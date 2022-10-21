@@ -1,0 +1,281 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Billing Measures Scheduler
+tags:
+  - name: billing measures scheduler
+paths:
+  /billing-measures/scheduler:
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - billing measures scheduler
+      summary: Create billing measures scheduler
+      description: 'create billing measures scheduler'
+      operationId: Create billing measures scheduler
+      requestBody:
+        $ref: "#/components/requestBodies/CreateBillingMeasuresScheduler"
+      responses:
+        '201':
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - billing measures scheduler
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      summary:  List billing measures scheduler
+      description: 'List billing measures scheduler'
+      operationId: list billing measures scheduler
+      responses:
+        '200':
+          $ref: '#/components/responses/ListBillingMeasuresScheduler'
+        '400':
+          $ref: '#/components/responses/UnauthorizedError'
+  /billing-measures/scheduler/{id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - billing measures scheduler
+      summary: Get billing measures scheduler by id
+      description: 'Get billing measures scheduler by id'
+      operationId: Get billing measures scheduler by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: scheduler id
+      responses:
+        '200':
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - billing measures scheduler
+      summary: Delete billing measures scheduler
+      description: 'delete billing measures scheduler'
+      operationId: Delete billing measures scheduler
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: scheduler id
+      responses:
+        '200':
+          description: "delete success"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    patch:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - billing measures scheduler
+      summary: Patch billing measures scheduler
+      description: 'patch billing measures scheduler'
+      operationId: Patch billing measures scheduler
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: scheduler id
+      requestBody:
+        $ref: "#/components/requestBodies/PatchBillingMeasuresScheduler"
+      responses:
+        '201':
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+
+components:
+
+  requestBodies:
+    CreateBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BillingMeasuresSchedulerBase"
+
+    PatchBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BillingMeasuresSchedulerUpdatable"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    ListBillingMeasuresScheduler:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BillingMeasuresScheduler'
+    BillingMeasuresScheduler:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BillingMeasuresScheduler"
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+    BillingMeasuresScheduler:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/BillingMeasuresSchedulerBase"
+    BillingMeasuresSchedulerBase:
+      allOf:
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+        - $ref: "#/components/schemas/BillingMeasuresSchedulerUpdatable"
+
+    BillingMeasuresSchedulerUpdatable:
+      type: object
+      required:
+        - service_type
+        - point_type
+        - meter_type
+        - process_type
+        - scheduler
+      properties:
+        distributor_id:
+          type: string
+          format: uuid
+
+        service_type:
+          type: string
+          enum:
+            - 'D-D'
+            - 'G-D'
+            - 'D-C'
+          x-opai-codegen-extra-tags:
+            binding: oneof='G-D' 'D-D' 'D-C'
+
+        point_type:
+          type: string
+          enum:
+            - '1'
+            - '2'
+            - '3'
+            - '4'
+            - '5'
+          x-opai-codegen-extra-tags:
+            binding: oneof='1' '2' '3' '4' '5'
+
+        meter_type:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'TLG'
+              - 'TLM'
+              - 'OTHER'
+          x-oapi-codegen-extra-tags:
+            binding: dive,oneof='TLG' 'TLM' 'OTHER'
+
+        process_type:
+          type: string
+          enum:
+            - 'D-C TLG'
+            - 'D-C NO TLG'
+            - 'G-D'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='D-C TLG' 'D-C NO TLG' 'G-D'
+
+        scheduler:
+          type: string
+
+
+
+
+

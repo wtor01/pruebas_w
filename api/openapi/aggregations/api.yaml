@@ -1,0 +1,648 @@
+openapi: 3.0.0
+servers:
+- url: http://{hostname}/api
+  variables:
+    hostname:
+      default: localhost:8080
+- url: https://{hostname}/api
+  variables:
+    hostname:
+      default: localhost
+info:
+  version: 1.0.0
+  title: api
+tags:
+- name: aggregations
+- name: Aggregations config
+- name: Aggregation features available
+- name: Aggregations config
+- name: Aggregations
+paths:
+  /admin/aggregations/config/:
+    get:
+      description: Get all aggregations config
+      operationId: Get all aggregations config
+      parameters:
+      - description: Filter by query name
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationsConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all aggregations config
+      tags:
+      - Aggregations config
+    post:
+      description: Create aggregation config
+      operationId: Create aggregation config
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationConfig'
+      responses:
+        "200":
+          $ref: '#/components/responses/CreateAggregationConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create aggregation config
+      tags:
+      - Aggregations config
+  /admin/aggregations/config/{aggregation_config_id}:
+    delete:
+      description: Delete aggregation config
+      operationId: Delete aggregation config
+      parameters:
+      - description: aggregation config id
+        in: path
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete aggregation config
+      tags:
+      - Aggregations config
+    get:
+      description: Get aggregation config
+      operationId: Get aggregation config
+      parameters:
+      - description: aggregation config id
+        in: path
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get aggregation config
+      tags:
+      - Aggregations config
+    put:
+      description: Update aggregation config
+      operationId: Update aggregation config
+      parameters:
+      - description: aggregation config id
+        in: path
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          minLength: 1
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationConfig'
+      responses:
+        "200":
+          $ref: '#/components/responses/UpdateAggregationConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Update aggregation config
+      tags:
+      - Aggregations config
+  /admin/aggregations/features:
+    get:
+      description: Get all aggregation features available
+      operationId: Get all aggregation features available
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationFeatures'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all aggregation features available
+      tags:
+      - Aggregation features available
+    post:
+      description: Create aggregation feature available
+      operationId: Create aggregation features available
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationFeature'
+      responses:
+        "200":
+          $ref: '#/components/responses/CreateAggregationFeature'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create aggregation feature available
+      tags:
+      - Aggregation features available
+  /admin/aggregations/features/{feature_id}:
+    delete:
+      description: Delete aggregation feature available
+      operationId: Delete aggregation features available
+      parameters:
+      - description: feature id
+        in: path
+        name: feature_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete aggregation feature available
+      tags:
+      - Aggregation features available
+    get:
+      description: Get one aggregation feature available
+      operationId: Get aggregation features available
+      parameters:
+      - description: feature id
+        in: path
+        name: feature_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationFeature'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get one aggregation feature available
+      tags:
+      - Aggregation features available
+    put:
+      description: Update aggregation feature available
+      operationId: Update aggregation features available
+      parameters:
+      - description: feature id
+        in: path
+        name: feature_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationFeature'
+      responses:
+        "200":
+          $ref: '#/components/responses/UpdateAggregationFeature'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Update aggregation feature available
+      tags:
+      - Aggregation features available
+  /aggregations:
+    get:
+      description: Get all aggregations
+      operationId: Get all aggregations
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: The id of the aggregation config
+        in: query
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: The day of generation the aggregations
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: The day of generation the aggregations
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregations'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all aggregations
+      tags:
+      - Aggregations
+  /aggregations/{aggregation_id}:
+    get:
+      description: Get aggregation
+      operationId: Get aggregation
+      parameters:
+      - description: aggregation id
+        in: path
+        name: aggregation_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregation'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get aggregation
+      tags:
+      - Aggregations
+components:
+  requestBodies:
+    AggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfigBase'
+    AggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeaturesBase'
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+  responses:
+    CreateAggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfig'
+      description: successful operation
+    CreateAggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeature'
+      description: successful operation
+    GetAggregation:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationWithCUPS'
+      description: successful operation
+    GetAggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfig'
+      description: successful operation
+    GetAggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeature'
+      description: successful operation
+    GetAggregationFeatures:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeatures'
+      description: successful operation
+    GetAggregations:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Aggregations'
+      description: successful operation
+    GetAggregationsConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationsConfig'
+      description: successful operation
+    UnauthorizedError:
+      description: Access token is missing or INV
+    UpdateAggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfig'
+      description: successful operation
+    UpdateAggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeature'
+      description: successful operation
+  schemas:
+    Aggregation:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/AggregationBase'
+    AggregationBase:
+      description: Aggregation
+      properties:
+        aggregation_before:
+          format: uuid
+          type: string
+        aggregation_config_id:
+          format: uuid
+          type: string
+        date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        features:
+          items:
+            $ref: '#/components/schemas/Features'
+          type: array
+      required:
+      - aggregation_config_id
+      - date
+      - features
+      type: object
+    AggregationCUPSCurrent:
+      description: Characteristics of CUPS in Aggregation
+      properties:
+        CUPS:
+          type: string
+        Type:
+          enum:
+          - IN
+          - NEUTRAL
+          type: string
+      type: object
+    AggregationCUPSPrevious:
+      description: Characteristics of CUPS in Aggregation
+      properties:
+        CUPS:
+          type: string
+        Type:
+          enum:
+          - OUT
+          - NEUTRAL
+          type: string
+      type: object
+    AggregationConfig:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/AggregationConfigBase'
+    AggregationConfigBase:
+      description: Aggregation configuration
+      properties:
+        description:
+          type: string
+        end_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        features:
+          items:
+            $ref: '#/components/schemas/AggregationFeature'
+          type: array
+        name:
+          type: string
+        scheduler:
+          type: string
+        start_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: start_date
+      required:
+      - name
+      - scheduler
+      - start_date
+      - features
+      type: object
+    AggregationFeature:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/AggregationFeaturesBase'
+    AggregationFeatures:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        results:
+          items:
+            $ref: '#/components/schemas/AggregationFeature'
+          type: array
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    AggregationFeaturesBase:
+      description: Aggregation features
+      properties:
+        field:
+          type: string
+        name:
+          type: string
+      required:
+      - name
+      - field
+      type: object
+    AggregationWithCUPS:
+      allOf:
+      - properties:
+          listCUPSCurrent:
+            items:
+              $ref: '#/components/schemas/AggregationCUPSCurrent'
+            type: array
+          listCUPSPrevious:
+            items:
+              $ref: '#/components/schemas/AggregationCUPSPrevious'
+            type: array
+        type: object
+      - $ref: '#/components/schemas/Aggregation'
+    Aggregations:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/AggregationsResults'
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    AggregationsConfig:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        results:
+          items:
+            $ref: '#/components/schemas/AggregationConfig'
+          type: array
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    AggregationsResults:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/Aggregation'
+          type: array
+    Features:
+      description: Features
+      properties:
+        feature:
+          $ref: '#/components/schemas/AggregationFeature'
+        value:
+          type: string
+      type: object
+    Pagination:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object

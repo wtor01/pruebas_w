@@ -1,0 +1,262 @@
+openapi: 3.0.0
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api measures
+tags:
+  - name: measures
+paths:
+  /measures/file:
+    post:
+      tags:
+        - measures
+      summary: Insert measures from file
+      description: ''
+      operationId: insert measures file
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/PubSubMessage'
+  /measures:
+    post:
+      tags:
+        - measures
+      summary: Insert measures
+      description: ''
+      operationId: insert measures
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/PubSubMessageInsert'
+components:
+  requestBodies:
+    PubSubMessage:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PubSubMessage'
+      description: PubSubMessage object
+      required: true
+    PubSubMessageInsert:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PubSubMessageInsert'
+      description: Inser Measure object
+      required: true
+  schemas:
+    MeasureInsert:
+      type: object
+      required:
+        - start_date
+        - end_date
+        - measure_date
+        - type
+        - status
+        - type_measure
+        - register_type
+        - equipment_id
+        - concentrator_id
+        - reader_id
+        - file
+        - distributor
+        - origin
+        - period
+        - qualifier
+        - AI
+        - AE
+        - R1
+        - R2
+        - R3
+        - R4
+        - MX
+        - FX
+        - E
+      properties:
+        start_date:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: start_date
+        end_date:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        measure_date:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: measure_date
+        type:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: type
+        status:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: status
+        type_measure:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: type_measure
+        register_type:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: register_type
+        equipment_id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: equipment_id
+        concentrator_id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: concentrator_id
+        reader_id:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: reader_id
+        file:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: file
+        distributor:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: distributor
+        origin:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: origin
+        period:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: period
+        qualifier:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: qualifier
+        AI:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: AI
+        AE:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: AE
+        R1:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: R1
+        R2:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: R2
+        R3:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: R3
+        R4:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: R4
+        MX:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: MX
+        FX:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: FX
+        E:
+          type: number
+          format: double
+          x-oapi-codegen-extra-tags:
+            json: E
+    PubSubMessageData:
+      type: object
+      required:
+        - bucket
+        - timeStorageClassUpdated
+        - name
+      properties:
+        bucket:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: bucket
+            binding: required
+        timeStorageClassUpdated:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: timeStorageClassUpdated
+            binding: required
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: name
+            binding: required
+    PubSubMessage:
+      title: PubSubMessage
+      description: PubSubMessage params
+      type: object
+      properties:
+        message:
+          type: object
+          required:
+            - data
+          x-oapi-codegen-extra-tags:
+            json: message
+            binding: required
+          properties:
+            data:
+              $ref: '#/components/schemas/PubSubMessageData'
+        subscription:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: subscription
+            binding: required
+      required:
+        - message
+        - subscription
+    PubSubMessageInsert:
+      title: PubSubMessage
+      description: PubSubMessage params
+      type: object
+      properties:
+        message:
+          type: object
+          required:
+            - data
+          x-oapi-codegen-extra-tags:
+            json: message
+            binding: required
+          properties:
+            data:
+              $ref: '#/components/schemas/MeasureInsert'
+        subscription:
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: subscription
+            binding: required
+      required:
+        - message
+        - subscription

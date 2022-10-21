@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: mongo-poc
+    meta.helm.sh/release-namespace: measures
+    networking.gke.io/load-balancer-type: Internal
+  labels:
+    app.kubernetes.io/component: mongos
+    app.kubernetes.io/instance: mongo-poc
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mongodb-sharded
+    helm.sh/chart: mongodb-sharded-6.0.0
+  name: mongo-poc-mongodb-sharded-lb
+  namespace: measures
+spec:
+  allocateLoadBalancerNodePorts: true
+  ports:
+    - name: mongodb
+      nodePort: 32073
+      port: 27017
+      protocol: TCP
+      targetPort: mongodb
+  selector:
+    app.kubernetes.io/component: mongos
+    app.kubernetes.io/instance: mongo-poc
+    app.kubernetes.io/name: mongodb-sharded
+  sessionAffinity: None
+  type: LoadBalancer

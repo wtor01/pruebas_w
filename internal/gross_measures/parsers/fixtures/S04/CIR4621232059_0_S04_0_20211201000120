@@ -1,0 +1,38 @@
+<Report IdRpt="S04" IdPet="0" Version="3.1.c">
+	<Cnc Id="CIR4621808001">
+		<Cnt Id="CIR2081808002">
+			<S04 Fhi="20220401000000000S" Fhf="20220501000000000S" Ctr="1" Pt="0" Mx="123487" Fx="20220411211500000S">
+				<Value AIa="625766" AEa="0" R1a="128493" R2a="0" R3a="0" R4a="184"/>
+				<Value AIi="29125" AEi="0" R1i="5299" R2i="0" R3i="0" R4i="9"/>
+			</S04>
+			<S04 Fhi="20220401000000000S" Fhf="20220501000000000S" Ctr="1" Pt="1" Mx="123487" Fx="20220411211500000S">
+				<Value AIa="625766" AEa="0" R1a="128493" R2a="0" R3a="0" R4a="184"/>
+				<Value AIi="29125" AEi="0" R1i="5299" R2i="0" R3i="0" R4i="9"/>
+			</S04>
+			<S04 Fhi="20220401000000000S" Fhf="20220501000000000S" Ctr="1" Pt="2" Mx="0" Fx="20220401000000000S">
+				<Value AIa="0" AEa="0" R1a="0" R2a="0" R3a="0" R4a="0"/>
+				<Value AIi="0" AEi="0" R1i="0" R2i="0" R3i="0" R4i="0"/>
+			</S04>
+			<S04 Fhi="20220401000000000S" Fhf="20220501000000000S" Ctr="1" Pt="3" Mx="0" Fx="20220401000000000S">
+				<Value AIa="0" AEa="0" R1a="0" R2a="0" R3a="0" R4a="0"/>
+				<Value AIi="0" AEi="0" R1i="0" R2i="0" R3i="0" R4i="0"/>
+			</S04>
+			<S04 Fhi="20220401000000000S" Fhf="20220501000000000S" Ctr="1" Pt="4" Mx="0" Fx="20220401000000000S">
+				<Value AIa="0" AEa="0" R1a="0" R2a="0" R3a="0" R4a="0"/>
+				<Value AIi="0" AEi="0" R1i="0" R2i="0" R3i="0" R4i="0"/>
+			</S04>
+			<S04 Fhi="20220401000000000S" Fhf="20220501000000000S" Ctr="1" Pt="5" Mx="0" Fx="20220401000000000S">
+				<Value AIa="0" AEa="0" R1a="0" R2a="0" R3a="0" R4a="0"/>
+				<Value AIi="0" AEi="0" R1i="0" R2i="0" R3i="0" R4i="0"/>
+			</S04>
+			<S04 Fhi="20220401000000000S" Fhf="20220501000000000S" Ctr="1" Pt="6" Mx="0" Fx="20220401000000000S">
+				<Value AIa="0" AEa="0" R1a="0" R2a="0" R3a="0" R4a="0"/>
+				<Value AIi="0" AEi="0" R1i="0" R2i="0" R3i="0" R4i="0"/>
+			</S04>
+		</Cnt>
+		<Cnt Id="SAG0155755650" ErrCat="2" ErrCode="1"/>
+		<Cnt Id="SAG0155755737" ErrCat="2" ErrCode="1"/>
+		<Cnt Id="SAG0155755772" ErrCat="2" ErrCode="1"/>
+		<Cnt Id="SAG0156255327" ErrCat="2" ErrCode="1"/>
+	</Cnc>
+</Report>

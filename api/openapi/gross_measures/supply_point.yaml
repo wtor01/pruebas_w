@@ -1,0 +1,363 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api gross measures dashboard
+tags:
+  - name: gross measure dashboard
+paths:
+  /gross-measures/dashboard/{cups}/curve-process-measures:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - gross measure dashboard
+      parameters:
+        - in: query
+          required: true
+          name: distributor
+          schema:
+            type: string
+          description: The service point distributor_id whose the data will be taken
+        - in: path
+          required: true
+          name: cups
+          schema:
+            type: string
+          description: The cups of equipment whose the data will be taken
+        - in: query
+          required: true
+          name: date
+          schema:
+            type: string
+            format: date
+          description: Date of the gross curve measures
+        - in: query
+          required: true
+          name: curve_type
+          schema:
+            type: string
+            enum:
+              - "HOURLY"
+              - "QUARTER"
+      summary: Search curve of meter for gross measure
+      description: "Search curve of meter for gross measure"
+      operationId: getCurveGrossMeasureMeter
+      responses:
+        '200':
+          $ref: '#/components/responses/CurveGrossMeasureMeterResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /gross-measures/dashboard/{cups}/service-point:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - gross measure dashboard
+      parameters:
+        - in: path
+          required: true
+          name: cups
+          schema:
+            type: string
+          description: The cups whose the data will be taken
+        - in: query
+          required: true
+          name: distributor
+          schema:
+            type: string
+          description: The distributor whose the data will be taken
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            type: string
+            format: date
+          description: Start date of the process measures
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            type: string
+            format: date
+          description: End date of the process measures
+      summary: Search service point for gross measures
+      description: "Search service point gross measures"
+      operationId: getGrossMeasureServicePoint
+      responses:
+        '200':
+          $ref: '#/components/responses/ServicePointGrossMeasureResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or INV
+    CurveGrossMeasureMeterResponse:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CurveGrossMeasureMeterList'
+    ServicePointGrossMeasureResponse:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GrossMeasureServicePoint'
+  schemas:
+    GrossMeasureValidationStatus:
+      type: string
+      enum:
+        - "VAL"
+        - "INV"
+        - "SUPERV"
+        - "ALERT"
+        - "NONE"
+    GrossMeasureServicePoint:
+      type: object
+      required:
+        - type
+        - cups
+        - serial_number
+        - magnitudes
+        - magnitude_energy
+        - periods
+        - calendar_daily_closure
+        - calendar_monthly_closure
+        - calendar_curve
+        - list_daily_closures
+        - list_monthly_closures
+      properties:
+        type:
+          type: string
+          enum:
+            - "TLG"
+            - "TLM"
+            - "OTHER"
+        serial_number:
+          type: string
+        cups:
+          type: string
+        magnitude_energy:
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE'
+        magnitudes:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'AI'
+              - 'AE'
+              - 'R1'
+              - 'R2'
+              - 'R3'
+              - 'R4'
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+        periods:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'P1'
+              - 'P2'
+              - 'P3'
+              - 'P4'
+              - 'P5'
+              - 'P6'
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+        calendar_daily_closure:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+        calendar_monthly_closure:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+        calendar_curve:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+        list_daily_closures:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePointDailyValues'
+        list_monthly_closures:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServicePointMonthlyValues'
+
+    ServicePointCalendarStatus:
+      type: object
+      required:
+        - date
+        - status
+      properties:
+        date:
+          type: string
+        status:
+          $ref: '#/components/schemas/GrossMeasureValidationStatus'
+    ServicePointDailyValues:
+        type: object
+        required:
+          - end_date
+          - status
+          - file
+          - P0
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+        properties:
+          end_date:
+            type: string
+          status:
+            $ref: '#/components/schemas/GrossMeasureValidationStatus'
+          file:
+            type: string
+          P0:
+            $ref: '#/components/schemas/GrossMeasureValues'
+          P1:
+            $ref: '#/components/schemas/GrossMeasureValues'
+          P2:
+            $ref: '#/components/schemas/GrossMeasureValues'
+          P3:
+            $ref: '#/components/schemas/GrossMeasureValues'
+          P4:
+            $ref: '#/components/schemas/GrossMeasureValues'
+          P5:
+            $ref: '#/components/schemas/GrossMeasureValues'
+          P6:
+            $ref: '#/components/schemas/GrossMeasureValues'
+    ServicePointMonthlyValues:
+        type: object
+        required:
+            - init_date
+            - end_date
+            - status
+            - file
+            - P0
+            - P1
+            - P2
+            - P3
+            - P4
+            - P5
+            - P6
+        properties:
+          init_date:
+            type: string
+          end_date:
+            type: string
+          status:
+            $ref: '#/components/schemas/GrossMeasureValidationStatus'
+          file:
+            type: string
+          P0:
+            $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+          P1:
+            $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+          P2:
+            $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+          P3:
+            $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+          P4:
+            $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+          P5:
+            $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+          P6:
+            $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+
+    CurveGrossMeasureMeterList:
+      type: array
+      description: Curve process measures distributor object
+      items:
+        $ref: '#/components/schemas/CurveGrossMeasureMeter'
+    CurveGrossMeasureMeter:
+      allOf:
+        - $ref: '#/components/schemas/ServicePointCalendarStatus'
+        - type: object
+          required:
+            - file
+            - values
+          properties:
+            file:
+              type: string
+            values:
+              $ref: '#/components/schemas/GrossMeasureValues'
+
+    GrossMeasureValues:
+      type: object
+      required:
+        - AI
+        - AE
+        - R1
+        - R2
+        - R3
+        - R4
+      properties:
+        AI:
+          type: number
+          format: double
+        AE:
+          type: number
+          format: double
+        R1:
+          type: number
+          format: double
+        R2:
+          type: number
+          format: double
+        R3:
+          type: number
+          format: double
+        R4:
+          type: number
+          format: double
+    GrossMeasureMonthlyValues:
+      allOf:
+        - $ref: '#/components/schemas/GrossMeasureValues'
+        - type: object
+          required:
+            - AIi
+            - AEi
+            - R1i
+            - R2i
+            - R3i
+            - R4i
+          properties:
+            AIi:
+              type: number
+              format: double
+            AEi:
+              type: number
+              format: double
+            R1i:
+              type: number
+              format: double
+            R2i:
+              type: number
+              format: double
+            R3i:
+              type: number
+              format: double
+            R4i:
+              type: number
+              format: double

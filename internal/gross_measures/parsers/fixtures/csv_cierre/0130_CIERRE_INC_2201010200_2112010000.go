@@ -1,0 +1,97 @@
+package csv_cierre
+
+import (
+	"bitbucket.org/sercide/data-ingestion/internal/gross_measures"
+	"bitbucket.org/sercide/data-ingestion/internal/measures"
+	"time"
+)
+
+var Result_0130_CIERRE_INC_2201010200_2112010000 = []gross_measures.MeasureCloseWrite{
+	{
+		StartDate:         time.Date(2021, time.November, 30, 23, 00, 00, 0, time.UTC),
+		EndDate:           time.Date(2021, time.December, 31, 23, 00, 00, 0, time.UTC),
+		ReadingDate:       time.Date(2021, time.December, 31, 23, 00, 00, 0, time.UTC),
+		Type:              measures.Absolute,
+		ReadingType:       measures.BillingClosure,
+		MeterSerialNumber: "ES0130000000300001JT",
+		ConcentratorID:    "",
+		File:              "bucketname/DistribuidorX/Input/CSV/0130_CIERRE_INC_2201010200_2112010000.csv",
+		DistributorID:     "",
+		DistributorCDOS:   "DistribuidorX",
+		Origin:            measures.STM,
+		Periods: []gross_measures.MeasureClosePeriod{
+			{
+				Period: measures.P1,
+				AI:     15002000,
+				AE:     5000,
+				R1:     5549000,
+				R2:     14000,
+				R3:     20000,
+				R4:     234000,
+				MX:     174000,
+				FX:     time.Date(2021, time.December, 20, 11, 30, 00, 0, time.UTC),
+				E:      15000,
+			},
+			{
+				Period: measures.P2,
+				AI:     8652000,
+				AE:     6000,
+				R1:     3799000,
+				R2:     15000,
+				R3:     21000,
+				R4:     227000,
+				MX:     165000,
+				FX:     time.Date(2021, time.December, 14, 16, 45, 00, 0, time.UTC),
+				E:      8000,
+			},
+			{
+				Period: measures.P3,
+				AI:     5000,
+				AE:     7000,
+				R1:     11000,
+				R2:     16000,
+				R3:     22000,
+				R4:     26000,
+				MX:     30000,
+				FX:     time.Date(2021, time.December, 31, 23, 00, 00, 0, time.UTC),
+				E:      33000,
+			},
+			{
+				Period: measures.P4,
+				AI:     6000,
+				AE:     8000,
+				R1:     12000,
+				R2:     17000,
+				R3:     23000,
+				R4:     27000,
+				MX:     31000,
+				FX:     time.Date(2021, time.December, 31, 23, 00, 00, 0, time.UTC),
+				E:      34000,
+			},
+			{
+				Period: measures.P5,
+				AI:     7000,
+				AE:     9000,
+				R1:     13000,
+				R2:     18000,
+				R3:     24000,
+				R4:     28000,
+				MX:     32000,
+				FX:     time.Date(2021, time.December, 31, 23, 00, 00, 0, time.UTC),
+				E:      35000,
+			},
+			{
+				Period: measures.P6,
+				AI:     5278000,
+				AE:     10000,
+				R1:     6098000,
+				R2:     19000,
+				R3:     25000,
+				R4:     181000,
+				MX:     180000,
+				FX:     time.Date(2021, time.December, 03, 06, 00, 00, 0, time.UTC),
+				E:      37000,
+			},
+		},
+	},
+}

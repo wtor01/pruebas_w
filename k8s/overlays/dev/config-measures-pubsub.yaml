@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-measures-pubsub
+data:
+  TOPIC_MEASURES: data-ingestion-measures
+  SUBSCRIPTION_MEASURES: data-ingestion-measures-test-sub
+  STORAGE_MEASURES_FAIL: test-data-ingestion-fail
+  STORAGE_MEASURES_SUCCESS: test-data-ingestion-ok
+  SUBSCRIPTION_UPLOAD_MEASURES: upload-files-sub
+  SUBSCRIPTION_INGESTION_MEASURES: data-ingestion-measures-test-sub

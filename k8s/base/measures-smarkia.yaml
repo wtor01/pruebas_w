@@ -1,0 +1,74 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: measures-smarkia
+  labels:
+    app: measures-smarkia
+spec:
+  selector:
+    matchLabels:
+      app: measures-smarkia
+  template:
+    metadata:
+      labels:
+        app: measures-smarkia
+      annotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    spec:
+      containers:
+        - name: measures-smarkia
+          image: pubsub
+          volumeMounts:
+            - name: credentials
+              mountPath: /usr/src/credentials
+              readOnly: true
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /usr/src/credentials/sa.json
+            - name: PUBSUB_PROCESS
+              value: SMARKIA
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres-password
+            - name: SMARKIA_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: smarkia-token
+                  key: SMARKIA_TOKEN
+            - name: SERVICE
+              value: measures_smarkia
+            - name: MEASURE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-credentials
+                  key: mongo-password
+          envFrom:
+            - configMapRef:
+                name: config-postgres
+            - configMapRef:
+                name: config-measures-pubsub
+            - configMapRef:
+                name: config-measures
+            - configMapRef:
+                name: config-redis
+            - configMapRef:
+                name: config-smarkia
+            - configMapRef:
+                name: config-measures-mongodb
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "150m"
+      volumes:
+        - name: credentials
+          secret:
+            secretName: credentials
+            items:
+              - key: credentials_key
+                path: sa.json

@@ -1,0 +1,20 @@
+steps:
+  - id: Run Unit Tests
+    name: golang:1.18-buster
+    entrypoint: /bin/bash
+    args:
+    - -c
+    - |
+        go test -parallel 5 ./...
+  - id: 'Build App'
+    name: 'gcr.io/k8s-skaffold/skaffold:v1.38.0'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        skaffold config set --global collect-metrics false
+        skaffold build --file-output build.json --default-repo eu.gcr.io/$PROJECT_ID --profile dev 
+
+timeout: 900s
+options:
+  machineType: N1_HIGHCPU_8

@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Allow files and directories
+!.env
+!go.*
+!service_account.json
+!/pkg/**
+!/internal/**
+!/cmd/**
+!/api/**

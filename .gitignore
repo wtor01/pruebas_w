@@ -1,0 +1,13 @@
+.idea/
+coverage.out
+.env
+service_account.json
+build.json
+credentials-secret.yaml
+firebase-secret.yaml
+postgres-secret.yaml
+mongo-secret.yaml
+smarkia-secret.yaml
+venv
+.DS_STORE
+internal/platform/redis/reids_cache_test.go

@@ -1,0 +1,6 @@
+<Report IdRpt="S04" IdPet="0" Version="3.1.c">
+	<Cnc Id="CIR4621232059">
+		<Cnt Id="LGZ0019939650" ErrCat="3" ErrCode="3"/>
+		<Cnt Id="ORB0000768540" ErrCat="3" ErrCode="3"/>
+	</Cnc>
+</Report>

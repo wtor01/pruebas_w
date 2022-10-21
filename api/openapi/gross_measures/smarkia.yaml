@@ -1,0 +1,57 @@
+openapi: 3.0.0
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api smarkia integration
+tags:
+  - name: smarkia
+paths:
+  /gross_measures/smarkia/recover:
+    post:
+      tags:
+        - smarkia
+      security:
+        - BearerAuth: [ ]
+      summary: recover smarkia measures
+      description: ''
+      operationId: recover smarkia measures
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/RecoverSmarkiaMeasures'
+components:
+  requestBodies:
+    RecoverSmarkiaMeasures:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RecoverSmarkiaMeasures'
+      description: PubSubMessage object
+      required: true
+  schemas:
+    RecoverSmarkiaMeasures:
+      type: object
+      description: day_types object
+      required:
+        - distributor_id
+        - cups
+        - date
+        - process_name
+      properties:
+        distributor_id:
+          type: string
+        cups:
+          type: string
+        date:
+          type: string
+          format: date
+        process_name:
+          type: string
+          enum: [ "curve", "close" ]

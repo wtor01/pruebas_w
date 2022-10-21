@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- api.yaml
+- measures-insert.yaml
+- measures-parse-files.yaml
+- measures-smarkia.yaml
+- process-measures.yaml
+- re-process-measures.yaml
+- billing-measures.yaml
+- aggregation.yaml
+- calendars-redis.yaml
+- gateway.yaml
+- virtual-service.yaml
+

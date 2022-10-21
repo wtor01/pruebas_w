@@ -1,0 +1,376 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api process measures dashboard
+tags:
+  - name: closures
+paths:
+  /process-measures/execute:
+    post:
+      description: Execute process measures services
+      operationId: Execute process measures services
+      requestBody:
+        $ref: '#/components/requestBodies/ExecuteProcessMeasure'
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid input
+        "401":
+          description: '#/components/responses/UnauthorizedError'
+      security:
+        - BearerAuth: [ ]
+      summary: Create measures services
+      tags:
+        - execute process measures services
+  /process-measures/create-close/resume:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - process measures resume
+      summary: Get process measures resume by cups
+      description: 'Get process measures resume by cups'
+      operationId: Get process measures resume by cups
+      parameters:
+        - in: query
+          name: cups
+          schema:
+            type: string
+          required: true
+          description: process measure cups
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+        - in: query
+          name: start_date
+          required: true
+          schema:
+            type: string
+            format: date
+          description: start date of the monthly process measure
+        - in: query
+          name: end_date
+          required: true
+          schema:
+            type: string
+            format: date
+          description: end date of the monthly process measure
+      responses:
+        '200':
+          $ref: '#/components/responses/processMeasuresResume'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /distributor/{distributor_id}/billing_closure:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - closures
+      parameters:
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+        - in: query
+          name: id
+          schema:
+            type: string
+            format: string
+          description: Id of the closures
+        - in: query
+          name: moment
+          schema:
+            type: string
+            enum: [ "before", "actual", "next" ]
+          description: Indicates if you want actual closures of id, the next or the before
+        - in: query
+          name: cups
+          schema:
+            type: string
+          description: Cups of service point
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+          description: Start date of query by End date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+          description: End date of query by End date
+      summary: Get billing closures
+      description: 'get billing closures'
+      operationId: get billing closures
+      responses:
+        '200':
+          $ref: '#/components/responses/MonthlyClosureResponse'
+        '404':
+          description: Invalid input
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - closures
+      parameters:
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+      summary: Create billing closures
+      description: 'create billing closures'
+      operationId: create billing closures
+      requestBody:
+        $ref: "#/components/requestBodies/MonthlyClosureRequest"
+      responses:
+        '200':
+          $ref: '#/components/responses/MonthlyClosureResponse'
+        '404':
+          description: Invalid input
+  /distributor/{distributor_id}/billing_closure/{id}:
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - closures
+      parameters:
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: string
+          required: true
+          description: closures id
+      summary: Update billing closures
+      description: 'update billing closures'
+      operationId: update billing closures
+      requestBody:
+        $ref: "#/components/requestBodies/MonthlyClosureRequest"
+      responses:
+        '200':
+          $ref: '#/components/responses/MonthlyClosureResponse'
+        '404':
+          description: Invalid input
+components:
+  requestBodies:
+    MonthlyClosureRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MonthlyClosureBase"
+    ExecuteProcessMeasure:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExecuteServices'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    processMeasuresResume:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/processMeasuresResume"
+    MonthlyClosureResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MonthlyClosure'
+      description: successful operation
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    DashboardProcessMeasureData:
+      type: object
+      required:
+        - valid
+        - invalid
+        - supervise
+        - measures_should_be
+      properties:
+        valid:
+          type: integer
+        invalid:
+          type: integer
+        supervise:
+          type: integer
+        measures_should_be:
+          type: integer
+    processMeasuresResume:
+      type: object
+      properties:
+        previous_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+        next_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+    ReadingClosure:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        origin:
+          type: string
+        measure_type:
+          type: string
+        measure_device:
+          type: string
+        p0:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p1:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p2:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p3:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p4:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p5:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p6:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+    MagnitudePeriodFeatures:
+      type: object
+      properties:
+        ai:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        ae:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r1:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r2:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r3:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r4:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+    MagnitudeFeatures:
+      type: object
+      properties:
+        max_demand_date:
+          type: string
+          format: date-time
+        max_demand:
+          type: number
+        reading:
+          type: number
+        consum:
+          type: number
+    MonthlyClosure:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/MonthlyClosureBase"
+    MonthlyClosureBase:
+      properties:
+        Periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/Periods'
+        init_date:
+          type: string
+        end_date:
+          type: string
+        status:
+          type: string
+        origen:
+          type: string
+        measure_type:
+          type: string
+        meter_serial_number:
+          type: string
+        cups:
+          type: string
+      required:
+        - init_date
+        - end_date
+        - status
+      type: object
+    Periods:
+      properties:
+        Period:
+          type: string
+          enum: [ "P0", "P1", "P2", "P3", "P4", "P5", "P6" ]
+        Magnitud:
+          type: string
+          enum: [ "AE", "AI", "R1", "R2", "R3", "R4" ]
+        Absolute:
+          format: double
+          type: number
+        Incremental:
+          format: double
+          type: number
+      required:
+        - Period
+        - Magnitud
+      type: object
+
+    ExecuteServices:
+      type: object
+      description: day_types object
+      required:
+        - distributor_id
+        - cups
+        - start_date
+        - end_date
+        - type
+      properties:
+        distributor_id:
+          type: string
+        cups:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        type:
+          type: string
+          enum:
+            - 'curve'
+            - 'monthly-close'
+            - 'daily-close'
+
+

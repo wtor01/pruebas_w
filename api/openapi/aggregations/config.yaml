@@ -1,0 +1,277 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+externalDocs:
+  description:
+info:
+  version: 1.0.0
+  title: API Admin
+tags:
+  - name: Aggregations config
+paths:
+  /admin/aggregations/config/:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregations config
+      summary: Get all aggregations config
+      description: 'Get all aggregations config'
+      operationId: Get all aggregations config
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Filter by query name
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: true
+          description: The numbers of items to return
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAggregationsConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregations config
+      summary: Create aggregation config
+      description: 'Create aggregation config'
+      operationId: Create aggregation config
+      requestBody:
+        $ref: "#/components/requestBodies/AggregationConfig"
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateAggregationConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /admin/aggregations/config/{aggregation_config_id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregations config
+      summary: Get aggregation config
+      description: 'Get aggregation config'
+      operationId: Get aggregation config
+      parameters:
+        - in: path
+          name: aggregation_config_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: aggregation config id
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAggregationConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregations config
+      summary: Update aggregation config
+      description: 'Update aggregation config'
+      operationId: Update aggregation config
+      parameters:
+        - in: path
+          name: aggregation_config_id
+          schema:
+            type: string
+            format: uuid
+            minLength: 1
+          required: true
+          description: aggregation config id
+      requestBody:
+        $ref: "#/components/requestBodies/AggregationConfig"
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateAggregationConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregations config
+      summary: Delete aggregation config
+      description: 'Delete aggregation config'
+      operationId: Delete aggregation config
+      parameters:
+        - in: path
+          name: aggregation_config_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: aggregation config id
+      responses:
+        '200':
+          description: "delete success"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+components:
+  requestBodies:
+    AggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationConfigBase"
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    GetAggregationsConfig:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationsConfig"
+    CreateAggregationConfig:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationConfig"
+    UpdateAggregationConfig:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationConfig"
+    GetAggregationConfig:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationConfig"
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+    AggregationFeature:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/AggregationFeaturesBase"
+    AggregationFeaturesBase:
+      type: object
+      description: Aggregation features
+      required:
+        - name
+        - field
+      properties:
+        name:
+          type: string
+          minLength: 1
+        field:
+          type: string
+          minLength: 1
+    AggregationsConfig:
+        allOf:
+          - $ref: "#/components/schemas/Pagination"
+          - type: object
+            required:
+              - results
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AggregationConfig'
+    AggregationConfig:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/AggregationConfigBase"
+    AggregationConfigBase:
+      type: object
+      description: Aggregation configuration
+      required:
+        - name
+        - scheduler
+        - start_date
+        - features
+      properties:
+        name:
+          type: string
+          minLength: 1
+        scheduler:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: start_date
+        end_date:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        description:
+          type: string
+        features:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/AggregationFeature'

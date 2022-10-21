@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-measures-mongodb
+data:
+  MEASURE_DATABASE_HOST: mongodb://%s:%s@mongo.local.svc:27017/?tls=false
+  MEASURE_DATABASE_USER: root
+  MEASURE_DATABASE: measure
+  MEASURE_COLLECTION: gross_measure

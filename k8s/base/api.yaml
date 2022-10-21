@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  selector:
+    matchLabels:
+      app: api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: api
+          volumeMounts:
+            - name: credentials
+              mountPath: /usr/src/credentials
+              readOnly: true
+            - name: firebase
+              mountPath: usr/src/firebase
+              readOnly: true
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /usr/src/credentials/sa.json
+            - name: FIREBASE_SERVICE_ACCOUNT
+              value: /usr/src/firebase/firebase.json
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres-password
+            - name: MEASURE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-credentials
+                  key: mongo-password
+            - name: SMARKIA_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: smarkia-token
+                  key: SMARKIA_TOKEN
+
+          envFrom:
+            - configMapRef:
+                name: config-postgres
+            - configMapRef:
+                name: config-measures-mongodb
+            - configMapRef:
+                name: config-measures-pubsub
+            - configMapRef:
+                name: config-measures
+            - configMapRef:
+                name: config-redis
+            - configMapRef:
+                name: config-process-measures
+            - configMapRef:
+                name: config-billing-measures
+            - configMapRef:
+                name: config-aggregations
+            - configMapRef:
+                name: config-calendars-redis
+            - configMapRef:
+                name: config-smarkia
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          readinessProbe:
+            initialDelaySeconds: 3
+            httpGet:
+              path: /api/health
+              scheme: HTTP
+              port: 8080
+          livenessProbe:
+            initialDelaySeconds: 3
+            httpGet:
+              path: /api/health
+              scheme: HTTP
+              port: 8080
+      volumes:
+        - name: credentials
+          secret:
+            secretName: credentials
+            items:
+              - key: credentials_key
+                path: sa.json
+        - name: firebase
+          secret:
+            secretName: firebase
+            items:
+              - key: firebase_key
+                path: firebase.json
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+spec:
+  type: NodePort
+  selector:
+    app: api
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+
+---

@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: measures
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - general-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /api
+      route:
+        - destination:
+            host: api.measures.svc.cluster.local
+            port:
+              number: 8080
+    - route:
+        - destination:
+            host: dashboard.measures.svc.cluster.local
+            port:
+              number: 8080

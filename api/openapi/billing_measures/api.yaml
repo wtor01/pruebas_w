@@ -1,0 +1,1692 @@
+openapi: 3.0.0
+servers:
+- url: http://{hostname}/api
+  variables:
+    hostname:
+      default: localhost:8080
+- url: https://{hostname}/api
+  variables:
+    hostname:
+      default: localhost
+info:
+  version: 1.0.0
+  title: api
+tags:
+- name: billing measures scheduler
+- name: billing measures dashboard
+- name: self-consumption
+paths:
+  /billing-measures/dashboard/fiscal-measures:
+    get:
+      description: Search distributor fiscal billing measures
+      operationId: search distributor fiscal billing measures
+      parameters:
+      - description: The distributor cups whose the data will be taken
+        in: query
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: The distributor whose data will be taken
+        in: query
+        name: distributorId
+        required: true
+        schema:
+          type: string
+      - description: Start date of the fiscal billing measures
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: End date of the fiscal billing measures
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalBillingMeasures'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search distributor for fiscal billing measures
+      tags:
+      - billing measures dashboard
+  /billing-measures/resume/{id}:
+    get:
+      description: Get billing measures resume by id
+      operationId: Get billing measures resume by id
+      parameters:
+      - description: billing measure id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/BillingMeasuresResume'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get billing measures resume by id
+      tags:
+      - billing measures resume
+  /billing-measures/scheduler:
+    get:
+      description: List billing measures scheduler
+      operationId: list billing measures scheduler
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/ListBillingMeasuresScheduler'
+        "400":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: List billing measures scheduler
+      tags:
+      - billing measures scheduler
+    post:
+      description: create billing measures scheduler
+      operationId: Create billing measures scheduler
+      requestBody:
+        $ref: '#/components/requestBodies/CreateBillingMeasuresScheduler'
+      responses:
+        "201":
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create billing measures scheduler
+      tags:
+      - billing measures scheduler
+  /billing-measures/scheduler/{id}:
+    delete:
+      description: delete billing measures scheduler
+      operationId: Delete billing measures scheduler
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete billing measures scheduler
+      tags:
+      - billing measures scheduler
+    get:
+      description: Get billing measures scheduler by id
+      operationId: Get billing measures scheduler by id
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get billing measures scheduler by id
+      tags:
+      - billing measures scheduler
+    patch:
+      description: patch billing measures scheduler
+      operationId: Patch billing measures scheduler
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBillingMeasuresScheduler'
+      responses:
+        "201":
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Patch billing measures scheduler
+      tags:
+      - billing measures scheduler
+  /billing_measure/dashboard/summary:
+    get:
+      parameters:
+      - description: The distributor ID whose the data will be taken
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: meter_type
+        required: true
+        schema:
+          $ref: '#/components/schemas/MeterType'
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalMeasureSummary'
+        "400":
+          description: bad request
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      tags:
+      - billing measures dashboard
+  /billing_measure/tax/measure:
+    get:
+      parameters:
+      - description: The distributor ID whose the data will be taken
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The measure type
+        in: query
+        name: measure_type
+        required: true
+        schema:
+          enum:
+          - TLM
+          - TLG
+          - OTHER
+          type: string
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalMeasure'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      tags:
+      - fiscal measures dashboard
+  /billing_measure/tax/measurebycups:
+    get:
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: The distributor ID whose the data will be taken
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The measure type
+        in: query
+        name: measure_type
+        required: true
+        schema:
+          enum:
+          - TLM
+          - TLG
+          - OTHER
+          type: string
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalMeasureByCupsResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      tags:
+      - fiscal measures dashboard
+  /billing_measures/mvh:
+    post:
+      description: create billing measures MVH
+      operationId: Create billing measures MVH
+      requestBody:
+        $ref: '#/components/requestBodies/CreateBillingMeasuresMVH'
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid input
+        "401":
+          description: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create billing mvh
+      tags:
+      - billing measures mvh
+  /self-consumption/{distributor_id}/:
+    get:
+      description: Search self-consumption unit config
+      operationId: Search self-consumption unit config
+      parameters:
+      - description: The distributor whose data will be taken
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The distributor cups whose the data will be taken
+        in: query
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: Date of configuration
+        in: query
+        name: date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/SelfConsumptionUnitConfigResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search self-consumption unit config
+      tags:
+      - self-consumption
+  /self-consumption/{distributor_id}/{cau}:
+    get:
+      description: Get self consumption unit
+      operationId: get self consumption by cau
+      parameters:
+      - description: ID of distributor
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: cau
+        required: true
+        schema:
+          description: CAU ID
+          type: string
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/BillingSelfConsumptionUnitResponse'
+        "400":
+          description: bad request
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get self consumption cau
+      tags:
+      - self-consumption
+  /self-consumption/actives/{distributor_id}:
+    get:
+      description: Search actives self-consumption unit config by distributor id
+      operationId: Search actives self-consumption unit config by distributor id
+      parameters:
+      - description: The distributor whose data will be taken
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Date of configuration
+        in: query
+        name: date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/ListSelfConsumptionUnitConfigs'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search actives self-consumption unit config by distributor id
+      tags:
+      - self-consumption
+components:
+  requestBodies:
+    CreateBillingMeasuresMVH:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MVH'
+      description: successful operation
+    CreateBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresSchedulerBase'
+    PatchBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresSchedulerUpdatable'
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+  responses:
+    BillingMeasuresResume:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresResume'
+      description: successful operation
+    BillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresScheduler'
+      description: successful operation
+    BillingSelfConsumptionUnitResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingSelfConsumptionUnits'
+      description: Get billing self consumption unit by cau
+    FiscalBillingMeasures:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/FiscalBillingMeasures'
+            type: array
+      description: successful operation
+    FiscalMeasure:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/FiscalMeasure'
+            type: array
+      description: successful operation
+    FiscalMeasureByCupsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FiscalMeasureByCupsResponse'
+      description: successful operation
+    FiscalMeasureSummary:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/FiscalMeasureSummary'
+            type: array
+      description: successful operation
+    ListBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/BillingMeasuresScheduler'
+                  type: array
+              required:
+              - results
+              type: object
+      description: successful operation
+    ListSelfConsumptionUnitConfigs:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/SelfConsumptionUnitConfig'
+                  type: array
+              required:
+              - results
+              type: object
+      description: successful operation
+    SelfConsumptionUnitConfigResponse:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/SelfConsumptionUnitConfig'
+            type: array
+      description: successful operation
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    BalanceOriginSummary:
+      description: Origin of balance
+      properties:
+        daily:
+          type: integer
+        monthly:
+          type: integer
+        no_closure:
+          type: integer
+        other:
+          type: integer
+      required:
+      - monthly
+      - daily
+      - other
+      - no_closure
+      type: object
+    BalancePeriods:
+      properties:
+        method:
+          enum:
+          - REAL
+          - OUTLINED
+          - ESTIMATED
+          - CALCULATED
+          - ADJUSTED
+          type: string
+        origin:
+          enum:
+          - REMOTE
+          - AUTO
+          - ESTIMATE
+          - TLG
+          - TLM
+          - LOCAL
+          type: string
+        p0:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p1:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p2:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p3:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p4:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p5:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p6:
+          $ref: '#/components/schemas/PeriodFeatures'
+      required:
+      - origin
+      - method
+      type: object
+    BalanceTypeSummary:
+      description: Balance Qualification type
+      properties:
+        calculated:
+          type: integer
+        estimated:
+          type: integer
+        real:
+          type: integer
+      required:
+      - real
+      - calculated
+      - estimated
+      type: object
+    BillingCalendarConsumption:
+      properties:
+        date:
+          type: string
+        energy:
+          format: double
+          type: number
+        values:
+          items:
+            $ref: '#/components/schemas/BillingCalendarConsumptionValues'
+          type: array
+      required:
+      - date
+      - values
+      - energy
+      type: object
+    BillingCalendarConsumptionValues:
+      properties:
+        energy:
+          format: double
+          type: number
+        hour:
+          type: string
+      required:
+      - hour
+      - energy
+      type: object
+    BillingCauInfo:
+      properties:
+        config_type:
+          description: Cau config type
+          type: string
+        id:
+          description: Cau Id
+          type: string
+        name:
+          description: Cau name
+          type: string
+        points:
+          description: Cau Number Points
+          type: integer
+        unit_type:
+          description: Cau Unit type
+          type: string
+      required:
+      - id
+      - name
+      - points
+      - unit_type
+      - config_type
+      type: object
+    BillingMeasuresResume:
+      properties:
+        actual_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+        previous_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+      required:
+      - previous_reading_closure
+      - actual_reading_closure
+      type: object
+    BillingMeasuresScheduler:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/BillingMeasuresSchedulerBase'
+    BillingMeasuresSchedulerBase:
+      allOf:
+      - properties:
+          name:
+            type: string
+        required:
+        - name
+        type: object
+      - $ref: '#/components/schemas/BillingMeasuresSchedulerUpdatable'
+    BillingMeasuresSchedulerUpdatable:
+      properties:
+        distributor_id:
+          format: uuid
+          type: string
+        meter_type:
+          items:
+            enum:
+            - TLG
+            - TLM
+            - OTHER
+            type: string
+          type: array
+          x-oapi-codegen-extra-tags:
+            binding: dive,oneof='TLG' 'TLM' 'OTHER'
+        point_type:
+          enum:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          type: string
+          x-opai-codegen-extra-tags:
+            binding: oneof='1' '2' '3' '4' '5'
+        process_type:
+          enum:
+          - D-C TLG
+          - D-C NO TLG
+          - G-D
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='D-C TLG' 'D-C NO TLG' 'G-D'
+        scheduler:
+          type: string
+        service_type:
+          enum:
+          - D-D
+          - G-D
+          - D-C
+          type: string
+          x-opai-codegen-extra-tags:
+            binding: oneof='G-D' 'D-D' 'D-C'
+      required:
+      - service_type
+      - point_type
+      - meter_type
+      - process_type
+      - scheduler
+      type: object
+    BillingNetGeneration:
+      properties:
+        date:
+          type: string
+        excedente:
+          format: double
+          type: number
+        net:
+          format: double
+          type: number
+      required:
+      - date
+      - net
+      - excedente
+      type: object
+    BillingSelfConsumptionCups:
+      description: Billing Cups points list
+      properties:
+        consumption:
+          format: double
+          type: number
+        cups:
+          type: string
+        end_date:
+          type: string
+        generation:
+          format: double
+          type: number
+        ps_type:
+          type: string
+        start_date:
+          type: string
+      required:
+      - cups
+      - ps_type
+      - consumption
+      - generation
+      - start_date
+      - end_date
+      type: object
+    BillingSelfConsumptionUnitInfo:
+      properties:
+        calendar_consumption:
+          items:
+            $ref: '#/components/schemas/BillingCalendarConsumption'
+          type: array
+        cau_info:
+          $ref: '#/components/schemas/BillingCauInfo'
+        cups_list:
+          items:
+            $ref: '#/components/schemas/BillingSelfConsumptionCups'
+          type: array
+        end_date:
+          format: date-time
+          type: string
+        net_generation:
+          items:
+            $ref: '#/components/schemas/BillingNetGeneration'
+          type: array
+        start_date:
+          format: date-time
+          type: string
+        status:
+          type: string
+        totals:
+          $ref: '#/components/schemas/BillingTotals'
+        unit_consumption:
+          items:
+            $ref: '#/components/schemas/BillingUnitConsumption'
+          type: array
+      required:
+      - end_date
+      - start_date
+      - status
+      - cau_info
+      - totals
+      - net_generation
+      - unit_consumption
+      - calendar_consumption
+      - cups_list
+      type: object
+    BillingSelfConsumptionUnits:
+      items:
+        $ref: '#/components/schemas/BillingSelfConsumptionUnitInfo'
+      type: array
+    BillingTotals:
+      properties:
+        aux_consumption:
+          description: Auxiliar services consumption
+          format: double
+          type: number
+        gross_generation:
+          description: Gross Generation
+          format: double
+          type: number
+        net_generation:
+          description: Net Generation
+          format: double
+          type: number
+        network_consumption:
+          description: Network consumption
+          format: double
+          type: number
+        self_consumption:
+          description: Self consumption consumed
+          format: double
+          type: number
+      required:
+      - gross_generation
+      - net_generation
+      - self_consumption
+      - network_consumption
+      - aux_consumption
+      type: object
+    BillingUnitConsumption:
+      properties:
+        aux:
+          format: double
+          type: number
+        date:
+          type: string
+        network:
+          format: double
+          type: number
+        self:
+          format: double
+          type: number
+      required:
+      - date
+      - network
+      - self
+      - aux
+      type: object
+    CalendarCurve:
+      items:
+        $ref: '#/components/schemas/CalendarCurveItem'
+      type: array
+    CalendarCurveItem:
+      properties:
+        date:
+          type: string
+        status:
+          enum:
+          - REAL
+          - ADJUSTED
+          - OUTLINED
+          - CALCULATED
+          - ESTIMATED
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='REAL' 'ADJUSTED' 'OUTLINED' 'CALCULATED'  'ESTIMATED'
+      required:
+      - date
+      - status
+      type: object
+    Curve:
+      items:
+        $ref: '#/components/schemas/ItemCurve'
+      type: array
+    CurveStatusSummary:
+      description: Status
+      properties:
+        absent:
+          type: integer
+        completed:
+          type: integer
+        not_completed:
+          type: integer
+      required:
+      - completed
+      - not_completed
+      - absent
+      type: object
+    CurveTypeSummary:
+      description: Curve Qualification type
+      properties:
+        adjusted:
+          type: integer
+        calculated:
+          type: integer
+        estimated:
+          type: integer
+        outlined:
+          type: integer
+        real:
+          type: integer
+      required:
+      - real
+      - adjusted
+      - outlined
+      type: object
+    DailyCurve:
+      properties:
+        ae:
+          format: double
+          type: number
+        ae_auto:
+          format: double
+          type: number
+        ai:
+          format: double
+          type: number
+        ai_auto:
+          format: double
+          type: number
+        date:
+          type: string
+        r1:
+          format: double
+          type: number
+        r2:
+          format: double
+          type: number
+        r3:
+          format: double
+          type: number
+        r4:
+          format: double
+          type: number
+        status:
+          enum:
+          - REAL
+          - ADJUSTED
+          - OUTLINED
+          - CALCULATED
+          - ESTIMATED
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='REAL' 'ADJUSTED' 'OUTLINED' 'CALCULATED'  'ESTIMATED'
+      required:
+      - date
+      - status
+      - ai
+      - ae
+      - r1
+      - r2
+      - r3
+      - r4
+      type: object
+    ExecutionSummary:
+      properties:
+        balance_origin:
+          description: Origin of balance
+          enum:
+          - NO_CLOSURE
+          - MONTHLY
+          - DAILY
+          - OTHER
+          type: string
+        balance_type:
+          $ref: '#/components/schemas/MethodType'
+        curve_status:
+          description: Status of curve
+          enum:
+          - COMPLETE
+          - INCOMPLETE
+          - ABSENT
+          type: string
+        curve_type:
+          $ref: '#/components/schemas/MethodType'
+      required:
+      - balance_type
+      - curve_type
+      - balance_origin
+      - curve_status
+      type: object
+    FiscalBillingMeasures:
+      description: Fiscal billing measures distributor object
+      properties:
+        balance:
+          $ref: '#/components/schemas/BalancePeriods'
+        calendar_curve:
+          $ref: '#/components/schemas/CalendarCurve'
+        cups:
+          type: string
+        curve:
+          $ref: '#/components/schemas/Curve'
+        end_date:
+          type: string
+        execution_summary:
+          $ref: '#/components/schemas/ExecutionSummary'
+        graph_history:
+          items:
+            $ref: '#/components/schemas/FiscalMeasureGraph'
+          type: array
+        last_mv_date:
+          type: string
+        magnitudes:
+          items:
+            enum:
+            - AI
+            - AE
+            - R1
+            - R2
+            - R3
+            - R4
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+          type: array
+        meter_type:
+          type: string
+        periods:
+          items:
+            enum:
+            - P1
+            - P2
+            - P3
+            - P4
+            - P5
+            - P6
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+          type: array
+        principal_magnitude:
+          enum:
+          - AI
+          - AE
+          - R1
+          - R2
+          - R3
+          - R4
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+        start_date:
+          type: string
+        status:
+          enum:
+          - PENDING
+          - CALCULATING
+          - CALCULATED
+          - READY_TO_BILL
+          - BILLED
+          - OVERRIDED
+          - CANCELLED
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='PENDING' 'CALCULATING' 'CALCULATED' 'READY_TO_BILL' 'BILLED'
+              'OVERRRIDED' 'CANCELLED'
+        summary:
+          $ref: '#/components/schemas/SummaryStructure'
+      required:
+      - cups
+      - meter_type
+      - start_date
+      - end_date
+      - last_mv_date
+      - principal_magnitude
+      - status
+      - periods
+      - magnitudes
+      - summary
+      - calendar_curve
+      - graph_history
+      - balance
+      - curve
+      - execution_summary
+      type: object
+    FiscalMeasure:
+      description: fiscalMeasure calculated
+      properties:
+        curve_estimated:
+          type: integer
+        curve_real:
+          type: integer
+        origin_atr_auto_reading:
+          type: integer
+        origin_atr_daily:
+          type: integer
+        origin_atr_estimated:
+          type: integer
+        origin_atr_monthly:
+          type: integer
+        origin_atr_visual:
+          type: integer
+        qualification_atr_calculated:
+          type: integer
+        qualification_atr_estimated:
+          type: integer
+        qualification_atr_real:
+          type: integer
+        qualification_curve_adjusted:
+          type: integer
+        qualification_curve_calculated:
+          type: integer
+        qualification_curve_estimated:
+          type: integer
+        qualification_curve_profiled:
+          type: integer
+        qualification_curve_real:
+          type: integer
+        total:
+          type: integer
+      type: object
+    FiscalMeasureByCups:
+      description: fiscalMeasure by cups
+      properties:
+        atr_calification:
+          enum:
+          - REAL
+          - CALCULATED
+          - ESTIMATED
+          - OUTLINED
+          - ADJUSTED
+          type: string
+        atr_type:
+          description: Origin of balance
+          enum:
+          - MONTHLY
+          - DAILY
+          - NO_CLOSURE
+          - OTHER
+          type: string
+        cups:
+          type: string
+        curve_calification:
+          enum:
+          - REAL
+          - CALCULATED
+          - ESTIMATED
+          - OUTLINED
+          - ADJUSTED
+          type: string
+        curve_status:
+          enum:
+          - COMPLETE
+          - INCOMPLETE
+          type: string
+        end_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        start_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: start_date
+      type: object
+    FiscalMeasureByCupsResponse:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - properties:
+          results:
+            items:
+              $ref: '#/components/schemas/FiscalMeasureByCups'
+            type: array
+        required:
+        - results
+        type: object
+    FiscalMeasureGraph:
+      description: mvh execution info
+      properties:
+        balance_algorithm:
+          description: balance algorithm executed
+          type: string
+        cch_algorithm:
+          description: curve algorithm executed
+          type: string
+        finished_at:
+          description: time of graph execute end
+          format: date-time
+          type: string
+        magnitude:
+          description: Magnitude graph execution
+          enum:
+          - AI
+          - AE
+          - R1
+          - R2
+          - R3
+          - R4
+          type: string
+        period:
+          description: Period graph execution
+          enum:
+          - P0
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+          type: string
+        started_at:
+          description: time of graph execute start
+          format: date-time
+          type: string
+      required:
+      - period
+      - magnitude
+      - balance_algorithm
+      - cch_algorithm
+      - started_at
+      - finished_at
+      type: object
+    FiscalMeasureSummary:
+      description: fiscalMeasure calculated
+      properties:
+        balance_origin:
+          $ref: '#/components/schemas/BalanceOriginSummary'
+        balance_type:
+          $ref: '#/components/schemas/BalanceTypeSummary'
+        curve_status:
+          $ref: '#/components/schemas/CurveStatusSummary'
+        curve_type:
+          $ref: '#/components/schemas/CurveTypeSummary'
+        meter_type:
+          $ref: '#/components/schemas/MeterType'
+        total:
+          type: integer
+      required:
+      - meter_type
+      - total
+      - balance_type
+      - curve_type
+      - balance_origin
+      - curve_status
+      type: object
+    ItemCurve:
+      properties:
+        date:
+          type: string
+        values:
+          items:
+            $ref: '#/components/schemas/DailyCurve'
+          type: array
+      required:
+      - date
+      - values
+      type: object
+    ItemSummaryStructure:
+      properties:
+        p1:
+          format: double
+          type: number
+        p2:
+          format: double
+          type: number
+        p3:
+          format: double
+          type: number
+        p4:
+          format: double
+          type: number
+        p5:
+          format: double
+          type: number
+        p6:
+          format: double
+          type: number
+        total:
+          format: double
+          type: number
+      required:
+      - total
+      - p1
+      - p2
+      - p3
+      - p4
+      - p5
+      - p6
+      type: object
+    MVH:
+      description: day_types object
+      properties:
+        cups:
+          type: string
+        distributor_id:
+          type: string
+        time:
+          format: date
+          type: string
+      required:
+      - distributor_id
+      - cups
+      - time
+      type: object
+    MagnitudeFeatures:
+      properties:
+        consum:
+          format: double
+          type: number
+        reading:
+          format: double
+          type: number
+      required:
+      - reading
+      - consum
+      type: object
+    MagnitudePeriodFeatures:
+      properties:
+        ae:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        ai:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r1:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r2:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r3:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r4:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+      required:
+      - ai
+      - ae
+      - r1
+      - r2
+      - r3
+      - r4
+      type: object
+    MeterType:
+      description: Type of Meter
+      enum:
+      - TLG
+      - TLM
+      - OTHER
+      type: string
+    MethodType:
+      description: Worst type of fiscal measures curve/balance
+      enum:
+      - REAL
+      - CALCULATED
+      - ESTIMATED
+      - OUTLINED
+      - ADJUSTED
+      type: string
+    Pagination:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    PeriodFeatures:
+      properties:
+        ae:
+          format: double
+          type: number
+        ai:
+          format: double
+          type: number
+        balance_type_ae:
+          type: string
+        balance_type_ai:
+          type: string
+        balance_type_r1:
+          type: string
+        balance_type_r2:
+          type: string
+        balance_type_r3:
+          type: string
+        balance_type_r4:
+          type: string
+        r1:
+          format: double
+          type: number
+        r2:
+          format: double
+          type: number
+        r3:
+          format: double
+          type: number
+        r4:
+          format: double
+          type: number
+      required:
+      - ai
+      - balance_type_ai
+      - ae
+      - balance_type_ae
+      - r1
+      - balance_type_r1
+      - r2
+      - balance_type_r2
+      - r3
+      - balance_type_r3
+      - r4
+      - balance_type_r4
+      type: object
+    ReadingClosure:
+      properties:
+        end_date:
+          type: string
+        measure_device:
+          type: string
+        measure_type:
+          type: string
+        origin:
+          type: string
+        p0:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p1:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p2:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p3:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p4:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p5:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p6:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        start_date:
+          type: string
+      required:
+      - origin
+      - measure_type
+      - measure_device
+      - p0
+      - p1
+      - p2
+      - p3
+      - p4
+      - p5
+      - p6
+      type: object
+    SelfConsumptionConfig:
+      properties:
+        antivert_type:
+          type: string
+        cnmc_type_desc:
+          type: string
+        cnmc_type_id:
+          type: integer
+        cnmc_type_name:
+          type: string
+        compensation:
+          type: boolean
+        conf_type:
+          type: string
+        conf_type_description:
+          type: string
+        conn_type:
+          type: string
+        consumer_type:
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        excedents:
+          type: boolean
+        generation_pot:
+          type: number
+        group_subgroup:
+          type: integer
+        id:
+          format: uuid
+          type: string
+        init_date:
+          format: date-time
+          type: string
+        participant_number:
+          type: integer
+        solar_zone_id:
+          type: integer
+        solar_zone_name:
+          type: string
+        solar_zone_num:
+          type: integer
+        status_id:
+          type: integer
+        status_name:
+          type: string
+        technology_description:
+          type: string
+        technology_id:
+          type: string
+      type: object
+    SelfConsumptionPoint:
+      properties:
+        CUPS:
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        exent1_flag:
+          type: integer
+        exent2_flag:
+          type: integer
+        id:
+          format: uuid
+          type: string
+        init_date:
+          format: date-time
+          type: string
+        instalation_flag:
+          type: integer
+        partition_coeff:
+          type: number
+        service_point_type:
+          type: string
+        withoutmeter_flag:
+          type: integer
+      type: object
+    SelfConsumptionUnitConfig:
+      description: Self-consumption unit config
+      properties:
+        CAU:
+          type: string
+        ccaa:
+          type: string
+        ccaa_id:
+          type: integer
+        configs:
+          items:
+            $ref: '#/components/schemas/SelfConsumptionConfig'
+          type: array
+        distributor_id:
+          format: uuid
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        id:
+          format: uuid
+          type: string
+        init_date:
+          format: date-time
+          type: string
+        name:
+          type: string
+        points:
+          items:
+            $ref: '#/components/schemas/SelfConsumptionPoint'
+          type: array
+        status_id:
+          type: integer
+        status_name:
+          type: string
+      required:
+      - id
+      - CAU
+      - name
+      - status_id
+      - status_name
+      - ccaa_id
+      - ccaa
+      - init_date
+      - end_date
+      - distributor_id
+      - configs
+      - points
+      type: object
+    SummaryStructure:
+      properties:
+        adjusted:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        calculated:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        consum:
+          description: These are not percentages
+          properties:
+            p1:
+              format: double
+              type: number
+            p2:
+              format: double
+              type: number
+            p3:
+              format: double
+              type: number
+            p4:
+              format: double
+              type: number
+            p5:
+              format: double
+              type: number
+            p6:
+              format: double
+              type: number
+            total:
+              format: double
+              type: number
+          required:
+          - total
+          - p1
+          - p2
+          - p3
+          - p4
+          - p5
+          - p6
+          type: object
+        estimated:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        outlined:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        real:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+      required:
+      - real
+      - adjusted
+      - outlined
+      - calculated
+      - estimated
+      - consum
+      type: object

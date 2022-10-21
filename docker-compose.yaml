@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: sercide-postgres
+    image: postgres:14
+    volumes:
+      - sercide-posgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    env_file:
+      - '.env'
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - sercide
+  pgadmin:
+    container_name: sercide-pgadmin
+    image: dpage/pgadmin4
+    restart: on-failure
+    ports:
+      - '5050:80'
+    env_file:
+      - '.env'
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    networks:
+      - sercide
+  redis:
+    container_name: sercide-redis
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    volumes:
+      - sercide-redis:/data
+  mongo:
+    container_name: sercide-mongo
+    image: mongo
+    restart: on-failure
+    ports:
+      - 27017:27017
+    env_file:
+      - '.env'
+    volumes:
+      - sercide-mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MEASURE_DATABASE_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MEASURE_DATABASE_PASSWORD}
+  jaeger:
+    container_name: sercide-jaeger
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5775:5775/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+    networks:
+      - sercide
+networks:
+  sercide:
+volumes:
+  sercide-posgres:
+  sercide-mongo:
+  sercide-redis:
+

@@ -1,0 +1,233 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Auth
+tags:
+  - name: Geographic zones
+paths:
+### GEOGRAPHIC API
+  /admin/master-tables/geographic-zones:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Geographic zones
+      summary: Get all geographic zones
+      description: 'Get all geographic zones'
+      operationId: get all  geographic zones
+
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/GeographicResponseList'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Geographic zones
+      security:
+        - BearerAuth: [ ]
+      summary: Insert geographic zone
+      description: ''
+      operationId: insert geographic zone
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/GeographicZones'
+  /admin/master-tables/geographic-zones/{geographic-id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Geographic zones
+      summary: Get geographic zone
+      description: 'Get geographic zone'
+      operationId: get geographic zone
+      parameters:
+        - description: geographic id
+          in: path
+          name: geographic-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/geographic_zones'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - Geographic zones
+      summary: Modify all geographic zones
+      description: 'Modify geographic zone'
+      operationId: modify geographic zone
+      parameters:
+        - description: geographic id
+          in: path
+          name: geographic-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/GeographicZones'
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - Geographic zones
+      summary: Delete all geographic zones
+      description: 'delete geographic zone'
+      operationId: delete geographic zone
+      parameters:
+        - description: geographic id
+          in: path
+          name: geographic-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/geographic_zones'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  requestBodies:
+### REQUEST BODY GEOGRAPHIC
+    GeographicZones:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/geographic_zones'
+      description: geographic zone object
+      required: true
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+### GEOGRAPHIC RESPONSES
+    GeographicResponseList:
+      description: 'geographical response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/geographic_zone_with_id'
+    geographic_zones:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/geographic_zones'
+
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  schemas:
+### GEOGRAPHIC SCHEMA
+    geographic_zone_with_id:
+      type: object
+      description: geographic zones object
+      required:
+        - id
+        - code
+        - description
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+    geographic_zones:
+      type: object
+      description: geographic zones object
+      required:
+        - id
+        - code
+        - description
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        description:
+          type: string

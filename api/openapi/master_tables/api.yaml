@@ -1,0 +1,1650 @@
+openapi: 3.0.0
+servers:
+- url: http://{hostname}/api
+  variables:
+    hostname:
+      default: localhost:8080
+- url: https://{hostname}/api
+  variables:
+    hostname:
+      default: localhost
+info:
+  version: 1.0.0
+  title: api
+tags:
+- name: Geographic zones
+- name: Festive days
+- name: Seasons
+- name: Tariffs
+- name: Calendars
+paths:
+  /admin/master-tables/calendars:
+    get:
+      description: Get all calendars
+      operationId: get all calendars
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/CalendarResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all calendars
+      tags:
+      - Calendars
+    post:
+      description: insert calendars
+      operationId: insert calendars
+      requestBody:
+        $ref: '#/components/requestBodies/Calendar'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert calendars
+      tags:
+      - Calendars
+  /admin/master-tables/calendars/{calendar-id}:
+    delete:
+      description: delete calendar
+      operationId: delete calendar
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/calendars'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete calendar
+      tags:
+      - Calendars
+    get:
+      description: Get calendar
+      operationId: get calendar
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/calendars'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get calendar
+      tags:
+      - Calendars
+    put:
+      description: Modify calendar
+      operationId: modify calendar
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Calendar'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify all calendars
+      tags:
+      - Calendars
+  /admin/master-tables/calendars/{calendar-id}/periods:
+    get:
+      description: Get all periods calendars
+      operationId: get all periods calendars
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/PeriodResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all periods calendars
+      tags:
+      - Periods
+    post:
+      description: insert periods
+      operationId: insert periods
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/period'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert periods
+      tags:
+      - Periods
+  /admin/master-tables/calendars/periods/{period-id}:
+    delete:
+      description: delete period
+      operationId: delete period
+      parameters:
+      - description: period id
+        in: path
+        name: period-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete period
+      tags:
+      - Periods
+    get:
+      description: Get period
+      operationId: get period
+      parameters:
+      - description: period id
+        in: path
+        name: period-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/periods'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get period
+      tags:
+      - Periods
+    put:
+      description: Modify Period Calendar
+      operationId: modify Period Calendar
+      parameters:
+      - description: period id
+        in: path
+        name: period-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/period'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify Period Calendar
+      tags:
+      - Periods
+  /admin/master-tables/festive-days:
+    get:
+      description: Servicio para la obtención del listado de dias festivos en el sistema
+      operationId: list festive days
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/FestiveDaysList'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get all festive days
+      tags:
+      - Festive days
+    post:
+      description: ""
+      operationId: post festive day
+      requestBody:
+        $ref: '#/components/requestBodies/FestiveDay'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Post festive day
+      tags:
+      - Festive days
+  /admin/master-tables/festive-days/{festive-days_id}:
+    delete:
+      description: ""
+      operationId: delete festive day
+      parameters:
+      - description: festive-days id
+        in: path
+        name: festive-days_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Delete festive day
+      tags:
+      - Festive days
+    get:
+      description: ""
+      operationId: get festive day
+      parameters:
+      - description: festive-days id
+        in: path
+        name: festive-days_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetFestiveDay'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get festive day by id
+      tags:
+      - Festive days
+    put:
+      description: ""
+      operationId: put festive day
+      parameters:
+      - description: festive-days id
+        in: path
+        name: festive-days_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/FestiveDay'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Put festive day
+      tags:
+      - Festive days
+  /admin/master-tables/generate/calendars:
+    post:
+      description: Generate all calendars
+      operationId: generate calendars periods
+      responses:
+        "200":
+          description: success operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Generate all calendars
+      tags:
+      - Calendars
+  /admin/master-tables/generate/festive_days:
+    post:
+      description: Generate Festive Days
+      operationId: generate festive days
+      responses:
+        "200":
+          description: success operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Generate Festive Days
+      tags:
+      - Festive days
+  /admin/master-tables/geographic-zones:
+    get:
+      description: Get all geographic zones
+      operationId: get all  geographic zones
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/GeographicResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all geographic zones
+      tags:
+      - Geographic zones
+    post:
+      description: ""
+      operationId: insert geographic zone
+      requestBody:
+        $ref: '#/components/requestBodies/GeographicZones'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert geographic zone
+      tags:
+      - Geographic zones
+  /admin/master-tables/geographic-zones/{geographic-id}:
+    delete:
+      description: delete geographic zone
+      operationId: delete geographic zone
+      parameters:
+      - description: geographic id
+        in: path
+        name: geographic-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/geographic_zones'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete all geographic zones
+      tags:
+      - Geographic zones
+    get:
+      description: Get geographic zone
+      operationId: get geographic zone
+      parameters:
+      - description: geographic id
+        in: path
+        name: geographic-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/geographic_zones'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get geographic zone
+      tags:
+      - Geographic zones
+    put:
+      description: Modify geographic zone
+      operationId: modify geographic zone
+      parameters:
+      - description: geographic id
+        in: path
+        name: geographic-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/GeographicZones'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify all geographic zones
+      tags:
+      - Geographic zones
+  /admin/master-tables/seasons:
+    get:
+      description: Get all seasons
+      operationId: get all seasons
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The number of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/SeasonsResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all seasons
+      tags:
+      - Seasons
+    post:
+      description: insert season
+      operationId: insert season
+      requestBody:
+        $ref: '#/components/requestBodies/Seasons'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert seasons
+      tags:
+      - Seasons
+  /admin/master-tables/seasons/{season-id}:
+    delete:
+      description: delete season
+      operationId: delete season
+      parameters:
+      - description: season-id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/seasons'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete season
+      tags:
+      - Seasons
+    get:
+      description: Get season
+      operationId: get season
+      parameters:
+      - description: season id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/seasons'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get season
+      tags:
+      - Seasons
+    put:
+      description: Modify season
+      operationId: modify season
+      parameters:
+      - description: season id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Seasons'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify a season
+      tags:
+      - Seasons
+  /admin/master-tables/seasons/{season-id}/day_types:
+    get:
+      description: Get all day types
+      operationId: get all day types
+      parameters:
+      - description: season-id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/DayTypesResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all day types
+      tags:
+      - Day types
+    post:
+      description: insert day type
+      operationId: insert day type
+      parameters:
+      - description: season id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Day_types'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert day type
+      tags:
+      - Day types
+  /admin/master-tables/seasons/day_types/{day-type-id}:
+    delete:
+      description: Delete day type
+      operationId: delete day type
+      parameters:
+      - description: day-type-id
+        in: path
+        name: day-type-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete day type
+      tags:
+      - Day types
+    get:
+      description: Get day type
+      operationId: get day type
+      parameters:
+      - description: day type id
+        in: path
+        name: day-type-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/dayTypes'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get day type
+      tags:
+      - Day types
+    put:
+      description: Modify day type
+      operationId: modify day type
+      parameters:
+      - description: day type id
+        in: path
+        name: day-type-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Day_types'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify day type
+      tags:
+      - Day types
+  /admin/master-tables/tariffs:
+    get:
+      description: Get all Tariffs
+      operationId: get all tariffs
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/TariffResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all Tariffs
+      tags:
+      - Tariffs
+    post:
+      description: insert tariffs
+      operationId: insert tariffs
+      requestBody:
+        $ref: '#/components/requestBodies/tariffs'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert tariffs
+      tags:
+      - Tariffs
+  /admin/master-tables/tariffs/{tariff-id}:
+    delete:
+      description: delete tariff
+      operationId: delete tariff
+      parameters:
+      - description: tariff id
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/tariffs'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete all tariff
+      tags:
+      - Tariffs
+    get:
+      description: Get tariffs
+      operationId: get tariffs
+      parameters:
+      - description: tariffs
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/tariffs'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get tariffs
+      tags:
+      - Tariffs
+    put:
+      description: Modify tariffs
+      operationId: modify tariffs
+      parameters:
+      - description: tariffs
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/tariffs'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify all tariffs
+      tags:
+      - Tariffs
+  /admin/master-tables/tariffs/tariffs-calendars/{tariff-id}:
+    get:
+      description: Get tariffs cal
+      operationId: get tariffs calendar
+      parameters:
+      - description: tariffs
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/TariffCalendarResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get tariff calendar
+      tags:
+      - Tariffs
+components:
+  requestBodies:
+    Calendar:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar'
+      description: calendar object
+      required: true
+    Day_types:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/day_types'
+      description: day types object
+      required: true
+    FestiveDay:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FestiveDays'
+    GeographicZones:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/geographic_zones'
+      description: geographic zone object
+      required: true
+    Seasons:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/seasons'
+      description: seasons object
+      required: true
+    period:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar_period'
+      description: calendar object
+      required: true
+    tariffs:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tariffs'
+      description: tariffs object
+      required: true
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+  responses:
+    CalendarResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/calendar_with_id'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: calendar response
+    DayTypesResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/day_types'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: day types response
+    FestiveDaysList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/FestiveDays'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: festive days list response
+    GeographicResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/geographic_zone_with_id'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: geographical response
+    GetFestiveDay:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FestiveDays'
+      description: festive days response
+    PeriodResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/calendar_period'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: calendar response
+    SeasonsResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/seasons'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: seasons response
+    TariffCalendarResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/tariff-calendar'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: tariff calendar response
+    TariffResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/tariffs'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: tariff response
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    calendars:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar'
+      description: successful operation
+    dayTypes:
+      content:
+        application/json:
+          schema:
+            $ref: ""
+      description: successful operation
+    geographic_zones:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/geographic_zones'
+      description: successful operation
+    periods:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/period'
+      description: successful operation
+    seasons:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/seasons'
+      description: successful operation
+    tariffs:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tariffs'
+      description: successful operation
+  schemas:
+    FestiveDays:
+      description: festive days object
+      properties:
+        date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        description:
+          type: string
+        geographic_id:
+          type: string
+        id:
+          type: string
+      required:
+      - id
+      - date
+      - description
+      - geographic_id
+      type: object
+    calendar:
+      description: calendar object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        geographic_code:
+          type: string
+        id:
+          type: string
+        periods:
+          type: integer
+      required:
+      - id
+      - code
+      - description
+      - periods
+      - geographic_code
+      type: object
+    calendar_period:
+      description: calendar_period object
+      properties:
+        calendar_code:
+          type: string
+        day_type:
+          enum:
+          - Workable
+          - Festive
+          type: string
+        description:
+          type: string
+        end_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        end_hour:
+          type: integer
+        energy:
+          type: boolean
+        id:
+          type: string
+        period_number:
+          enum:
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+          type: string
+        power:
+          type: boolean
+        start_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        start_hour:
+          type: integer
+        year:
+          type: integer
+      required:
+      - id
+      - calendar_code
+      - period_number
+      - description
+      - year
+      - day_type
+      - start_hour
+      - end_hour
+      - start_date
+      - end_date
+      - power
+      - energy
+      type: object
+    calendar_with_id:
+      description: calendar object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        geographic_code:
+          type: string
+        id:
+          type: string
+        periods:
+          type: integer
+      required:
+      - id
+      - code
+      - description
+      - periods
+      - geographic_code
+      type: object
+    day_types:
+      description: day_types object
+      properties:
+        id:
+          type: string
+        isFestive:
+          type: boolean
+        month:
+          type: integer
+        name:
+          type: string
+        season_id:
+          type: string
+      required:
+      - id
+      - name
+      - season_id
+      - month
+      - isFestive
+      type: object
+    geographic_zone_with_id:
+      description: geographic zones object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+      required:
+      - id
+      - code
+      - description
+      type: object
+    geographic_zones:
+      description: geographic zones object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+      required:
+      - id
+      - code
+      - description
+      type: object
+    period:
+      description: calendar object
+      properties:
+        calendar_code:
+          type: string
+        day_type:
+          enum:
+          - Workable
+          - Festive
+          type: string
+        description:
+          type: string
+        end_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        end_hour:
+          type: integer
+        energy:
+          type: boolean
+        id:
+          type: string
+        period_number:
+          enum:
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+          type: string
+        power:
+          type: boolean
+        start_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        start_hour:
+          type: integer
+        year:
+          type: integer
+      required:
+      - id
+      - calendar_code
+      - period_number
+      - description
+      - year
+      - day_type
+      - start_hour
+      - end_hour
+      - start_date
+      - end_date
+      - power
+      - energy
+      type: object
+    seasons:
+      description: seasons object
+      properties:
+        description:
+          type: string
+        geographic_code:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - geographic_code
+      type: object
+    tariff-calendar:
+      description: Tariffs object
+      properties:
+        calendar_code:
+          type: string
+        end_date:
+          type: string
+        geographic_code:
+          type: string
+        start_date:
+          type: string
+        tariff_code:
+          type: string
+      required:
+      - calendar_code
+      - tariff_code
+      - start_date
+      - end_date
+      - geographic_code
+      type: object
+    tariffs:
+      description: Tariffs object
+      properties:
+        calendar_code:
+          type: string
+        code_odos:
+          type: string
+        code_one:
+          type: string
+        coef:
+          enum:
+          - A
+          - B
+          - C
+          - D
+          type: string
+        description:
+          type: string
+        geographic_id:
+          type: string
+        id:
+          type: string
+        periods:
+          type: integer
+        tariff_code:
+          type: string
+        tension_level:
+          enum:
+          - AT
+          - MT
+          - BT
+          type: string
+      required:
+      - id
+      - tariff_code
+      - description
+      - tension_level
+      - code_odos
+      - code_one
+      - periods
+      - geographic_id
+      - calendar_code
+      - coef
+      type: object

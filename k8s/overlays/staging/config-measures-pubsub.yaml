@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-measures-pubsub
+data:
+  TOPIC_MEASURES: pre-topic-data-ingestion-measures
+  SUBSCRIPTION_MEASURES: pre-sub-data-ingestion-measures
+  STORAGE_MEASURES_FAIL: pre-data-ingestion-fail
+  STORAGE_MEASURES_SUCCESS: pre-data-ingestion-ok
+  SUBSCRIPTION_UPLOAD_MEASURES: pre-sub-upload-files
+  SUBSCRIPTION_INGESTION_MEASURES: pre-sub-data-ingestion-measures

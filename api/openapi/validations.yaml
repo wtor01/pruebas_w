@@ -1,0 +1,638 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+externalDocs:
+  description:
+info:
+  version: 1.0.0
+  title: API Validations
+tags:
+  - name: validations measure
+  - name: validations measure config
+  - name: Measure validation
+paths:
+  /admin/validations-measure:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - validations measure
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      summary: List validations measure
+      description: 'List all validations measures'
+      operationId: list validations measure
+      responses:
+        '200':
+          $ref: '#/components/responses/ListValidationMeasures'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure
+      summary: Create validations measure
+      description: 'create validations measures'
+      operationId: Create validations measure
+      requestBody:
+        $ref: "#/components/requestBodies/CreateValidationMeasure"
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateValidationMeasures'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /admin/validations-measure/{validation_id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure
+      summary: Get validations measure
+      description: 'get validations measures'
+      operationId: Get validations measure
+      parameters:
+        - in: path
+          name: validation_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: validations id
+      responses:
+        '200':
+          $ref: '#/components/responses/GetValidationMeasure'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure
+      summary: Update validations measure
+      description: 'update validations measures'
+      operationId: Update validations measure
+      parameters:
+        - in: path
+          name: validation_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: validations id
+      requestBody:
+        $ref: "#/components/requestBodies/CreateValidationMeasure"
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateValidationMeasures'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure
+      summary: Delete validations measure
+      description: 'delete validations measures'
+      operationId: Delete validations measure
+      parameters:
+        - in: path
+          name: validation_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: validations id
+      responses:
+        '200':
+          description: "delete success"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /admin/distributors/{distributor_id}/validations-measure-config:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure config
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - INM
+              - PROC
+              - COHE
+          description: The type of the validations measure config
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+      summary: List validations measure
+      description: 'List all validations measure configs'
+      operationId: list validations measure config
+      responses:
+        '200':
+          $ref: '#/components/responses/ListValidationMeasureConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure config
+      parameters:
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+      summary: Create validations measure config
+      description: 'create validations measures config'
+      operationId: Create validations measure config
+      requestBody:
+        $ref: "#/components/requestBodies/CreateValidationMeasureConfig"
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateValidationMeasureConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /admin/distributors/{distributor_id}/validations-measure-config/{configuration_id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure config
+      summary: Get validations measure config
+      description: 'get validations measures config'
+      operationId: Get validations measure config
+      parameters:
+        - in: path
+          name: configuration_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: configuration id
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+      responses:
+        '200':
+          $ref: '#/components/responses/GetValidationMeasureConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure config
+      summary: Get validations measure config
+      description: 'update validations measures config'
+      operationId: Update validations measure config
+      parameters:
+        - in: path
+          name: configuration_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: configuration id
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+      requestBody:
+        $ref: "#/components/requestBodies/CreateValidationMeasureConfig"
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateValidationMeasureConfig'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - validations measure config
+      summary: Delete validations measure config
+      description: 'delete validations measures'
+      operationId: Delete validations measure config
+      parameters:
+        - in: path
+          name: configuration_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: configuration id
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+      responses:
+        '200':
+          description: "delete success"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /measure-validation/{measure-type}:
+    put:
+      tags:
+        - Measure validation
+      security:
+        - BearerAuth: [ ]
+      summary: Measurement validation
+      description: ''
+      operationId: put measurement validation
+      parameters:
+        - description: measure-type
+          in: path
+          name: measure-type
+          required: true
+          schema:
+            type: string
+            enum: [ "curve", "monthly-closure", "daily-closure" ]
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/MeasureForValidate'
+components:
+  requestBodies:
+    CreateValidationMeasure:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationMeasureBase"
+    CreateValidationMeasureConfig:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationMeasureConfigCreate"
+    MeasureForValidate:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MeasureForValidate'
+      description: Validation Measure object
+      required: true
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    GetValidationMeasure:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationMeasure"
+    CreateValidationMeasures:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationMeasure"
+    ListValidationMeasures:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ValidationMeasure'
+    ListValidationMeasureConfig:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ValidationMeasureConfig'
+    CreateValidationMeasureConfig:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationMeasureConfig"
+    GetValidationMeasureConfig:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationMeasureConfig"
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+
+    ValidationMeasure:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/ValidationMeasureBase"
+    ValidationMeasureBase:
+      type: object
+      description: Validation measure
+      required:
+        - name
+        - params
+        - action
+        - enabled
+        - measure_type
+        - type
+        - code
+        - message
+      properties:
+        name:
+          type: string
+        action:
+          type: string
+          enum:
+            - INV
+            - SUPERV
+            - ALERT
+            - NONE
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INV' 'SUPERV' 'ALERT' 'NONE'
+        enabled:
+          type: boolean
+        measure_type:
+          type: string
+          enum:
+            - INC
+            - ABS
+            - INC_CLO
+            - ABS_CLO
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INC' 'ABS' 'INC_CLO' 'ABS_CLO'
+        type:
+          type: string
+          enum:
+            - INM
+            - PROC
+            - COHE
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INM' 'PROC' 'COHE'
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          type: string
+        params:
+          $ref: "#/components/schemas/Params"
+
+    ValidationMeasureConfigBase:
+      type: object
+      description: Validation measure config
+      required:
+        - validation_measure
+        - action
+        - enabled
+      properties:
+        validation_measure:
+          $ref: "#/components/schemas/ValidationMeasure"
+        action:
+          type: string
+          enum:
+            - INV
+            - SUPERV
+            - ALERT
+            - NONE
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INV' 'SUPERV' 'ALERT' 'NONE'
+        enabled:
+          type: boolean
+
+        extra_config:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExtraConfig"
+    ValidationMeasureConfigCreate:
+      type: object
+      description: Validation measure config create
+      required:
+        - validation_measure_id
+        - action
+        - enabled
+      properties:
+        validation_measure_id:
+          type: string
+          format: uuid
+        action:
+          type: string
+          enum:
+            - INV
+            - SUPERV
+            - ALERT
+            - NONE
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INV' 'SUPERV' 'ALERT' 'NONE'
+        enabled:
+          type: boolean
+
+        extra_config:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExtraConfig"
+
+    ValidationMeasureConfig:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/ValidationMeasureConfigBase"
+    Params:
+      type: object
+      required:
+        - type
+        - validations
+      properties:
+        type:
+          type: string
+          enum:
+            - simple
+          x-oapi-codegen-extra-tags:
+            binding: oneof='simple'
+        validations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Validation"
+          x-oapi-codegen-extra-tags:
+            binding: "required,dive"
+
+    Validation:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - keys
+        - required
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - threshold
+            - qualifier
+            - daily_date
+            - hour_date
+            - quarterly_date
+            - future_date
+            - curve_limit
+            - summary_totalizer
+            - summary_calendar
+            - zero_consumption
+            - close_hose
+            - excesive_consumption
+            - close_meter
+          x-oapi-codegen-extra-tags:
+            binding: oneof='threshold' 'qualifier' 'daily_date' 'hour_date' 'quarterly_date' 'future_date' 'curve_limit' 'summary_totalizer' 'summary_calendar' 'zero_consumption' 'close_hose' 'excesive_consumption' 'close_meter'
+        keys:
+          type: array
+          items:
+            type: string
+            enum:
+              - start_date
+              - end_date
+              - measure_date
+              - qualifier
+              - AI
+              - AE
+              - R1
+              - R2
+              - R3
+              - R4
+              - MX
+              - FX
+              - E
+          x-oapi-codegen-extra-tags:
+            binding: dive,oneof='start_date' 'end_date' 'measure_date' 'qualifier' 'AI' 'AE' 'R1' 'R2' 'R3' 'R4' 'MX' 'FX' 'E'
+        required:
+          type: boolean
+        config:
+          type: object
+          additionalProperties:
+            type: string
+    ExtraConfig:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      additionalProperties:
+        type: string
+    MeasureForValidate:
+      type: object
+      description: Measure for validation object
+      required:
+        - ID
+        - status
+        - invalidation_code
+      properties:
+        ID:
+          type: string
+        status:
+          type: string
+          enum: [ "VAL", "INV" ]
+        invalidation_code:
+          type: string

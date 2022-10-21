@@ -1,0 +1,278 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api process measures dashboard
+tags:
+  - name: Statistics
+paths:
+  /dashboard/gross-measure/global:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Statistics
+      parameters:
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+        - in: query
+          name: month
+          schema:
+            type: integer
+          required: true
+          description: Number of month
+        - in: query
+          name: year
+          schema:
+            type: integer
+          required: true
+          description: Number of year
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - "TLG"
+              - "TLM"
+              - "OTHER"
+          required: true
+          description: Type of measurement config
+      summary: get dashboard gross measure
+      description: 'get dashboard gross measure'
+      operationId: get dashboard gross measure
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGrossMeasureDashboardResponse'
+        '404':
+          description: Invalid input
+  /dashboard/gross-measure/cups:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Statistics
+      parameters:
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+        - in: query
+          name: month
+          schema:
+            type: integer
+          required: true
+          description: Number of month
+        - in: query
+          name: year
+          schema:
+            type: integer
+          required: true
+          description: Number of year
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - "TLG"
+              - "TLM"
+              - "OTHER"
+          required: true
+          description: Type of measurement config
+        - in: query
+          required: true
+          name: ghost
+          schema:
+            type: boolean
+          description: Flag for ghost equipments
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      summary: get process measure statistics by cups
+      description: 'get process measure statistics by cups'
+      operationId: get process measure statistics by cups
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGrossMeasureDashboardCUPSResponse'
+        '404':
+          description: Invalid input
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    GetGrossMeasureDashboardResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GrossMeasureDashboardList'
+      description: successful operation
+    GetGrossMeasureDashboardCUPSResponse:
+      description: 'list statistics by cups'
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GrossMeasureDashboardCUPS'
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+    GrossMeasureDashboardCUPS:
+      type: object
+      required:
+        - distributor_id
+        - month
+        - year
+        - type
+        - cups
+        - service_type
+        - service_point_type
+        - serial_number
+      properties:
+        distributor_id:
+          type: string
+          format: uuid
+        month:
+          type: integer
+        year:
+          type: integer
+        cups:
+          type: string
+        type:
+          type: string
+          enum:
+            - "TLG"
+            - "TLM"
+            - "OTHER"
+        service_type:
+          type: string
+        service_point_type:
+          type: string
+        serial_number:
+          type: string
+        gross_measures_daily_stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/GrossMeasureDashboardDaily'
+    GrossMeasureDashboardList:
+      type: array
+      items:
+        $ref: '#/components/schemas/GrossMeasureDashboard'
+    GrossMeasureDashboard:
+      type: object
+      required:
+        - distributor_id
+        - month
+        - year
+        - type
+      properties:
+        distributor_id:
+          type: string
+          format: uuid
+        month:
+          type: integer
+        year:
+          type: integer
+        type:
+          type: string
+          enum:
+            - "TLG"
+            - "TLM"
+            - "OTHER"
+        gross_measures_daily_stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/GrossMeasureDashboardDaily'
+    GrossMeasureDashboardDaily:
+      type: object
+      required:
+        - date
+        - hourly_curve
+        - quarterly_curve
+        - daily_closure
+        - monthly_closure
+        - expected_hourly_curve
+        - expected_quarterly_curve
+        - expected_daily_closure
+        - expected_monthly_closure
+      properties:
+        day:
+          type: integer
+        hourly_curve:
+          type: integer
+        quarterly_curve:
+          type: integer
+        daily_closure:
+          type: integer
+        monthly_closure:
+          type: integer
+        expected_hourly_curve:
+          type: integer
+        expected_quarterly_curve:
+          type: integer
+        expected_daily_closure:
+          type: integer
+        expected_monthly_closure:
+          type: integer

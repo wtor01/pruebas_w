@@ -1,0 +1,23 @@
+{{range .}}
+
+// RegisterHandler{{.OperationId}} creates http.Handler with routing matching OpenAPI spec.
+func RegisterHandler{{.OperationId}}(router *gin.RouterGroup, si ServerInterface) *gin.RouterGroup {
+  return RegisterHandlerWithMiddlewares{{.OperationId}}(router, si, []gin.HandlerFunc{})
+}
+
+// RegisterHandlerWithMiddlewares{{.OperationId}} creates http.Handler with additional options
+func RegisterHandlerWithMiddlewares{{.OperationId}}(router *gin.RouterGroup, si ServerInterface, middlewares []gin.HandlerFunc) *gin.RouterGroup {
+{{if .}}wrapper := ServerInterfaceWrapper{
+Handler: si,
+HandlerMiddlewares: middlewares,
+}
+{{end}}
+
+m := append(middlewares, wrapper.{{.OperationId}})
+
+router.{{.Method }}("{{.Path | swaggerUriToGinUri }}", m...)
+
+return router
+}
+
+{{end}}

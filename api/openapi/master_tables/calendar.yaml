@@ -1,0 +1,519 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Auth
+tags:
+  - name: Calendars
+paths:
+### CALENDARS API
+  /admin/master-tables/calendars:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Calendars
+      summary: Get all calendars
+      description: 'Get all calendars'
+      operationId: get all calendars
+
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/CalendarResponseList'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Calendars
+      security:
+        - BearerAuth: [ ]
+      summary: Insert calendars
+      description: 'insert calendars'
+      operationId: insert calendars
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Calendar'
+  /admin/master-tables/calendars/{calendar-id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Calendars
+      summary: Get calendar
+      description: 'Get calendar'
+      operationId: get calendar
+      parameters:
+        - description: calendar id
+          in: path
+          name: calendar-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/calendars'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Calendars
+      summary: Modify all calendars
+      description: 'Modify calendar'
+      operationId: modify calendar
+      parameters:
+        - description: calendar id
+          in: path
+          name: calendar-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Calendar'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Calendars
+      summary: Delete calendar
+      description: 'delete calendar'
+      operationId: delete calendar
+      parameters:
+        - description: calendar id
+          in: path
+          name: calendar-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/calendars'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /admin/master-tables/calendars/periods/{period-id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Periods
+      summary: Get period
+      description: 'Get period'
+      operationId: get period
+      parameters:
+        - description: period id
+          in: path
+          name: period-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/periods'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Periods
+      summary: Modify Period Calendar
+      description: 'Modify Period Calendar'
+      operationId: modify Period Calendar
+      parameters:
+        - description: period id
+          in: path
+          name: period-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/period'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Periods
+      summary: Delete period
+      description: 'delete period'
+      operationId: delete period
+      parameters:
+        - description: period id
+          in: path
+          name: period-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /admin/master-tables/calendars/{calendar-id}/periods:
+    post:
+            tags:
+              - Periods
+            security:
+              - BearerAuth: [ ]
+            summary: Insert periods
+            description: 'insert periods'
+            operationId: insert periods
+            parameters:
+              - description: calendar id
+                in: path
+                name: calendar-id
+                required: true
+                schema:
+                  type: string
+            responses:
+              '200':
+                description: successful operation
+              '404':
+                description: Invalid input
+            requestBody:
+              $ref: '#/components/requestBodies/period'
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Periods
+      summary: Get all periods calendars
+      description: 'Get all periods calendars'
+      operationId: get all periods calendars
+
+      parameters:
+        - description: calendar id
+          in: path
+          name: calendar-id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/PeriodResponseList'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+components:
+  requestBodies:
+
+### REQUEST BODY CALENDAR
+    Calendar:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar'
+      description: calendar object
+      required: true
+    period:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar_period'
+      description: calendar object
+      required: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+### CALENDAR RESPONSES
+    CalendarResponseList:
+      description: 'calendar response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/calendar_with_id'
+    calendars:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar'
+    PeriodResponseList:
+      description: 'calendar response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/calendar_period'
+    periods:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/period'
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  schemas:
+### CALENDAR SCHEMA
+    calendar:
+      type: object
+      description: calendar object
+      required:
+        - id
+        - code
+        - description
+        - periods
+        - geographic_code
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        periods:
+          type: integer
+        geographic_code:
+          type: string
+    calendar_with_id:
+      type: object
+      description: calendar object
+      required:
+        - id
+        - code
+        - description
+        - periods
+        - geographic_code
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        periods:
+          type: integer
+        geographic_code:
+          type: string
+    calendar_period:
+      type: object
+      description: calendar_period object
+      required:
+        - id
+        - calendar_code
+        - period_number
+        - description
+        - year
+        - day_type
+        - start_hour
+        - end_hour
+        - start_date
+        - end_date
+        - power
+        - energy
+      properties:
+        id:
+          type: string
+        calendar_code:
+          type: string
+        period_number:
+          type: string
+          enum: ["P1","P2","P3","P4","P5","P6"]
+        description:
+          type: string
+        year:
+          type: integer
+        day_type:
+          type: string
+          enum: ["Workable", "Festive"]
+        start_hour:
+          type: integer
+        end_hour:
+          type: integer
+        start_date:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+        end_date:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+        power:
+          type: boolean
+        energy:
+          type: boolean
+    period:
+      type: object
+      description: calendar object
+      required:
+        - id
+        - calendar_code
+        - period_number
+        - description
+        - year
+        - day_type
+        - start_hour
+        - end_hour
+        - start_date
+        - end_date
+        - power
+        - energy
+      properties:
+        id:
+          type: string
+        calendar_code:
+          type: string
+        period_number:
+          type: string
+          enum: [ "P1","P2","P3","P4","P5","P6" ]
+        description:
+          type: string
+        year:
+          type: integer
+        day_type:
+          type: string
+          enum: [ "Workable", "Festive" ]
+        start_hour:
+          type: integer
+        end_hour:
+          type: integer
+        start_date:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+        end_date:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+        power:
+          type: boolean
+        energy:
+          type: boolean
+

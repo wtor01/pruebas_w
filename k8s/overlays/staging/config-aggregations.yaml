@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-aggregations
+data:
+  TOPIC_AGGREGATIONS: pre-aggregations
+  SUBSCRIPTION_AGGREGATIONS:  pre-aggregations-sub

@@ -1,0 +1,16 @@
+<Report IdRpt="S04" IdPet="0" Version="3.1.c">
+	<Cnc Id="CIR4621232059">
+		<Cnt Id="SAG0125150903">
+			<S04 Fhi="20211101000000000W" Ctr="1" Pt="0" Mx="0" Fx="20210303184500000W">
+				<Value AIa="49" AEa="0" R1a="1" R2a="0" R3a="0" R4a="3"/>
+				<Value AIi="0" AEi="0" R1i="0" R2i="0" R3i="0" R4i="0"/>
+			</S04>
+			<S04 Fhi="20211101000000000W" Fhf="20211201000000000W" Ctr="1" Pt="0" Mx="0" Fx="20210303184500000W">
+                <Value AIa="49" AEa="0" R1a="1" R2a="0" R3a="0" R4a="3"/>
+                <Value AIi="0" AEi="0" R1i="0" R2i="0" R3i="0" R4i="0"/>
+            </S04>
+		</Cnt>
+		<Cnt Id="LGZ0019939650" ErrCat="3" ErrCode="3"/>
+		<Cnt Id="ORB0000768540" ErrCat="3" ErrCode="3"/>
+	</Cnc>
+</Report>

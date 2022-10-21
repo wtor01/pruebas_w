@@ -1,0 +1,11 @@
+<Report IdRpt="S05" IdPet="0" Version="3.1.c">
+	<Cnc Id="CIR4621232059">
+		<Cnt Id="SAG0125150903">
+			<S05 Fh="" AI="0" AE="0" R1="0" R2="0" R3="0" R4="0" Bc="130"/>
+			<S05 Fh="20170720000000000S" AI="0" AE="0" R1="0" R2="0" R3="0" R4="0" Bc="0"/>
+		</Cnt>
+		<Cnt Id="ITE0131750135" ErrCat="2" ErrCode="2"/>
+		<Cnt Id="SAG0115255574" ErrCat="2" ErrCode="2"/>
+		<Cnt Id="ZIV0034701517" ErrCat="2" ErrCode="2"/>
+	</Cnc>
+</Report>

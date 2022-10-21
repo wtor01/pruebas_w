@@ -1,0 +1,152 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api process measures dashboard
+tags:
+  - name: process measures dashboard
+paths:
+  /process-measures/dashboard/measures:
+    get:
+      tags:
+        - process measures dashboard
+      security:
+        - BearerAuth: [ ]
+      summary: process measure dashboard
+      description: ''
+      operationId: get process measure dashboard
+
+      parameters:
+        - in: query
+          name: start_date
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+          required: true
+          description: ditributor id
+      responses:
+        '200':
+          $ref: '#/components/responses/DashboardProcessMeasure'
+        '404':
+          description: Invalid input
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    DashboardProcessMeasure:
+      description: 'dashboard process measure response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - totals
+              - daily
+
+            properties:
+              totals:
+                type: object
+                required:
+                  - telegestion
+                  - telemedida
+                  - others
+                properties:
+                  telegestion:
+                    $ref: "#/components/schemas/DashboardProcessMeasureTLG"
+                  telemedida:
+                    $ref: "#/components/schemas/DashboardProcessMeasureTLM"
+                  others:
+                    $ref: "#/components/schemas/DashboardProcessMeasureOthers"
+              daily:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - date
+                    - telegestion
+                    - telemedida
+                    - others
+                  properties:
+                    date:
+                      type: string
+                      format: date
+                    telegestion:
+                      $ref: "#/components/schemas/DashboardProcessMeasureTLG"
+                    telemedida:
+                      $ref: "#/components/schemas/DashboardProcessMeasureTLM"
+                    others:
+                      $ref: "#/components/schemas/DashboardProcessMeasureOthers"
+  schemas:
+    DashboardProcessMeasureData:
+      type: object
+      required:
+        - valid
+        - invalid
+        - supervise
+        - measures_should_be
+      properties:
+        valid:
+          type: integer
+        invalid:
+          type: integer
+        supervise:
+          type: integer
+        measures_should_be:
+          type: integer
+    DashboardProcessMeasureTLG:
+      type: object
+      required:
+        - curva
+        - closing
+        - resumen
+      properties:
+        curva:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+        closing:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+        resumen:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+    DashboardProcessMeasureTLM:
+      type: object
+      required:
+        - curva
+        - closing
+      properties:
+        curva:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+        closing:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+    DashboardProcessMeasureOthers:
+      type: object
+      required:
+        - curva
+        - closing
+        - resumen
+      properties:
+        closing:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+
+
+

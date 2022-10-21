@@ -1,0 +1,273 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api process measures dashboard
+tags:
+  - name: Statistics
+paths:
+  /dashboard/statistics/global:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Statistics
+      parameters:
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+        - in: query
+          name: month
+          schema:
+            type: integer
+          required: true
+          description: Number of month
+        - in: query
+          name: year
+          schema:
+            type: integer
+          required: true
+          description: Number of year
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - "TLG"
+              - "TLM"
+              - "OTHER"
+          required: true
+          description: Type of measurement config
+      summary: get process measure statistics
+      description: 'get process measure statistics'
+      operationId: get process measure statistics
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMeasureStatisticsResponse'
+        '404':
+          description: Invalid input
+  /dashboard/statistics/cups:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Statistics
+      parameters:
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: distributor id
+        - in: query
+          name: month
+          schema:
+            type: integer
+          required: true
+          description: Number of month
+        - in: query
+          name: year
+          schema:
+            type: integer
+          required: true
+          description: Number of year
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - "TLG"
+              - "TLM"
+              - "OTHER"
+          required: true
+          description: Type of measurement config
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      summary: get process measure statistics by cups
+      description: 'get process measure statistics by cups'
+      operationId: get process measure statistics by cups
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMeasureStatisticsCUPSResponse'
+        '404':
+          description: Invalid input
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    GetMeasureStatisticsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MeasureStatisticsList'
+      description: successful operation
+    GetMeasureStatisticsCUPSResponse:
+      description: 'list statistics by cups'
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MeasureStatisticsCUPS'
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+    MeasureStatisticsCUPS:
+      type: object
+      required:
+        - distributor_id
+        - month
+        - year
+        - type
+        - cups
+      properties:
+        distributor_id:
+          type: string
+          format: uuid
+        month:
+          type: integer
+        year:
+          type: integer
+        cups:
+          type: string
+        type:
+          type: string
+          enum:
+            - "TLG"
+            - "TLM"
+            - "OTHER"
+        dailyStats:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeasureStatisticsDaily'
+    MeasureStatisticsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/MeasureStatistics'
+    MeasureStatistics:
+      type: object
+      required:
+        - distributor_id
+        - month
+        - year
+        - type
+      properties:
+        distributor_id:
+          type: string
+          format: uuid
+        month:
+          type: integer
+        year:
+          type: integer
+        type:
+          type: string
+          enum:
+            - "TLG"
+            - "TLM"
+            - "OTHER"
+        dailyStats:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeasureStatisticsDaily'
+    MeasureStatisticsDaily:
+      type: object
+      required:
+        - date
+        - expected_curve
+        - expected_dailyClosure
+        - expected_monthlyClosure
+        - load_curve
+        - daily_closure
+        - monthly_closure
+      properties:
+        date:
+          type: integer
+        expected_curve:
+          type: integer
+        expected_dailyClosure:
+          type: integer
+        expected_monthlyClosure:
+          type: integer
+        load_curve:
+          $ref: '#/components/schemas/MeasureStatisticsDailyResults'
+        daily_closure:
+          $ref: '#/components/schemas/MeasureStatisticsDailyResults'
+        monthly_closure:
+          $ref: '#/components/schemas/MeasureStatisticsDailyResults'
+    MeasureStatisticsDailyResults:
+      properties:
+        total:
+          type: integer
+        complete:
+          type: integer
+        incomplete:
+          type: integer
+        absent:
+          type: integer
+        val:
+          type: integer
+        inv:
+          type: integer
+        sup:
+          type: integer

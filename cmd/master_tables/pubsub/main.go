@@ -1,0 +1,34 @@
+package main
+
+import (
+	"bitbucket.org/sercide/data-ingestion/cmd/master_tables/pubsub/register"
+	"bitbucket.org/sercide/data-ingestion/internal/common/config"
+	"bitbucket.org/sercide/data-ingestion/internal/platform/postgres"
+	redis_repos "bitbucket.org/sercide/data-ingestion/internal/platform/redis"
+	"context"
+	"github.com/go-redis/redis/v9"
+	"log"
+)
+
+func main() {
+	logger := log.Default()
+
+	cnf, err := config.LoadConfig(logger)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	ctx := context.Background()
+
+	db := postgres.New(cnf)
+	var redisClient *redis.Client
+
+	if cnf.RedisEnabled {
+		redisClient = redis_repos.New(cnf)
+		defer redisClient.Close()
+	}
+
+	if err := register.Register(ctx, cnf, db, redisClient); err != nil {
+		log.Fatal(err)
+	}
+}

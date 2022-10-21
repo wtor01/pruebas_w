@@ -1,0 +1,570 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api distributor
+tags:
+  - name: distributors
+  - name: measure equipment
+paths:
+  /distributors:
+    get:
+      tags:
+        - distributors
+      security:
+        - BearerAuth: [ ]
+      summary: Get all distributors
+      description: ''
+      operationId: list distributors
+
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+
+      responses:
+        '200':
+          $ref: '#/components/responses/DistributorsResponseList'
+        '400':
+          description: Invalid input
+
+  /distributors/{distributor_id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - distributors
+      summary: Get by id
+      description: ''
+      operationId: get distributor
+      parameters:
+        - in: path
+          name: distributor_id
+          schema:
+            type: string
+          required: true
+          description: ditributor id
+      responses:
+        '200':
+          $ref: '#/components/responses/Distributor'
+        '404':
+          description: Invalid input
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /distributors/smarkia/{smarkiaId}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - distributors
+      summary: Get by smarkia id
+      description: ''
+      operationId: get smarkia distributor
+      parameters:
+        - in: path
+          name: smarkiaId
+          schema:
+            type: string
+          required: true
+          description: smarkia id
+      responses:
+        '200':
+          $ref: '#/components/responses/Distributor'
+        '404':
+          description: Invalid input
+
+  /distributors/{distributor_id}/measure-equipments:
+    get:
+      tags:
+        - measure equipment
+      security:
+        - BearerAuth: [ ]
+      summary: Get all measureEquipment
+      description: ''
+      operationId: list measure equipment
+
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: path
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: Distributor id
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "type asc"
+          description: short by
+
+      responses:
+        '200':
+          $ref: '#/components/responses/MeasureEquipmentsResponseList'
+        '404':
+          description: Invalid input
+
+  /distributors/{distributor_id}/measure-equipments/{id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - measure equipment
+      summary: Get by id
+      description: ''
+      operationId: get measure equipment
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id
+        - in: path
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: Distributor id
+      responses:
+        '200':
+          $ref: '#/components/responses/Distributor'
+        '404':
+          description: Invalid input
+
+  /measure-equipments/smarkia/{smarkiaId}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - measure equipment
+      summary: Get by smarkia id
+      description: ''
+      operationId: get smarkia measure equipment
+      parameters:
+        - in: path
+          name: smarkiaId
+          schema:
+            type: string
+          required: true
+          description: smarkia id
+      responses:
+        '200':
+          $ref: '#/components/responses/Distributor'
+        '404':
+          description: Invalid input
+  /distributors/{distributor_id}/meter_config/:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - service point
+      summary: Get Meter config
+      description: 'Get Meter config'
+      operationId: get meter config
+      parameters:
+        - in: query
+          name: cups
+          schema:
+            type: string
+          description: cups
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+          required: true
+          description: date of configuration
+        - in: path
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: Distributor id
+      responses:
+        '200':
+          $ref: '#/components/responses/MeterConfig'
+        '404':
+          description: Invalid input
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    DistributorsResponseList:
+      description: 'distributors response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Distributor'
+
+
+    MeasureEquipmentsResponseList:
+      description: 'measureEquipment response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MeasureEquipment'
+
+
+    Distributor:
+      description: 'distributor response'
+      content:
+        application/json:
+          schema:
+            type: object
+            items:
+              $ref: '#/components/schemas/Distributor'
+
+    MeasureEquipment:
+      description: 'measure equipment response'
+      content:
+        application/json:
+          schema:
+            type: object
+            items:
+              $ref: '#/components/schemas/MeasureEquipment'
+    MeterConfig:
+      description: 'measure equipment response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MeterConfig'
+
+    UnauthorizedError:
+      description: Access token is missing or INV
+
+  schemas:
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          default: 1
+        offset:
+          type: integer
+          default: 0
+    Distributor:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        r1:
+          type: string
+        smarkia_id:
+          type: string
+
+    MeasureEquipment:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        serial_number:
+          type: string
+        technology:
+          type: string
+        type:
+          type: string
+        brand:
+          type: string
+        model:
+          type: string
+        active_constant:
+          type: number
+          format: double
+        reactive_constant:
+          type: number
+          format: double
+        maximeter_constant:
+          type: number
+          format: double
+        distributor:
+          type: string
+    MeterConfig:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        curve_type:
+          type: string
+        cups:
+          type: string
+        reading_type:
+          type: string
+        priority_contract:
+          type: number
+        calendar:
+          type: string
+        ai:
+
+          type: integer
+        ae:
+          type: integer
+        r1:
+          type: integer
+        r2:
+          type: integer
+        r3:
+          type: integer
+        r4:
+          type: integer
+        mx:
+          type: integer
+        e:
+          type: integer
+
+        renting_prince:
+          type: number
+          format: double
+        tlg_code:
+          type: string
+        type:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        meter:
+          $ref: '#/components/schemas/Meter'
+        measure_point:
+          $ref: '#/components/schemas/MeasurePoint'
+        service_point:
+          $ref: '#/components/schemas/ServicePoint'
+        contractual_situation:
+          $ref: '#/components/schemas/ContractualSituation'
+    Meter:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        serial_number:
+          type: string
+        smakia_id:
+          type: string
+        brand:
+          type: string
+        model:
+          type: string
+        active_constant:
+          type: number
+          format: double
+        reactive_constant:
+          type: number
+          format: double
+        maximeter_constant:
+          type: number
+          format: double
+        type:
+          type: string
+        technology:
+          type: string
+    MeasurePoint:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        losses_perc:
+          type: string
+        losses_coef:
+          type: string
+    ContractualSituation:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        tariff:
+          type: string
+        p1_demand:
+          type: number
+          format: double
+        p2_demand:
+          type: number
+          format: double
+        p3_demand:
+          type: number
+          format: double
+        p4_demand:
+          type: number
+          format: double
+        p5_demand:
+          type: number
+          format: double
+        p6_demand:
+          type: number
+          format: double
+        retailer_code:
+          type: string
+        retailer_name:
+          type: string
+        retailer_cdos:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+    ServicePoint:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cups:
+          type: string
+        service_type:
+          type: string
+        point_type:
+          type: string
+        point_tension_level:
+          type: string
+        measure_tension_level:
+          type: string
+        tension_section:
+          type: integer
+        enabled:
+          type: boolean

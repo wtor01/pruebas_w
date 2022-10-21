@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-smarkia
+data:
+  SMARKIA_HOST: https://energycloud.smarkia.com
+  SMARKIA_SUB: smarkia-sub
+  SMARKIA_TOPIC: smarkia
+

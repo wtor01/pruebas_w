@@ -1,0 +1,80 @@
+###########################################
+# Pod para debuggear la conexion a mongo: #
+###########################################
+
+# 1. desplegamos el pod
+# kubectl apply -f ./k8s/base/mongo-debug.yaml -n measures
+# 2. nos conectamos a el
+# kubectl exec -ti -n measures mongo-debug  -- bash
+# 3. ejecutamos la conexion
+# mongosh mongodb+srv://<user>:<pass>@cluster-medidas-desa-pri.6og8n.mongodb.net/test cluster-medidas-desa.6og8n.mongodb.net/test
+# 4. salir
+# exit
+# 5 borrar el pod
+# kubectl delete -f ./k8s/base/mongo-debug.yaml -n measures
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongo-debug
+  labels:
+    app: mongo-debug
+spec:
+  containers:
+    - name: mongo-debug
+      image: mongo:latest
+      volumeMounts:
+        - name: credentials
+          mountPath: /usr/src/credentials
+          readOnly: true
+        - name: firebase
+          mountPath: usr/src/firebase
+          readOnly: true
+      env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /usr/src/credentials/sa.json
+        - name: FIREBASE_SERVICE_ACCOUNT
+          value: /usr/src/firebase/firebase.json
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: postgres-password
+        - name: MEASURE_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credentials
+              key: mongo-password
+
+      envFrom:
+        - configMapRef:
+            name: config-postgres
+        - configMapRef:
+            name: config-measures-mongodb
+        - configMapRef:
+            name: config-measures-pubsub
+        - configMapRef:
+            name: config-measures
+        - configMapRef:
+            name: config-redis
+        - configMapRef:
+            name: config-process-measures
+        - configMapRef:
+            name: config-billing-measures
+        - configMapRef:
+            name: config-aggregations
+        - configMapRef:
+            name: config-calendars-redis
+  volumes:
+    - name: credentials
+      secret:
+        secretName: credentials
+        items:
+          - key: credentials_key
+            path: sa.json
+    - name: firebase
+      secret:
+        secretName: firebase
+        items:
+          - key: firebase_key
+            path: firebase.json

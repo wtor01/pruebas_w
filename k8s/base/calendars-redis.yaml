@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calendars-redis
+  labels:
+    app: calendars-redis
+spec:
+  selector:
+    matchLabels:
+      app: calendars-redis
+  template:
+    metadata:
+      labels:
+        app: calendars-redis
+    spec:
+      containers:
+        - name: calendars-redis
+          image: pubsub
+          volumeMounts:
+            - name: credentials
+              mountPath: /usr/src/credentials
+              readOnly: true
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /usr/src/credentials/sa.json
+            - name: PUBSUB_PROCESS
+              value: CALENDARS_REDIS
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres-password
+            - name: SERVICE
+              value: calendars_redis
+            - name: MEASURE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-credentials
+                  key: mongo-password
+          envFrom:
+            - configMapRef:
+                name: config-measures
+            - configMapRef:
+                name: config-postgres
+            - configMapRef:
+                name: config-redis
+            - configMapRef:
+                name: config-calendars-redis
+            - configMapRef:
+                name: config-measures-mongodb
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+      volumes:
+        - name: credentials
+          secret:
+            secretName: credentials
+            items:
+              - key: credentials_key
+                path: sa.json

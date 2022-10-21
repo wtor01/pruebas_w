@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: measures-parse-files
+  labels:
+    app: measures-parse-files
+spec:
+  selector:
+    matchLabels:
+      app: measures-parse-files
+  template:
+    metadata:
+      labels:
+        app: measures-parse-files
+    spec:
+      containers:
+        - name: measures-parse-files
+          image: pubsub
+          volumeMounts:
+            - name: credentials
+              mountPath: /usr/src/credentials
+              readOnly: true
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /usr/src/credentials/sa.json
+            - name: PUBSUB_PROCESS
+              value: GROSS_MEASURES
+            - name: SUB_READ
+              valueFrom:
+                configMapKeyRef:
+                  name: config-measures-pubsub
+                  key: SUBSCRIPTION_UPLOAD_MEASURES
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres-password
+
+            - name: SERVICE
+              value: measures_parse_files
+            - name: MEASURE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-credentials
+                  key: mongo-password
+          envFrom:
+            - configMapRef:
+                name: config-postgres
+            - configMapRef:
+                name: config-measures-mongodb
+            - configMapRef:
+                name: config-measures-pubsub
+            - configMapRef:
+                name: config-measures
+            - configMapRef:
+                name: config-redis
+            - configMapRef:
+                name: config-process-measures
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "200m"
+      volumes:
+        - name: credentials
+          secret:
+            secretName: credentials
+            items:
+              - key: credentials_key
+                path: sa.json

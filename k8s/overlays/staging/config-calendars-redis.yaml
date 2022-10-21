@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-calendars-redis
+data:
+  TOPIC_CALENDAR_PERIODS: pre-calendars-redis
+  SUBSCRIPTION_CALENDAR_PERIODS:  pre-calendars-redis-sub

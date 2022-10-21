@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcsfuse-sftp
+spec:
+  selector:
+    matchLabels:
+      app: gcsfuse-sftp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gcsfuse-sftp
+    spec:
+      containers:
+        - name: gcsfuse-sftp
+          image: gcsfuse-sftp
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+          volumeMounts:
+            - name: credentials
+              mountPath: "/usr/src/credentials"
+              readOnly: true
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/usr/src/credentials/sa.json"
+          envFrom:
+            - configMapRef:
+                name: config-sftp
+            - configMapRef:
+                name: config-measures
+          ports:
+            - containerPort: 22
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+      volumes:
+        - name: credentials
+          secret:
+            secretName: credentials
+            items:
+              - key: credentials_key
+                path: sa.json
+        - name: config-sftp
+          configMap:
+            name: config-sftp
+        - name: config-measures
+          configMap:
+            name: config-measures
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gcsfuse-sftp
+spec:
+  type: ClusterIP
+  selector:
+    app: gcsfuse-sftp
+  ports:
+    - port: 22
+      targetPort: 22

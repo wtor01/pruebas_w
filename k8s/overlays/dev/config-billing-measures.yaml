@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-billing-measures
+data:
+  TOPIC_BILLING_MEASURES: mvh-test
+  SUBSCRIPTION_BILLING_MEASURES:  mvh-test-sub

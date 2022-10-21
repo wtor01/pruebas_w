@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: measures
+resources:
+- namespace.yaml
+- config-measures-mongo.yaml
+- config-aggregations.yaml
+- config-measures-pubsub.yaml
+- config-measures.yaml
+- config-postgres.yaml
+- config-sftp.yaml
+- config-redis.yaml
+- config-process-measures.yaml
+- config-billing-measures.yaml
+- config-smarkia.yaml
+- config-calendars-redis.yaml
+- gcsfuse-sftp.yaml
+- hpa-aggregation.yaml
+- hpa-billing-measures.yaml
+- hpa-gross-measures-insert.yaml
+- hpa-gross-measures-parse-files.yaml
+- hpa-gross-measures-smarkia.yaml
+- hpa-process-measures.yaml
+- ../../base
+images:
+  - name: gcsfuse-sftp
+    newName: eu.gcr.io/med-d-base-cdad/med-d-base-sftp
+    newTag: v0.4
+

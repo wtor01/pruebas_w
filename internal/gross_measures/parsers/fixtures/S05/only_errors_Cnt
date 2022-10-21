@@ -1,0 +1,8 @@
+<Report IdRpt="S02" IdPet="0" Version="3.1.c">
+	<Cnc Id="CIR4621232059">
+
+		<Cnt Id="ITE0131750135" ErrCat="2" ErrCode="2"/>
+		<Cnt Id="SAG0115255574" ErrCat="2" ErrCode="2"/>
+		<Cnt Id="ZIV0034701517" ErrCat="2" ErrCode="2"/>
+	</Cnc>
+</Report>

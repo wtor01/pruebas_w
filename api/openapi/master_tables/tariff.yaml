@@ -1,0 +1,347 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Auth
+tags:
+  - name: Tariffs
+paths:
+### TARIFFS API
+  /admin/master-tables/tariffs:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Tariffs
+      summary: Get all Tariffs
+      description: 'Get all Tariffs'
+      operationId: get all tariffs
+
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/TariffResponseList'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Tariffs
+      security:
+        - BearerAuth: [ ]
+      summary: Insert tariffs
+      description: 'insert tariffs'
+      operationId: insert tariffs
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/tariffs'
+  /admin/master-tables/tariffs/{tariff-id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Tariffs
+      summary: Get tariffs
+      description: 'Get tariffs'
+      operationId: get tariffs
+      parameters:
+        - description: tariffs
+          in: path
+          name: tariff-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/tariffs'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - Tariffs
+      summary: Modify all tariffs
+      description: 'Modify tariffs'
+      operationId: modify tariffs
+      parameters:
+        - description: tariffs
+          in: path
+          name: tariff-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/tariffs'
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - Tariffs
+      summary: Delete all tariff
+      description: 'delete tariff'
+      operationId: delete tariff
+      parameters:
+        - description: tariff id
+          in: path
+          name: tariff-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/tariffs'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /admin/master-tables/tariffs/tariffs-calendars/{tariff-id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Tariffs
+      summary: Get tariff calendar
+      description: 'Get tariffs cal'
+      operationId: get tariffs calendar
+      parameters:
+        - description: tariffs
+          in: path
+          name: tariff-id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/TariffCalendarResponseList'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  requestBodies:
+### REQUEST BODY TARIFFS
+    tariffs:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tariffs'
+      description: tariffs object
+      required: true
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+### TARIFFS RESPONSES
+    TariffResponseList:
+      description: 'tariff response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tariffs'
+    tariffs:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tariffs'
+    TariffCalendarResponseList:
+      description: 'tariff calendar response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tariff-calendar'
+
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  schemas:
+### TARIFFS SCHEMA
+    tariffs:
+      type: object
+      description: Tariffs object
+      required:
+        - id
+        - tariff_code
+        - description
+        - tension_level
+        - code_odos
+        - code_one
+        - periods
+        - geographic_id
+        - calendar_code
+        - coef
+      properties:
+        id:
+          type: string
+        tariff_code:
+          type: string
+        description:
+          type: string
+        tension_level:
+          type: string
+          enum: [ "AT", "MT", "BT"]
+        code_odos:
+          type: string
+        code_one:
+          type: string
+        periods:
+          type: integer
+        geographic_id:
+          type: string
+        calendar_code:
+          type: string
+        coef:
+          type: string
+          enum: ["A", "B", "C", "D"]
+    tariff-calendar:
+      type: object
+      description: Tariffs object
+      required:
+        - calendar_code
+        - tariff_code
+        - start_date
+        - end_date
+        - geographic_code
+      properties:
+        calendar_code:
+          type: string
+        tariff_code:
+          type: string
+        start_date:
+          type: string
+        end_date:
+          type: string
+        geographic_code:
+          type: string

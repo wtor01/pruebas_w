@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-billing-measures
+data:
+  TOPIC_BILLING_MEASURES: pre-mvh
+  SUBSCRIPTION_BILLING_MEASURES:  pre-mvh-sub

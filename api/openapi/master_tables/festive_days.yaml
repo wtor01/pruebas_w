@@ -1,0 +1,217 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api Master tables - Festive days
+tags:
+  - name: Festive days
+paths:
+  /admin/master-tables/festive-days:
+    get:
+      tags:
+        - Festive days
+      security:
+        - BearerAuth: [ ]
+      summary: Get all festive days
+      description: 'Servicio para la obtención del listado de dias festivos en el sistema'
+      operationId: list festive days
+
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/FestiveDaysList'
+        '404':
+          description: Invalid input
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Festive days
+      summary: Post festive day
+      description: ''
+      operationId: post festive day
+      requestBody:
+        $ref: "#/components/requestBodies/FestiveDay"
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+
+  /admin/master-tables/festive-days/{festive-days_id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Festive days
+      summary: Get festive day by id
+      description: ''
+      operationId: get festive day
+      parameters:
+        - in: path
+          name: festive-days_id
+          schema:
+            type: string
+          required: true
+          description: festive-days id
+      responses:
+        '200':
+          $ref: '#/components/responses/GetFestiveDay'
+        '404':
+          description: Invalid input
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Festive days
+      summary: Put festive day
+      description: ''
+      operationId: put festive day
+      parameters:
+        - in: path
+          name: festive-days_id
+          schema:
+            type: string
+          required: true
+          description: festive-days id
+      requestBody:
+        $ref: "#/components/requestBodies/FestiveDay"
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Festive days
+      summary: Delete festive day
+      description: ''
+      operationId: delete festive day
+      parameters:
+        - in: path
+          name: festive-days_id
+          schema:
+            type: string
+          required: true
+          description: festive-days id
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+
+components:
+  requestBodies:
+    FestiveDay:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/FestiveDays"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    FestiveDaysList:
+      description: 'festive days list response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FestiveDays'
+    GetFestiveDay:
+      description: 'festive days response'
+      content:
+        application/json:
+          schema:
+              $ref: '#/components/schemas/FestiveDays'
+
+  schemas:
+    FestiveDays:
+      type: object
+      description: festive days object
+      required:
+        - id
+        - date
+        - description
+        - geographic_id
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+        description:
+          type: string
+        geographic_id:
+          type: string
+

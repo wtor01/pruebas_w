@@ -1,0 +1,6804 @@
+openapi: 3.0.0
+servers:
+- url: http://{hostname}/api
+  variables:
+    hostname:
+      default: localhost:8080
+- url: https://{hostname}/api
+  variables:
+    hostname:
+      default: localhost
+info:
+  version: 1.0.0
+  title: api
+tags:
+- name: validations measure
+- name: validations measure config
+- name: Measure validation
+- name: auth
+- name: dashboard
+- name: distributors
+- name: measure equipment
+- name: Geographic zones
+- name: Festive days
+- name: Seasons
+- name: Tariffs
+- name: Calendars
+- name: billing measures scheduler
+- name: billing measures dashboard
+- name: self-consumption
+- name: process measures dashboard
+- name: process measures scheduler
+- name: Statistics
+- name: Aggregations config
+- name: aggregations
+- name: dashboard
+- name: Statistics
+- name: Aggregation features available
+- name: Aggregations config
+- name: Aggregations
+- name: smarkia
+- name: gross measure dashboard
+paths:
+  /admin/aggregations/config/:
+    get:
+      description: Get all aggregations config
+      operationId: Get all aggregations config
+      parameters:
+      - description: Filter by query name
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationsConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all aggregations config
+      tags:
+      - Aggregations config
+    post:
+      description: Create aggregation config
+      operationId: Create aggregation config
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationConfig'
+      responses:
+        "200":
+          $ref: '#/components/responses/CreateAggregationConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create aggregation config
+      tags:
+      - Aggregations config
+  /admin/aggregations/config/{aggregation_config_id}:
+    delete:
+      description: Delete aggregation config
+      operationId: Delete aggregation config
+      parameters:
+      - description: aggregation config id
+        in: path
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete aggregation config
+      tags:
+      - Aggregations config
+    get:
+      description: Get aggregation config
+      operationId: Get aggregation config
+      parameters:
+      - description: aggregation config id
+        in: path
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get aggregation config
+      tags:
+      - Aggregations config
+    put:
+      description: Update aggregation config
+      operationId: Update aggregation config
+      parameters:
+      - description: aggregation config id
+        in: path
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          minLength: 1
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationConfig'
+      responses:
+        "200":
+          $ref: '#/components/responses/UpdateAggregationConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Update aggregation config
+      tags:
+      - Aggregations config
+  /admin/aggregations/features:
+    get:
+      description: Get all aggregation features available
+      operationId: Get all aggregation features available
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationFeatures'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all aggregation features available
+      tags:
+      - Aggregation features available
+    post:
+      description: Create aggregation feature available
+      operationId: Create aggregation features available
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationFeature'
+      responses:
+        "200":
+          $ref: '#/components/responses/CreateAggregationFeature'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create aggregation feature available
+      tags:
+      - Aggregation features available
+  /admin/aggregations/features/{feature_id}:
+    delete:
+      description: Delete aggregation feature available
+      operationId: Delete aggregation features available
+      parameters:
+      - description: feature id
+        in: path
+        name: feature_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete aggregation feature available
+      tags:
+      - Aggregation features available
+    get:
+      description: Get one aggregation feature available
+      operationId: Get aggregation features available
+      parameters:
+      - description: feature id
+        in: path
+        name: feature_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregationFeature'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get one aggregation feature available
+      tags:
+      - Aggregation features available
+    put:
+      description: Update aggregation feature available
+      operationId: Update aggregation features available
+      parameters:
+      - description: feature id
+        in: path
+        name: feature_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AggregationFeature'
+      responses:
+        "200":
+          $ref: '#/components/responses/UpdateAggregationFeature'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Update aggregation feature available
+      tags:
+      - Aggregation features available
+  /admin/distributors/{distributor_id}/validations-measure-config:
+    get:
+      description: List all validations measure configs
+      operationId: list validations measure config
+      parameters:
+      - description: The type of the validations measure config
+        in: query
+        name: type
+        schema:
+          enum:
+          - INM
+          - PROC
+          - COHE
+          type: string
+      - description: distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/ListValidationMeasureConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: List validations measure
+      tags:
+      - validations measure config
+    post:
+      description: create validations measures config
+      operationId: Create validations measure config
+      parameters:
+      - description: distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateValidationMeasureConfig'
+      responses:
+        "201":
+          $ref: '#/components/responses/CreateValidationMeasureConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create validations measure config
+      tags:
+      - validations measure config
+  /admin/distributors/{distributor_id}/validations-measure-config/{configuration_id}:
+    delete:
+      description: delete validations measures
+      operationId: Delete validations measure config
+      parameters:
+      - description: configuration id
+        in: path
+        name: configuration_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete validations measure config
+      tags:
+      - validations measure config
+    get:
+      description: get validations measures config
+      operationId: Get validations measure config
+      parameters:
+      - description: configuration id
+        in: path
+        name: configuration_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetValidationMeasureConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get validations measure config
+      tags:
+      - validations measure config
+    put:
+      description: update validations measures config
+      operationId: Update validations measure config
+      parameters:
+      - description: configuration id
+        in: path
+        name: configuration_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateValidationMeasureConfig'
+      responses:
+        "201":
+          $ref: '#/components/responses/CreateValidationMeasureConfig'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get validations measure config
+      tags:
+      - validations measure config
+  /admin/master-tables/calendars:
+    get:
+      description: Get all calendars
+      operationId: get all calendars
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/CalendarResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all calendars
+      tags:
+      - Calendars
+    post:
+      description: insert calendars
+      operationId: insert calendars
+      requestBody:
+        $ref: '#/components/requestBodies/Calendar'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert calendars
+      tags:
+      - Calendars
+  /admin/master-tables/calendars/{calendar-id}:
+    delete:
+      description: delete calendar
+      operationId: delete calendar
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/calendars'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete calendar
+      tags:
+      - Calendars
+    get:
+      description: Get calendar
+      operationId: get calendar
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/calendars'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get calendar
+      tags:
+      - Calendars
+    put:
+      description: Modify calendar
+      operationId: modify calendar
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Calendar'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify all calendars
+      tags:
+      - Calendars
+  /admin/master-tables/calendars/{calendar-id}/periods:
+    get:
+      description: Get all periods calendars
+      operationId: get all periods calendars
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/PeriodResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all periods calendars
+      tags:
+      - Periods
+    post:
+      description: insert periods
+      operationId: insert periods
+      parameters:
+      - description: calendar id
+        in: path
+        name: calendar-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/period'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert periods
+      tags:
+      - Periods
+  /admin/master-tables/calendars/periods/{period-id}:
+    delete:
+      description: delete period
+      operationId: delete period
+      parameters:
+      - description: period id
+        in: path
+        name: period-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete period
+      tags:
+      - Periods
+    get:
+      description: Get period
+      operationId: get period
+      parameters:
+      - description: period id
+        in: path
+        name: period-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/periods'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get period
+      tags:
+      - Periods
+    put:
+      description: Modify Period Calendar
+      operationId: modify Period Calendar
+      parameters:
+      - description: period id
+        in: path
+        name: period-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/period'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify Period Calendar
+      tags:
+      - Periods
+  /admin/master-tables/festive-days:
+    get:
+      description: Servicio para la obtención del listado de dias festivos en el sistema
+      operationId: list festive days
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/FestiveDaysList'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get all festive days
+      tags:
+      - Festive days
+    post:
+      description: ""
+      operationId: post festive day
+      requestBody:
+        $ref: '#/components/requestBodies/FestiveDay'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Post festive day
+      tags:
+      - Festive days
+  /admin/master-tables/festive-days/{festive-days_id}:
+    delete:
+      description: ""
+      operationId: delete festive day
+      parameters:
+      - description: festive-days id
+        in: path
+        name: festive-days_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Delete festive day
+      tags:
+      - Festive days
+    get:
+      description: ""
+      operationId: get festive day
+      parameters:
+      - description: festive-days id
+        in: path
+        name: festive-days_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetFestiveDay'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get festive day by id
+      tags:
+      - Festive days
+    put:
+      description: ""
+      operationId: put festive day
+      parameters:
+      - description: festive-days id
+        in: path
+        name: festive-days_id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/FestiveDay'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Put festive day
+      tags:
+      - Festive days
+  /admin/master-tables/generate/calendars:
+    post:
+      description: Generate all calendars
+      operationId: generate calendars periods
+      responses:
+        "200":
+          description: success operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Generate all calendars
+      tags:
+      - Calendars
+  /admin/master-tables/generate/festive_days:
+    post:
+      description: Generate Festive Days
+      operationId: generate festive days
+      responses:
+        "200":
+          description: success operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Generate Festive Days
+      tags:
+      - Festive days
+  /admin/master-tables/geographic-zones:
+    get:
+      description: Get all geographic zones
+      operationId: get all  geographic zones
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/GeographicResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all geographic zones
+      tags:
+      - Geographic zones
+    post:
+      description: ""
+      operationId: insert geographic zone
+      requestBody:
+        $ref: '#/components/requestBodies/GeographicZones'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert geographic zone
+      tags:
+      - Geographic zones
+  /admin/master-tables/geographic-zones/{geographic-id}:
+    delete:
+      description: delete geographic zone
+      operationId: delete geographic zone
+      parameters:
+      - description: geographic id
+        in: path
+        name: geographic-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/geographic_zones'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete all geographic zones
+      tags:
+      - Geographic zones
+    get:
+      description: Get geographic zone
+      operationId: get geographic zone
+      parameters:
+      - description: geographic id
+        in: path
+        name: geographic-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/geographic_zones'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get geographic zone
+      tags:
+      - Geographic zones
+    put:
+      description: Modify geographic zone
+      operationId: modify geographic zone
+      parameters:
+      - description: geographic id
+        in: path
+        name: geographic-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/GeographicZones'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify all geographic zones
+      tags:
+      - Geographic zones
+  /admin/master-tables/seasons:
+    get:
+      description: Get all seasons
+      operationId: get all seasons
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The number of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/SeasonsResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all seasons
+      tags:
+      - Seasons
+    post:
+      description: insert season
+      operationId: insert season
+      requestBody:
+        $ref: '#/components/requestBodies/Seasons'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert seasons
+      tags:
+      - Seasons
+  /admin/master-tables/seasons/{season-id}:
+    delete:
+      description: delete season
+      operationId: delete season
+      parameters:
+      - description: season-id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/seasons'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete season
+      tags:
+      - Seasons
+    get:
+      description: Get season
+      operationId: get season
+      parameters:
+      - description: season id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/seasons'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get season
+      tags:
+      - Seasons
+    put:
+      description: Modify season
+      operationId: modify season
+      parameters:
+      - description: season id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Seasons'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify a season
+      tags:
+      - Seasons
+  /admin/master-tables/seasons/{season-id}/day_types:
+    get:
+      description: Get all day types
+      operationId: get all day types
+      parameters:
+      - description: season-id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/DayTypesResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all day types
+      tags:
+      - Day types
+    post:
+      description: insert day type
+      operationId: insert day type
+      parameters:
+      - description: season id
+        in: path
+        name: season-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Day_types'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert day type
+      tags:
+      - Day types
+  /admin/master-tables/seasons/day_types/{day-type-id}:
+    delete:
+      description: Delete day type
+      operationId: delete day type
+      parameters:
+      - description: day-type-id
+        in: path
+        name: day-type-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete day type
+      tags:
+      - Day types
+    get:
+      description: Get day type
+      operationId: get day type
+      parameters:
+      - description: day type id
+        in: path
+        name: day-type-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/dayTypes'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get day type
+      tags:
+      - Day types
+    put:
+      description: Modify day type
+      operationId: modify day type
+      parameters:
+      - description: day type id
+        in: path
+        name: day-type-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/Day_types'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify day type
+      tags:
+      - Day types
+  /admin/master-tables/tariffs:
+    get:
+      description: Get all Tariffs
+      operationId: get all tariffs
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/TariffResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all Tariffs
+      tags:
+      - Tariffs
+    post:
+      description: insert tariffs
+      operationId: insert tariffs
+      requestBody:
+        $ref: '#/components/requestBodies/tariffs'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Insert tariffs
+      tags:
+      - Tariffs
+  /admin/master-tables/tariffs/{tariff-id}:
+    delete:
+      description: delete tariff
+      operationId: delete tariff
+      parameters:
+      - description: tariff id
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/tariffs'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete all tariff
+      tags:
+      - Tariffs
+    get:
+      description: Get tariffs
+      operationId: get tariffs
+      parameters:
+      - description: tariffs
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/tariffs'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get tariffs
+      tags:
+      - Tariffs
+    put:
+      description: Modify tariffs
+      operationId: modify tariffs
+      parameters:
+      - description: tariffs
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/tariffs'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Modify all tariffs
+      tags:
+      - Tariffs
+  /admin/master-tables/tariffs/tariffs-calendars/{tariff-id}:
+    get:
+      description: Get tariffs cal
+      operationId: get tariffs calendar
+      parameters:
+      - description: tariffs
+        in: path
+        name: tariff-id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/TariffCalendarResponseList'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get tariff calendar
+      tags:
+      - Tariffs
+  /admin/validations-measure:
+    get:
+      description: List all validations measures
+      operationId: list validations measure
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/ListValidationMeasures'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: List validations measure
+      tags:
+      - validations measure
+    post:
+      description: create validations measures
+      operationId: Create validations measure
+      requestBody:
+        $ref: '#/components/requestBodies/CreateValidationMeasure'
+      responses:
+        "201":
+          $ref: '#/components/responses/CreateValidationMeasures'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create validations measure
+      tags:
+      - validations measure
+  /admin/validations-measure/{validation_id}:
+    delete:
+      description: delete validations measures
+      operationId: Delete validations measure
+      parameters:
+      - description: validations id
+        in: path
+        name: validation_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete validations measure
+      tags:
+      - validations measure
+    get:
+      description: get validations measures
+      operationId: Get validations measure
+      parameters:
+      - description: validations id
+        in: path
+        name: validation_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetValidationMeasure'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get validations measure
+      tags:
+      - validations measure
+    put:
+      description: update validations measures
+      operationId: Update validations measure
+      parameters:
+      - description: validations id
+        in: path
+        name: validation_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateValidationMeasure'
+      responses:
+        "201":
+          $ref: '#/components/responses/CreateValidationMeasures'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Update validations measure
+      tags:
+      - validations measure
+  /aggregations:
+    get:
+      description: Get all aggregations
+      operationId: Get all aggregations
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          default: 0
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: The id of the aggregation config
+        in: query
+        name: aggregation_config_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: The day of generation the aggregations
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: The day of generation the aggregations
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregations'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get all aggregations
+      tags:
+      - Aggregations
+  /aggregations/{aggregation_id}:
+    get:
+      description: Get aggregation
+      operationId: Get aggregation
+      parameters:
+      - description: aggregation id
+        in: path
+        name: aggregation_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetAggregation'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get aggregation
+      tags:
+      - Aggregations
+  /billing-measures/dashboard/fiscal-measures:
+    get:
+      description: Search distributor fiscal billing measures
+      operationId: search distributor fiscal billing measures
+      parameters:
+      - description: The distributor cups whose the data will be taken
+        in: query
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: The distributor whose data will be taken
+        in: query
+        name: distributorId
+        required: true
+        schema:
+          type: string
+      - description: Start date of the fiscal billing measures
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: End date of the fiscal billing measures
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalBillingMeasures'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search distributor for fiscal billing measures
+      tags:
+      - billing measures dashboard
+  /billing-measures/resume/{id}:
+    get:
+      description: Get billing measures resume by id
+      operationId: Get billing measures resume by id
+      parameters:
+      - description: billing measure id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/BillingMeasuresResume'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get billing measures resume by id
+      tags:
+      - billing measures resume
+  /billing-measures/scheduler:
+    get:
+      description: List billing measures scheduler
+      operationId: list billing measures scheduler
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/ListBillingMeasuresScheduler'
+        "400":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: List billing measures scheduler
+      tags:
+      - billing measures scheduler
+    post:
+      description: create billing measures scheduler
+      operationId: Create billing measures scheduler
+      requestBody:
+        $ref: '#/components/requestBodies/CreateBillingMeasuresScheduler'
+      responses:
+        "201":
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create billing measures scheduler
+      tags:
+      - billing measures scheduler
+  /billing-measures/scheduler/{id}:
+    delete:
+      description: delete billing measures scheduler
+      operationId: Delete billing measures scheduler
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete billing measures scheduler
+      tags:
+      - billing measures scheduler
+    get:
+      description: Get billing measures scheduler by id
+      operationId: Get billing measures scheduler by id
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get billing measures scheduler by id
+      tags:
+      - billing measures scheduler
+    patch:
+      description: patch billing measures scheduler
+      operationId: Patch billing measures scheduler
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBillingMeasuresScheduler'
+      responses:
+        "201":
+          $ref: '#/components/responses/BillingMeasuresScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Patch billing measures scheduler
+      tags:
+      - billing measures scheduler
+  /billing_measure/dashboard/summary:
+    get:
+      parameters:
+      - description: The distributor ID whose the data will be taken
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: meter_type
+        required: true
+        schema:
+          $ref: '#/components/schemas/MeterType'
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalMeasureSummary'
+        "400":
+          description: bad request
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      tags:
+      - billing measures dashboard
+  /billing_measure/tax/measure:
+    get:
+      parameters:
+      - description: The distributor ID whose the data will be taken
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The measure type
+        in: query
+        name: measure_type
+        required: true
+        schema:
+          enum:
+          - TLM
+          - TLG
+          - OTHER
+          type: string
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalMeasure'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      tags:
+      - fiscal measures dashboard
+  /billing_measure/tax/measurebycups:
+    get:
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: The distributor ID whose the data will be taken
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The measure type
+        in: query
+        name: measure_type
+        required: true
+        schema:
+          enum:
+          - TLM
+          - TLG
+          - OTHER
+          type: string
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          description: Date of configuration
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/FiscalMeasureByCupsResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      tags:
+      - fiscal measures dashboard
+  /billing_measures/mvh:
+    post:
+      description: create billing measures MVH
+      operationId: Create billing measures MVH
+      requestBody:
+        $ref: '#/components/requestBodies/CreateBillingMeasuresMVH'
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid input
+        "401":
+          description: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create billing mvh
+      tags:
+      - billing measures mvh
+  /dashboard/gross-measure/cups:
+    get:
+      description: get process measure statistics by cups
+      operationId: get process measure statistics by cups
+      parameters:
+      - description: distributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: Number of month
+        in: query
+        name: month
+        required: true
+        schema:
+          type: integer
+      - description: Number of year
+        in: query
+        name: year
+        required: true
+        schema:
+          type: integer
+      - description: Type of measurement config
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      - description: Flag for ghost equipments
+        in: query
+        name: ghost
+        required: true
+        schema:
+          type: boolean
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/GetGrossMeasureDashboardCUPSResponse'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: get process measure statistics by cups
+      tags:
+      - Statistics
+  /dashboard/gross-measure/global:
+    get:
+      description: get dashboard gross measure
+      operationId: get dashboard gross measure
+      parameters:
+      - description: distributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: Number of month
+        in: query
+        name: month
+        required: true
+        schema:
+          type: integer
+      - description: Number of year
+        in: query
+        name: year
+        required: true
+        schema:
+          type: integer
+      - description: Type of measurement config
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetGrossMeasureDashboardResponse'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: get dashboard gross measure
+      tags:
+      - Statistics
+  /dashboard/measures:
+    get:
+      description: ""
+      operationId: get measure dashboard
+      parameters:
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: ditributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/DashboardMeasure'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: measure dashboard
+      tags:
+      - dashboard
+  /dashboard/statistics/cups:
+    get:
+      description: get process measure statistics by cups
+      operationId: get process measure statistics by cups
+      parameters:
+      - description: distributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: Number of month
+        in: query
+        name: month
+        required: true
+        schema:
+          type: integer
+      - description: Number of year
+        in: query
+        name: year
+        required: true
+        schema:
+          type: integer
+      - description: Type of measurement config
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/GetMeasureStatisticsCUPSResponse'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: get process measure statistics by cups
+      tags:
+      - Statistics
+  /dashboard/statistics/global:
+    get:
+      description: get process measure statistics
+      operationId: get process measure statistics
+      parameters:
+      - description: distributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: Number of month
+        in: query
+        name: month
+        required: true
+        schema:
+          type: integer
+      - description: Number of year
+        in: query
+        name: year
+        required: true
+        schema:
+          type: integer
+      - description: Type of measurement config
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetMeasureStatisticsResponse'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: get process measure statistics
+      tags:
+      - Statistics
+  /distributors:
+    get:
+      description: ""
+      operationId: list distributors
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: name asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/DistributorsResponseList'
+        "400":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get all distributors
+      tags:
+      - distributors
+  /distributors/{distributor_id}:
+    get:
+      description: ""
+      operationId: get distributor
+      parameters:
+      - description: ditributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/Distributor'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get by id
+      tags:
+      - distributors
+  /distributors/{distributor_id}/measure-equipments:
+    get:
+      description: ""
+      operationId: list measure equipment
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Search text
+        in: query
+        name: q
+        schema:
+          type: string
+      - description: Distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: short by
+        in: query
+        name: sort
+        schema:
+          items:
+            example: type asc
+            type: string
+          type: array
+      responses:
+        "200":
+          $ref: '#/components/responses/MeasureEquipmentsResponseList'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get all measureEquipment
+      tags:
+      - measure equipment
+  /distributors/{distributor_id}/measure-equipments/{id}:
+    get:
+      description: ""
+      operationId: get measure equipment
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: Distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/Distributor'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get by id
+      tags:
+      - measure equipment
+  /distributors/{distributor_id}/meter_config/:
+    get:
+      description: Get Meter config
+      operationId: get meter config
+      parameters:
+      - description: cups
+        in: query
+        name: cups
+        schema:
+          type: string
+      - description: date of configuration
+        in: query
+        name: date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: Distributor id
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/MeterConfig'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get Meter config
+      tags:
+      - service point
+  /distributors/smarkia/{smarkiaId}:
+    get:
+      description: ""
+      operationId: get smarkia distributor
+      parameters:
+      - description: smarkia id
+        in: path
+        name: smarkiaId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/Distributor'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get by smarkia id
+      tags:
+      - distributors
+  /gross-measures/dashboard/{cups}/curve-process-measures:
+    get:
+      description: Search curve of meter for gross measure
+      operationId: getCurveGrossMeasureMeter
+      parameters:
+      - description: The service point distributor_id whose the data will be taken
+        in: query
+        name: distributor
+        required: true
+        schema:
+          type: string
+      - description: The cups of equipment whose the data will be taken
+        in: path
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: Date of the gross curve measures
+        in: query
+        name: date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: curve_type
+        required: true
+        schema:
+          enum:
+          - HOURLY
+          - QUARTER
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/CurveGrossMeasureMeterResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search curve of meter for gross measure
+      tags:
+      - gross measure dashboard
+  /gross-measures/dashboard/{cups}/service-point:
+    get:
+      description: Search service point gross measures
+      operationId: getGrossMeasureServicePoint
+      parameters:
+      - description: The cups whose the data will be taken
+        in: path
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: The distributor whose the data will be taken
+        in: query
+        name: distributor
+        required: true
+        schema:
+          type: string
+      - description: Start date of the process measures
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: End date of the process measures
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/ServicePointGrossMeasureResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search service point for gross measures
+      tags:
+      - gross measure dashboard
+  /gross_measures/smarkia/recover:
+    post:
+      description: ""
+      operationId: recover smarkia measures
+      requestBody:
+        $ref: '#/components/requestBodies/RecoverSmarkiaMeasures'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: recover smarkia measures
+      tags:
+      - smarkia
+  /me:
+    get:
+      description: ""
+      operationId: authorization user
+      responses:
+        "200":
+          $ref: '#/components/responses/Me'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Authorization users from bearer token
+      tags:
+      - auth
+  /measure-equipments/smarkia/{smarkiaId}:
+    get:
+      description: ""
+      operationId: get smarkia measure equipment
+      parameters:
+      - description: smarkia id
+        in: path
+        name: smarkiaId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/Distributor'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Get by smarkia id
+      tags:
+      - measure equipment
+  /measure-validation/{measure-type}:
+    put:
+      description: ""
+      operationId: put measurement validation
+      parameters:
+      - description: measure-type
+        in: path
+        name: measure-type
+        required: true
+        schema:
+          enum:
+          - curve
+          - monthly-closure
+          - daily-closure
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/MeasureForValidate'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: Measurement validation
+      tags:
+      - Measure validation
+  /process-measures/dashboard/cups:
+    get:
+      description: Get distributor cups list with processed measure info
+      operationId: get process measure dashboard list
+      parameters:
+      - description: Limit of Meters to view
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Meters to skip
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          type: integer
+      - description: Start Date
+        in: query
+        name: start_date
+        required: true
+        schema:
+          example: "2006-05-01"
+          format: date
+          type: string
+      - description: End Date
+        in: query
+        name: end_date
+        required: true
+        schema:
+          example: "2006-05-31"
+          format: date
+          type: string
+      - description: Distributor Id
+        example: 111111-2222-3333-4444-555555555555
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: Type of meter
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/DashboardCupsProcessMeasure'
+        "400":
+          description: Invalid input
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: process measure dashboard
+      tags:
+      - process measures dashboard
+  /process-measures/dashboard/curve-process-measures:
+    get:
+      description: Search service point  process measures
+      operationId: getCurveProcessServicePoint
+      parameters:
+      - description: The service point distributor_id whose the data will be taken
+        in: query
+        name: distributor
+        required: true
+        schema:
+          type: string
+      - description: The service point cups whose the data will be taken
+        in: query
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: Start date of the process measures
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: End date of the process measures
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: curve_type
+        required: true
+        schema:
+          enum:
+          - HOURLY
+          - QUARTER
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/CurveProcessServicePoint'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search service point  for process measures
+      tags:
+      - service point dashboard process measures
+  /process-measures/dashboard/measures:
+    get:
+      description: ""
+      operationId: get process measure dashboard
+      parameters:
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: ditributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/DashboardProcessMeasure'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: process measure dashboard
+      tags:
+      - process measures dashboard
+  /process-measures/dashboard/service-point-process-measures:
+    get:
+      description: Search service point process measures
+      operationId: getDashboardProcessServicePoint
+      parameters:
+      - description: The cups whose the data will be taken
+        in: query
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: The distributor whose the data will be taken
+        in: query
+        name: distributor
+        required: true
+        schema:
+          type: string
+      - description: Start date of the process measures
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: End date of the process measures
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/ServicePointProcessDashboard'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search service point  for process measures
+      tags:
+      - service point dashboard process measures
+  /process-measures/scheduler:
+    get:
+      description: List all process measures scheduler
+      operationId: list process measures scheduler
+      parameters:
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/ListProcessMeasuresScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: List process measures scheduler
+      tags:
+      - process measures scheduler
+    post:
+      description: create process measures scheduler
+      operationId: Create process measures scheduler
+      requestBody:
+        $ref: '#/components/requestBodies/CreateProcessMeasureScheduler'
+      responses:
+        "201":
+          $ref: '#/components/responses/ProcessMeasureScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Create process measures scheduler
+      tags:
+      - process measures scheduler
+  /process-measures/scheduler/{id}:
+    delete:
+      description: delete process measures scheduler
+      operationId: Delete process measures scheduler
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          description: delete success
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Delete process measures scheduler
+      tags:
+      - process measures scheduler
+    get:
+      description: Get process measure scheduler by id
+      operationId: Get process measure scheduler by id
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/ProcessMeasureScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get process measure scheduler by id
+      tags:
+      - process measures scheduler
+    patch:
+      description: patch process measures scheduler
+      operationId: Patch process measures scheduler
+      parameters:
+      - description: scheduler id
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/PatchProcessMeasureScheduler'
+      responses:
+        "201":
+          $ref: '#/components/responses/ProcessMeasureScheduler'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Patch process measures scheduler
+      tags:
+      - process measures scheduler
+  /self-consumption/{distributor_id}/:
+    get:
+      description: Search self-consumption unit config
+      operationId: Search self-consumption unit config
+      parameters:
+      - description: The distributor whose data will be taken
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The distributor cups whose the data will be taken
+        in: query
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: Date of configuration
+        in: query
+        name: date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/SelfConsumptionUnitConfigResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search self-consumption unit config
+      tags:
+      - self-consumption
+  /self-consumption/{distributor_id}/{cau}:
+    get:
+      description: Get self consumption unit
+      operationId: get self consumption by cau
+      parameters:
+      - description: ID of distributor
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: cau
+        required: true
+        schema:
+          description: CAU ID
+          type: string
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/BillingSelfConsumptionUnitResponse'
+        "400":
+          description: bad request
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Get self consumption cau
+      tags:
+      - self-consumption
+  /self-consumption/actives/{distributor_id}:
+    get:
+      description: Search actives self-consumption unit config by distributor id
+      operationId: Search actives self-consumption unit config by distributor id
+      parameters:
+      - description: The distributor whose data will be taken
+        in: path
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      - description: Date of configuration
+        in: query
+        name: date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/ListSelfConsumptionUnitConfigs'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search actives self-consumption unit config by distributor id
+      tags:
+      - self-consumption
+components:
+  requestBodies:
+    AggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfigBase'
+    AggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeaturesBase'
+    Calendar:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar'
+      description: calendar object
+      required: true
+    CreateBillingMeasuresMVH:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MVH'
+      description: successful operation
+    CreateBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresSchedulerBase'
+    CreateProcessMeasureScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProcessMeasureSchedulerBase'
+    CreateValidationMeasure:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationMeasureBase'
+    CreateValidationMeasureConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationMeasureConfigCreate'
+    Day_types:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/day_types'
+      description: day types object
+      required: true
+    FestiveDay:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FestiveDays'
+    GeographicZones:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/geographic_zones'
+      description: geographic zone object
+      required: true
+    MeasureForValidate:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MeasureForValidate'
+      description: Validation Measure object
+      required: true
+    PatchBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresSchedulerUpdatable'
+    PatchProcessMeasureScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProcessMeasureSchedulerUpdatable'
+    RecoverSmarkiaMeasures:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RecoverSmarkiaMeasures'
+      description: PubSubMessage object
+      required: true
+    Seasons:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/seasons'
+      description: seasons object
+      required: true
+    period:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar_period'
+      description: calendar object
+      required: true
+    tariffs:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tariffs'
+      description: tariffs object
+      required: true
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+  responses:
+    BillingMeasuresResume:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresResume'
+      description: successful operation
+    BillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresScheduler'
+      description: successful operation
+    BillingSelfConsumptionUnitResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingSelfConsumptionUnits'
+      description: Get billing self consumption unit by cau
+    CalendarResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/calendar_with_id'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: calendar response
+    CreateAggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfig'
+      description: successful operation
+    CreateAggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeature'
+      description: successful operation
+    CreateValidationMeasureConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationMeasureConfig'
+      description: successful operation
+    CreateValidationMeasures:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationMeasure'
+      description: successful operation
+    CurveGrossMeasureMeterResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CurveGrossMeasureMeterList'
+      description: successful operation
+    CurveProcessServicePoint:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CurveProcessServicePoint'
+      description: successful operation
+    DashboardCupsProcessMeasure:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/DashboardCups'
+                  type: array
+              required:
+              - results
+              type: object
+      description: dashboard list cups process measure response
+    DashboardMeasure:
+      content:
+        application/json:
+          schema:
+            properties:
+              daily:
+                items:
+                  properties:
+                    date:
+                      format: date
+                      type: string
+                    others:
+                      $ref: '#/components/schemas/Others'
+                    telegestion:
+                      $ref: '#/components/schemas/Telegestion'
+                    telemedida:
+                      $ref: '#/components/schemas/Telemedida'
+                  required:
+                  - date
+                  - telegestion
+                  - telemedida
+                  - others
+                  type: object
+                type: array
+              totals:
+                properties:
+                  others:
+                    $ref: '#/components/schemas/Others'
+                  telegestion:
+                    $ref: '#/components/schemas/Telegestion'
+                  telemedida:
+                    $ref: '#/components/schemas/Telemedida'
+                required:
+                - telegestion
+                - telemedida
+                - others
+                type: object
+            required:
+            - totals
+            - daily
+            type: object
+      description: dashboard measure response
+    DashboardProcessMeasure:
+      content:
+        application/json:
+          schema:
+            properties:
+              daily:
+                items:
+                  properties:
+                    date:
+                      format: date
+                      type: string
+                    others:
+                      $ref: '#/components/schemas/DashboardProcessMeasureOthers'
+                    telegestion:
+                      $ref: '#/components/schemas/DashboardProcessMeasureTLG'
+                    telemedida:
+                      $ref: '#/components/schemas/DashboardProcessMeasureTLM'
+                  required:
+                  - date
+                  - telegestion
+                  - telemedida
+                  - others
+                  type: object
+                type: array
+              totals:
+                properties:
+                  others:
+                    $ref: '#/components/schemas/DashboardProcessMeasureOthers'
+                  telegestion:
+                    $ref: '#/components/schemas/DashboardProcessMeasureTLG'
+                  telemedida:
+                    $ref: '#/components/schemas/DashboardProcessMeasureTLM'
+                required:
+                - telegestion
+                - telemedida
+                - others
+                type: object
+            required:
+            - totals
+            - daily
+            type: object
+      description: dashboard process measure response
+    DayTypesResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/day_types'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: day types response
+    Distributor:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/Distributor'
+            type: object
+      description: distributor response
+    DistributorsResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/Distributor'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: distributors response
+    FestiveDaysList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/FestiveDays'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: festive days list response
+    FiscalBillingMeasures:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/FiscalBillingMeasures'
+            type: array
+      description: successful operation
+    FiscalMeasure:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/FiscalMeasure'
+            type: array
+      description: successful operation
+    FiscalMeasureByCupsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FiscalMeasureByCupsResponse'
+      description: successful operation
+    FiscalMeasureSummary:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/FiscalMeasureSummary'
+            type: array
+      description: successful operation
+    GeographicResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/geographic_zone_with_id'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: geographical response
+    GetAggregation:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationWithCUPS'
+      description: successful operation
+    GetAggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfig'
+      description: successful operation
+    GetAggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeature'
+      description: successful operation
+    GetAggregationFeatures:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeatures'
+      description: successful operation
+    GetAggregations:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Aggregations'
+      description: successful operation
+    GetAggregationsConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationsConfig'
+      description: successful operation
+    GetFestiveDay:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FestiveDays'
+      description: festive days response
+    GetGrossMeasureDashboardCUPSResponse:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/GrossMeasureDashboardCUPS'
+                  type: array
+              required:
+              - results
+              type: object
+      description: list statistics by cups
+    GetGrossMeasureDashboardResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GrossMeasureDashboardList'
+      description: successful operation
+    GetMeasureStatisticsCUPSResponse:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/MeasureStatisticsCUPS'
+                  type: array
+              required:
+              - results
+              type: object
+      description: list statistics by cups
+    GetMeasureStatisticsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MeasureStatisticsList'
+      description: successful operation
+    GetValidationMeasure:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationMeasure'
+      description: successful operation
+    GetValidationMeasureConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationMeasureConfig'
+      description: successful operation
+    ListBillingMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/BillingMeasuresScheduler'
+                  type: array
+              required:
+              - results
+              type: object
+      description: successful operation
+    ListProcessMeasuresScheduler:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/ProcessMeasureScheduler'
+                  type: array
+              required:
+              - results
+              type: object
+      description: successful operation
+    ListSelfConsumptionUnitConfigs:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/SelfConsumptionUnitConfig'
+                  type: array
+              required:
+              - results
+              type: object
+      description: successful operation
+    ListValidationMeasureConfig:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/ValidationMeasureConfig'
+                  type: array
+              required:
+              - results
+              type: object
+      description: successful operation
+    ListValidationMeasures:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/ValidationMeasure'
+                  type: array
+              required:
+              - results
+              type: object
+      description: successful operation
+    Me:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+      description: successful operation
+    MeasureEquipment:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/MeasureEquipment'
+            type: object
+      description: measure equipment response
+    MeasureEquipmentsResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/MeasureEquipment'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: measureEquipment response
+    MeterConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MeterConfig'
+      description: measure equipment response
+    PeriodResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/calendar_period'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: calendar response
+    ProcessMeasureScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProcessMeasureScheduler'
+      description: successful operation
+    SeasonsResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/seasons'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: seasons response
+    SelfConsumptionUnitConfigResponse:
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/SelfConsumptionUnitConfig'
+            type: array
+      description: successful operation
+    ServicePointGrossMeasureResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GrossMeasureServicePoint'
+      description: successful operation
+    ServicePointProcessDashboard:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServicePointDashboardResponse'
+      description: successful operation
+    TariffCalendarResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/tariff-calendar'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: tariff calendar response
+    TariffResponseList:
+      content:
+        application/json:
+          schema:
+            properties:
+              _links:
+                properties:
+                  next:
+                    description: url for request next list
+                    type: string
+                  prev:
+                    description: url for request previous list
+                    type: string
+                  self:
+                    description: url for request current list
+                    type: string
+                required:
+                - self
+                type: object
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
+              results:
+                items:
+                  $ref: '#/components/schemas/tariffs'
+                type: array
+              size:
+                type: integer
+            required:
+            - limit
+            - count
+            - size
+            - _links
+            - results
+            type: object
+      description: tariff response
+    UnauthorizedError:
+      description: Access token is missing or INV
+    UpdateAggregationConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationConfig'
+      description: successful operation
+    UpdateAggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AggregationFeature'
+      description: successful operation
+    calendars:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/calendar'
+      description: successful operation
+    dayTypes:
+      content:
+        application/json:
+          schema:
+            $ref: ""
+      description: successful operation
+    geographic_zones:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/geographic_zones'
+      description: successful operation
+    periods:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/period'
+      description: successful operation
+    seasons:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/seasons'
+      description: successful operation
+    tariffs:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/tariffs'
+      description: successful operation
+  schemas:
+    Aggregation:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/AggregationBase'
+    AggregationBase:
+      description: Aggregation
+      properties:
+        aggregation_before:
+          format: uuid
+          type: string
+        aggregation_config_id:
+          format: uuid
+          type: string
+        date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        features:
+          items:
+            $ref: '#/components/schemas/Features'
+          type: array
+      required:
+      - aggregation_config_id
+      - date
+      - features
+      type: object
+    AggregationCUPSCurrent:
+      description: Characteristics of CUPS in Aggregation
+      properties:
+        CUPS:
+          type: string
+        Type:
+          enum:
+          - IN
+          - NEUTRAL
+          type: string
+      type: object
+    AggregationCUPSPrevious:
+      description: Characteristics of CUPS in Aggregation
+      properties:
+        CUPS:
+          type: string
+        Type:
+          enum:
+          - OUT
+          - NEUTRAL
+          type: string
+      type: object
+    AggregationConfig:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/AggregationConfigBase'
+    AggregationConfigBase:
+      description: Aggregation configuration
+      properties:
+        description:
+          type: string
+        end_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        features:
+          items:
+            $ref: '#/components/schemas/AggregationFeature'
+          type: array
+        name:
+          type: string
+        scheduler:
+          type: string
+        start_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: start_date
+      required:
+      - name
+      - scheduler
+      - start_date
+      - features
+      type: object
+    AggregationFeature:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/AggregationFeaturesBase'
+    AggregationFeatures:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        results:
+          items:
+            $ref: '#/components/schemas/AggregationFeature'
+          type: array
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    AggregationFeaturesBase:
+      description: Aggregation features
+      properties:
+        field:
+          type: string
+        name:
+          type: string
+      required:
+      - name
+      - field
+      type: object
+    AggregationWithCUPS:
+      allOf:
+      - properties:
+          listCUPSCurrent:
+            items:
+              $ref: '#/components/schemas/AggregationCUPSCurrent'
+            type: array
+          listCUPSPrevious:
+            items:
+              $ref: '#/components/schemas/AggregationCUPSPrevious'
+            type: array
+        type: object
+      - $ref: '#/components/schemas/Aggregation'
+    Aggregations:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/AggregationsResults'
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    AggregationsConfig:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        results:
+          items:
+            $ref: '#/components/schemas/AggregationConfig'
+          type: array
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    AggregationsResults:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/Aggregation'
+          type: array
+    BalanceOriginSummary:
+      description: Origin of balance
+      properties:
+        daily:
+          type: integer
+        monthly:
+          type: integer
+        no_closure:
+          type: integer
+        other:
+          type: integer
+      required:
+      - monthly
+      - daily
+      - other
+      - no_closure
+      type: object
+    BalancePeriods:
+      properties:
+        method:
+          enum:
+          - REAL
+          - OUTLINED
+          - ESTIMATED
+          - CALCULATED
+          - ADJUSTED
+          type: string
+        origin:
+          enum:
+          - REMOTE
+          - AUTO
+          - ESTIMATE
+          - TLG
+          - TLM
+          - LOCAL
+          type: string
+        p0:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p1:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p2:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p3:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p4:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p5:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p6:
+          $ref: '#/components/schemas/PeriodFeatures'
+      required:
+      - origin
+      - method
+      type: object
+    BalanceTypeSummary:
+      description: Balance Qualification type
+      properties:
+        calculated:
+          type: integer
+        estimated:
+          type: integer
+        real:
+          type: integer
+      required:
+      - real
+      - calculated
+      - estimated
+      type: object
+    BillingCalendarConsumption:
+      properties:
+        date:
+          type: string
+        energy:
+          format: double
+          type: number
+        values:
+          items:
+            $ref: '#/components/schemas/BillingCalendarConsumptionValues'
+          type: array
+      required:
+      - date
+      - values
+      - energy
+      type: object
+    BillingCalendarConsumptionValues:
+      properties:
+        energy:
+          format: double
+          type: number
+        hour:
+          type: string
+      required:
+      - hour
+      - energy
+      type: object
+    BillingCauInfo:
+      properties:
+        config_type:
+          description: Cau config type
+          type: string
+        id:
+          description: Cau Id
+          type: string
+        name:
+          description: Cau name
+          type: string
+        points:
+          description: Cau Number Points
+          type: integer
+        unit_type:
+          description: Cau Unit type
+          type: string
+      required:
+      - id
+      - name
+      - points
+      - unit_type
+      - config_type
+      type: object
+    BillingMeasuresResume:
+      properties:
+        actual_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+        previous_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+      required:
+      - previous_reading_closure
+      - actual_reading_closure
+      type: object
+    BillingMeasuresScheduler:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/BillingMeasuresSchedulerBase'
+    BillingMeasuresSchedulerBase:
+      allOf:
+      - properties:
+          name:
+            type: string
+        required:
+        - name
+        type: object
+      - $ref: '#/components/schemas/BillingMeasuresSchedulerUpdatable'
+    BillingMeasuresSchedulerUpdatable:
+      properties:
+        distributor_id:
+          format: uuid
+          type: string
+        meter_type:
+          items:
+            enum:
+            - TLG
+            - TLM
+            - OTHER
+            type: string
+          type: array
+          x-oapi-codegen-extra-tags:
+            binding: dive,oneof='TLG' 'TLM' 'OTHER'
+        point_type:
+          enum:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          type: string
+          x-opai-codegen-extra-tags:
+            binding: oneof='1' '2' '3' '4' '5'
+        process_type:
+          enum:
+          - D-C TLG
+          - D-C NO TLG
+          - G-D
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='D-C TLG' 'D-C NO TLG' 'G-D'
+        scheduler:
+          type: string
+        service_type:
+          enum:
+          - D-D
+          - G-D
+          - D-C
+          type: string
+          x-opai-codegen-extra-tags:
+            binding: oneof='G-D' 'D-D' 'D-C'
+      required:
+      - service_type
+      - point_type
+      - meter_type
+      - process_type
+      - scheduler
+      type: object
+    BillingNetGeneration:
+      properties:
+        date:
+          type: string
+        excedente:
+          format: double
+          type: number
+        net:
+          format: double
+          type: number
+      required:
+      - date
+      - net
+      - excedente
+      type: object
+    BillingSelfConsumptionCups:
+      description: Billing Cups points list
+      properties:
+        consumption:
+          format: double
+          type: number
+        cups:
+          type: string
+        end_date:
+          type: string
+        generation:
+          format: double
+          type: number
+        ps_type:
+          type: string
+        start_date:
+          type: string
+      required:
+      - cups
+      - ps_type
+      - consumption
+      - generation
+      - start_date
+      - end_date
+      type: object
+    BillingSelfConsumptionUnitInfo:
+      properties:
+        calendar_consumption:
+          items:
+            $ref: '#/components/schemas/BillingCalendarConsumption'
+          type: array
+        cau_info:
+          $ref: '#/components/schemas/BillingCauInfo'
+        cups_list:
+          items:
+            $ref: '#/components/schemas/BillingSelfConsumptionCups'
+          type: array
+        end_date:
+          format: date-time
+          type: string
+        net_generation:
+          items:
+            $ref: '#/components/schemas/BillingNetGeneration'
+          type: array
+        start_date:
+          format: date-time
+          type: string
+        status:
+          type: string
+        totals:
+          $ref: '#/components/schemas/BillingTotals'
+        unit_consumption:
+          items:
+            $ref: '#/components/schemas/BillingUnitConsumption'
+          type: array
+      required:
+      - end_date
+      - start_date
+      - status
+      - cau_info
+      - totals
+      - net_generation
+      - unit_consumption
+      - calendar_consumption
+      - cups_list
+      type: object
+    BillingSelfConsumptionUnits:
+      items:
+        $ref: '#/components/schemas/BillingSelfConsumptionUnitInfo'
+      type: array
+    BillingTotals:
+      properties:
+        aux_consumption:
+          description: Auxiliar services consumption
+          format: double
+          type: number
+        gross_generation:
+          description: Gross Generation
+          format: double
+          type: number
+        net_generation:
+          description: Net Generation
+          format: double
+          type: number
+        network_consumption:
+          description: Network consumption
+          format: double
+          type: number
+        self_consumption:
+          description: Self consumption consumed
+          format: double
+          type: number
+      required:
+      - gross_generation
+      - net_generation
+      - self_consumption
+      - network_consumption
+      - aux_consumption
+      type: object
+    BillingUnitConsumption:
+      properties:
+        aux:
+          format: double
+          type: number
+        date:
+          type: string
+        network:
+          format: double
+          type: number
+        self:
+          format: double
+          type: number
+      required:
+      - date
+      - network
+      - self
+      - aux
+      type: object
+    CalendarCurve:
+      items:
+        $ref: '#/components/schemas/CalendarCurveItem'
+      type: array
+    CalendarCurveItem:
+      properties:
+        date:
+          type: string
+        status:
+          enum:
+          - REAL
+          - ADJUSTED
+          - OUTLINED
+          - CALCULATED
+          - ESTIMATED
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='REAL' 'ADJUSTED' 'OUTLINED' 'CALCULATED'  'ESTIMATED'
+      required:
+      - date
+      - status
+      type: object
+    ContractualSituation:
+      properties:
+        end_date:
+          format: date
+          type: string
+        id:
+          format: uuid
+          type: string
+        p1_demand:
+          format: double
+          type: number
+        p2_demand:
+          format: double
+          type: number
+        p3_demand:
+          format: double
+          type: number
+        p4_demand:
+          format: double
+          type: number
+        p5_demand:
+          format: double
+          type: number
+        p6_demand:
+          format: double
+          type: number
+        retailer_cdos:
+          type: string
+        retailer_code:
+          type: string
+        retailer_name:
+          type: string
+        start_date:
+          format: date
+          type: string
+        tariff:
+          type: string
+      required:
+      - id
+      type: object
+    Curve:
+      properties:
+        P1:
+          $ref: '#/components/schemas/CurveValues'
+        P2:
+          $ref: '#/components/schemas/CurveValues'
+        P3:
+          $ref: '#/components/schemas/CurveValues'
+        P4:
+          $ref: '#/components/schemas/CurveValues'
+        P5:
+          $ref: '#/components/schemas/CurveValues'
+        P6:
+          $ref: '#/components/schemas/CurveValues'
+        status:
+          type: string
+      required:
+      - status
+      type: object
+    CurveGrossMeasureMeter:
+      allOf:
+      - $ref: '#/components/schemas/ServicePointCalendarStatus'
+      - properties:
+          file:
+            type: string
+          values:
+            $ref: '#/components/schemas/GrossMeasureValues'
+        required:
+        - file
+        - values
+        type: object
+    CurveGrossMeasureMeterList:
+      description: Curve process measures distributor object
+      items:
+        $ref: '#/components/schemas/CurveGrossMeasureMeter'
+      type: array
+    CurveProcessServicePoint:
+      properties:
+        date:
+          type: string
+        status:
+          type: string
+        values:
+          $ref: '#/components/schemas/CurveValues'
+      required:
+      - date
+      - status
+      - values
+      type: object
+    CurveProcessServicePointResponse:
+      description: Curve process measures distributor object
+      items:
+        $ref: '#/components/schemas/CurveProcessServicePoint'
+      type: array
+    CurveStatusSummary:
+      description: Status
+      properties:
+        absent:
+          type: integer
+        completed:
+          type: integer
+        not_completed:
+          type: integer
+      required:
+      - completed
+      - not_completed
+      - absent
+      type: object
+    CurveTypeSummary:
+      description: Curve Qualification type
+      properties:
+        adjusted:
+          type: integer
+        calculated:
+          type: integer
+        estimated:
+          type: integer
+        outlined:
+          type: integer
+        real:
+          type: integer
+      required:
+      - real
+      - adjusted
+      - outlined
+      type: object
+    CurveValues:
+      properties:
+        AE:
+          format: double
+          type: number
+        AI:
+          format: double
+          type: number
+        R1:
+          format: double
+          type: number
+        R2:
+          format: double
+          type: number
+        R3:
+          format: double
+          type: number
+        R4:
+          format: double
+          type: number
+      required:
+      - AI
+      - AE
+      - R1
+      - R2
+      - R3
+      - R4
+      type: object
+    DailyClosure:
+      properties:
+        P0:
+          $ref: '#/components/schemas/CurveValues'
+        P1:
+          $ref: '#/components/schemas/CurveValues'
+        P2:
+          $ref: '#/components/schemas/CurveValues'
+        P3:
+          $ref: '#/components/schemas/CurveValues'
+        P4:
+          $ref: '#/components/schemas/CurveValues'
+        P5:
+          $ref: '#/components/schemas/CurveValues'
+        P6:
+          $ref: '#/components/schemas/CurveValues'
+        status:
+          type: string
+      required:
+      - status
+      type: object
+    DailyCurve:
+      properties:
+        ae:
+          format: double
+          type: number
+        ae_auto:
+          format: double
+          type: number
+        ai:
+          format: double
+          type: number
+        ai_auto:
+          format: double
+          type: number
+        date:
+          type: string
+        r1:
+          format: double
+          type: number
+        r2:
+          format: double
+          type: number
+        r3:
+          format: double
+          type: number
+        r4:
+          format: double
+          type: number
+        status:
+          enum:
+          - REAL
+          - ADJUSTED
+          - OUTLINED
+          - CALCULATED
+          - ESTIMATED
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='REAL' 'ADJUSTED' 'OUTLINED' 'CALCULATED'  'ESTIMATED'
+      required:
+      - date
+      - status
+      - ai
+      - ae
+      - r1
+      - r2
+      - r3
+      - r4
+      type: object
+    DashboardCups:
+      properties:
+        cups:
+          type: string
+        curve:
+          $ref: '#/components/schemas/DashboardCupsValues'
+        daily:
+          $ref: '#/components/schemas/DashboardCupsValues'
+        monthly:
+          $ref: '#/components/schemas/DashboardCupsValues'
+      required:
+      - cups
+      - curve
+      - daily
+      - monthly
+      type: object
+    DashboardCupsValues:
+      properties:
+        invalid:
+          type: integer
+        none:
+          type: integer
+        should_be:
+          type: integer
+        supervise:
+          type: integer
+        total:
+          type: integer
+        valid:
+          type: integer
+      required:
+      - valid
+      - invalid
+      - supervise
+      - none
+      - total
+      - should_be
+      type: object
+    DashboardProcessMeasureData:
+      properties:
+        invalid:
+          type: integer
+        measures_should_be:
+          type: integer
+        supervise:
+          type: integer
+        valid:
+          type: integer
+      required:
+      - valid
+      - invalid
+      - supervise
+      - measures_should_be
+      type: object
+    DashboardProcessMeasureOthers:
+      properties:
+        closing:
+          $ref: '#/components/schemas/DashboardProcessMeasureData'
+      required:
+      - curva
+      - closing
+      - resumen
+      type: object
+    DashboardProcessMeasureTLG:
+      properties:
+        closing:
+          $ref: '#/components/schemas/DashboardProcessMeasureData'
+        curva:
+          $ref: '#/components/schemas/DashboardProcessMeasureData'
+        resumen:
+          $ref: '#/components/schemas/DashboardProcessMeasureData'
+      required:
+      - curva
+      - closing
+      - resumen
+      type: object
+    DashboardProcessMeasureTLM:
+      properties:
+        closing:
+          $ref: '#/components/schemas/DashboardProcessMeasureData'
+        curva:
+          $ref: '#/components/schemas/DashboardProcessMeasureData'
+      required:
+      - curva
+      - closing
+      type: object
+    Data:
+      properties:
+        invalid:
+          type: integer
+        measures_should_be:
+          type: integer
+        supervise:
+          type: integer
+        valid:
+          type: integer
+      required:
+      - valid
+      - invalid
+      - supervise
+      - measures_should_be
+      type: object
+    Distributor:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        r1:
+          type: string
+        smarkia_id:
+          type: string
+      required:
+      - id
+      type: object
+    ExecutionSummary:
+      properties:
+        balance_origin:
+          description: Origin of balance
+          enum:
+          - NO_CLOSURE
+          - MONTHLY
+          - DAILY
+          - OTHER
+          type: string
+        balance_type:
+          $ref: '#/components/schemas/MethodType'
+        curve_status:
+          description: Status of curve
+          enum:
+          - COMPLETE
+          - INCOMPLETE
+          - ABSENT
+          type: string
+        curve_type:
+          $ref: '#/components/schemas/MethodType'
+      required:
+      - balance_type
+      - curve_type
+      - balance_origin
+      - curve_status
+      type: object
+    ExtraConfig:
+      additionalProperties:
+        type: string
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    Features:
+      description: Features
+      properties:
+        feature:
+          $ref: '#/components/schemas/AggregationFeature'
+        value:
+          type: string
+      type: object
+    FestiveDays:
+      description: festive days object
+      properties:
+        date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        description:
+          type: string
+        geographic_id:
+          type: string
+        id:
+          type: string
+      required:
+      - id
+      - date
+      - description
+      - geographic_id
+      type: object
+    FiscalBillingMeasures:
+      description: Fiscal billing measures distributor object
+      properties:
+        balance:
+          $ref: '#/components/schemas/BalancePeriods'
+        calendar_curve:
+          $ref: '#/components/schemas/CalendarCurve'
+        cups:
+          type: string
+        curve:
+          $ref: '#/components/schemas/Curve'
+        end_date:
+          type: string
+        execution_summary:
+          $ref: '#/components/schemas/ExecutionSummary'
+        graph_history:
+          items:
+            $ref: '#/components/schemas/FiscalMeasureGraph'
+          type: array
+        id:
+          format: uuid
+          type: string
+        last_mv_date:
+          type: string
+        magnitudes:
+          items:
+            enum:
+            - AI
+            - AE
+            - R1
+            - R2
+            - R3
+            - R4
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+          type: array
+        meter_type:
+          type: string
+        periods:
+          items:
+            enum:
+            - P1
+            - P2
+            - P3
+            - P4
+            - P5
+            - P6
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+          type: array
+        principal_magnitude:
+          enum:
+          - AI
+          - AE
+          - R1
+          - R2
+          - R3
+          - R4
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+        start_date:
+          type: string
+        status:
+          enum:
+          - PENDING
+          - CALCULATING
+          - CALCULATED
+          - READY_TO_BILL
+          - BILLED
+          - OVERRIDED
+          - CANCELLED
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='PENDING' 'CALCULATING' 'CALCULATED' 'READY_TO_BILL' 'BILLED'
+              'OVERRRIDED' 'CANCELLED'
+        summary:
+          $ref: '#/components/schemas/SummaryStructure'
+      required:
+      - id
+      - cups
+      - meter_type
+      - start_date
+      - end_date
+      - last_mv_date
+      - principal_magnitude
+      - status
+      - periods
+      - magnitudes
+      - summary
+      - calendar_curve
+      - graph_history
+      - balance
+      - curve
+      - execution_summary
+      type: object
+    FiscalMeasure:
+      description: fiscalMeasure calculated
+      properties:
+        curve_estimated:
+          type: integer
+        curve_real:
+          type: integer
+        origin_atr_auto_reading:
+          type: integer
+        origin_atr_daily:
+          type: integer
+        origin_atr_estimated:
+          type: integer
+        origin_atr_monthly:
+          type: integer
+        origin_atr_visual:
+          type: integer
+        qualification_atr_calculated:
+          type: integer
+        qualification_atr_estimated:
+          type: integer
+        qualification_atr_real:
+          type: integer
+        qualification_curve_adjusted:
+          type: integer
+        qualification_curve_calculated:
+          type: integer
+        qualification_curve_estimated:
+          type: integer
+        qualification_curve_profiled:
+          type: integer
+        qualification_curve_real:
+          type: integer
+        total:
+          type: integer
+      type: object
+    FiscalMeasureByCups:
+      description: fiscalMeasure by cups
+      properties:
+        atr_calification:
+          enum:
+          - REAL
+          - CALCULATED
+          - ESTIMATED
+          - OUTLINED
+          - ADJUSTED
+          type: string
+        atr_type:
+          description: Origin of balance
+          enum:
+          - MONTHLY
+          - DAILY
+          - NO_CLOSURE
+          - OTHER
+          type: string
+        cups:
+          type: string
+        curve_calification:
+          enum:
+          - REAL
+          - CALCULATED
+          - ESTIMATED
+          - OUTLINED
+          - ADJUSTED
+          type: string
+        curve_status:
+          enum:
+          - COMPLETE
+          - INCOMPLETE
+          type: string
+        end_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        start_date:
+          format: date-time
+          type: string
+          x-oapi-codegen-extra-tags:
+            json: start_date
+      type: object
+    FiscalMeasureByCupsResponse:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - properties:
+          results:
+            items:
+              $ref: '#/components/schemas/FiscalMeasureByCups'
+            type: array
+        required:
+        - results
+        type: object
+    FiscalMeasureGraph:
+      description: mvh execution info
+      properties:
+        balance_algorithm:
+          description: balance algorithm executed
+          type: string
+        cch_algorithm:
+          description: curve algorithm executed
+          type: string
+        finished_at:
+          description: time of graph execute end
+          format: date-time
+          type: string
+        magnitude:
+          description: Magnitude graph execution
+          enum:
+          - AI
+          - AE
+          - R1
+          - R2
+          - R3
+          - R4
+          type: string
+        period:
+          description: Period graph execution
+          enum:
+          - P0
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+          type: string
+        started_at:
+          description: time of graph execute start
+          format: date-time
+          type: string
+      required:
+      - period
+      - magnitude
+      - balance_algorithm
+      - cch_algorithm
+      - started_at
+      - finished_at
+      type: object
+    FiscalMeasureSummary:
+      description: fiscalMeasure calculated
+      properties:
+        balance_origin:
+          $ref: '#/components/schemas/BalanceOriginSummary'
+        balance_type:
+          $ref: '#/components/schemas/BalanceTypeSummary'
+        curve_status:
+          $ref: '#/components/schemas/CurveStatusSummary'
+        curve_type:
+          $ref: '#/components/schemas/CurveTypeSummary'
+        meter_type:
+          $ref: '#/components/schemas/MeterType'
+        total:
+          type: integer
+      required:
+      - meter_type
+      - total
+      - balance_type
+      - curve_type
+      - balance_origin
+      - curve_status
+      type: object
+    GrossMeasureDashboard:
+      properties:
+        distributor_id:
+          format: uuid
+          type: string
+        gross_measures_daily_stats:
+          items:
+            $ref: '#/components/schemas/GrossMeasureDashboardDaily'
+          type: array
+        month:
+          type: integer
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+        year:
+          type: integer
+      required:
+      - distributor_id
+      - month
+      - year
+      - type
+      type: object
+    GrossMeasureDashboardCUPS:
+      properties:
+        cups:
+          type: string
+        distributor_id:
+          format: uuid
+          type: string
+        gross_measures_daily_stats:
+          items:
+            $ref: '#/components/schemas/GrossMeasureDashboardDaily'
+          type: array
+        month:
+          type: integer
+        serial_number:
+          type: string
+        service_point_type:
+          type: string
+        service_type:
+          type: string
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+        year:
+          type: integer
+      required:
+      - distributor_id
+      - month
+      - year
+      - type
+      - cups
+      - service_type
+      - service_point_type
+      - serial_number
+      type: object
+    GrossMeasureDashboardDaily:
+      properties:
+        daily_closure:
+          type: integer
+        day:
+          type: integer
+        expected_daily_closure:
+          type: integer
+        expected_hourly_curve:
+          type: integer
+        expected_monthly_closure:
+          type: integer
+        expected_quarterly_curve:
+          type: integer
+        hourly_curve:
+          type: integer
+        monthly_closure:
+          type: integer
+        quarterly_curve:
+          type: integer
+      required:
+      - date
+      - hourly_curve
+      - quarterly_curve
+      - daily_closure
+      - monthly_closure
+      - expected_hourly_curve
+      - expected_quarterly_curve
+      - expected_daily_closure
+      - expected_monthly_closure
+      type: object
+    GrossMeasureDashboardList:
+      items:
+        $ref: '#/components/schemas/GrossMeasureDashboard'
+      type: array
+    GrossMeasureMonthlyValues:
+      allOf:
+      - $ref: '#/components/schemas/GrossMeasureValues'
+      - properties:
+          AEi:
+            format: double
+            type: number
+          AIi:
+            format: double
+            type: number
+          R1i:
+            format: double
+            type: number
+          R2i:
+            format: double
+            type: number
+          R3i:
+            format: double
+            type: number
+          R4i:
+            format: double
+            type: number
+        required:
+        - AIi
+        - AEi
+        - R1i
+        - R2i
+        - R3i
+        - R4i
+        type: object
+    GrossMeasureServicePoint:
+      properties:
+        calendar_curve:
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+          type: array
+        calendar_daily_closure:
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+          type: array
+        calendar_monthly_closure:
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+          type: array
+        cups:
+          type: string
+        list_daily_closures:
+          items:
+            $ref: '#/components/schemas/ServicePointDailyValues'
+          type: array
+        list_monthly_closures:
+          items:
+            $ref: '#/components/schemas/ServicePointMonthlyValues'
+          type: array
+        magnitude_energy:
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE'
+        magnitudes:
+          items:
+            enum:
+            - AI
+            - AE
+            - R1
+            - R2
+            - R3
+            - R4
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+          type: array
+        periods:
+          items:
+            enum:
+            - P1
+            - P2
+            - P3
+            - P4
+            - P5
+            - P6
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+          type: array
+        serial_number:
+          type: string
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      required:
+      - type
+      - cups
+      - serial_number
+      - magnitudes
+      - magnitude_energy
+      - periods
+      - calendar_daily_closure
+      - calendar_monthly_closure
+      - calendar_curve
+      - list_daily_closures
+      - list_monthly_closures
+      type: object
+    GrossMeasureValidationStatus:
+      enum:
+      - VAL
+      - INV
+      - SUPERV
+      - ALERT
+      - NONE
+      type: string
+    GrossMeasureValues:
+      properties:
+        AE:
+          format: double
+          type: number
+        AI:
+          format: double
+          type: number
+        R1:
+          format: double
+          type: number
+        R2:
+          format: double
+          type: number
+        R3:
+          format: double
+          type: number
+        R4:
+          format: double
+          type: number
+      required:
+      - AI
+      - AE
+      - R1
+      - R2
+      - R3
+      - R4
+      type: object
+    ItemCurve:
+      properties:
+        date:
+          type: string
+        values:
+          items:
+            $ref: '#/components/schemas/DailyCurve'
+          type: array
+      required:
+      - date
+      - values
+      type: object
+    ItemSummaryStructure:
+      properties:
+        p1:
+          format: double
+          type: number
+        p2:
+          format: double
+          type: number
+        p3:
+          format: double
+          type: number
+        p4:
+          format: double
+          type: number
+        p5:
+          format: double
+          type: number
+        p6:
+          format: double
+          type: number
+        total:
+          format: double
+          type: number
+      required:
+      - total
+      - p1
+      - p2
+      - p3
+      - p4
+      - p5
+      - p6
+      type: object
+    MVH:
+      description: day_types object
+      properties:
+        cups:
+          type: string
+        distributor_id:
+          type: string
+        time:
+          format: date
+          type: string
+      required:
+      - distributor_id
+      - cups
+      - time
+      type: object
+    MagnitudeFeatures:
+      properties:
+        consum:
+          format: double
+          type: number
+        reading:
+          format: double
+          type: number
+      required:
+      - reading
+      - consum
+      type: object
+    MagnitudePeriodFeatures:
+      properties:
+        ae:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        ai:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r1:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r2:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r3:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r4:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+      required:
+      - ai
+      - ae
+      - r1
+      - r2
+      - r3
+      - r4
+      type: object
+    MeasureEquipment:
+      properties:
+        active_constant:
+          format: double
+          type: number
+        brand:
+          type: string
+        distributor:
+          type: string
+        id:
+          type: string
+        maximeter_constant:
+          format: double
+          type: number
+        model:
+          type: string
+        reactive_constant:
+          format: double
+          type: number
+        serial_number:
+          type: string
+        technology:
+          type: string
+        type:
+          type: string
+      required:
+      - id
+      type: object
+    MeasureForValidate:
+      description: Measure for validation object
+      properties:
+        ID:
+          type: string
+        invalidation_code:
+          type: string
+        status:
+          enum:
+          - VAL
+          - INV
+          type: string
+      required:
+      - ID
+      - status
+      - invalidation_code
+      type: object
+    MeasurePoint:
+      properties:
+        id:
+          format: uuid
+          type: string
+        losses_coef:
+          type: string
+        losses_perc:
+          type: string
+        type:
+          type: string
+      required:
+      - id
+      type: object
+    MeasureStatistics:
+      properties:
+        dailyStats:
+          items:
+            $ref: '#/components/schemas/MeasureStatisticsDaily'
+          type: array
+        distributor_id:
+          format: uuid
+          type: string
+        month:
+          type: integer
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+        year:
+          type: integer
+      required:
+      - distributor_id
+      - month
+      - year
+      - type
+      type: object
+    MeasureStatisticsCUPS:
+      properties:
+        cups:
+          type: string
+        dailyStats:
+          items:
+            $ref: '#/components/schemas/MeasureStatisticsDaily'
+          type: array
+        distributor_id:
+          format: uuid
+          type: string
+        month:
+          type: integer
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+        year:
+          type: integer
+      required:
+      - distributor_id
+      - month
+      - year
+      - type
+      - cups
+      type: object
+    MeasureStatisticsDaily:
+      properties:
+        daily_closure:
+          $ref: '#/components/schemas/MeasureStatisticsDailyResults'
+        date:
+          type: integer
+        expected_curve:
+          type: integer
+        expected_dailyClosure:
+          type: integer
+        expected_monthlyClosure:
+          type: integer
+        load_curve:
+          $ref: '#/components/schemas/MeasureStatisticsDailyResults'
+        monthly_closure:
+          $ref: '#/components/schemas/MeasureStatisticsDailyResults'
+      required:
+      - date
+      - expected_curve
+      - expected_dailyClosure
+      - expected_monthlyClosure
+      - load_curve
+      - daily_closure
+      - monthly_closure
+      type: object
+    MeasureStatisticsDailyResults:
+      properties:
+        absent:
+          type: integer
+        complete:
+          type: integer
+        incomplete:
+          type: integer
+        inv:
+          type: integer
+        sup:
+          type: integer
+        total:
+          type: integer
+        val:
+          type: integer
+    MeasureStatisticsList:
+      items:
+        $ref: '#/components/schemas/MeasureStatistics'
+      type: array
+    Meter:
+      properties:
+        active_constant:
+          format: double
+          type: number
+        brand:
+          type: string
+        id:
+          format: uuid
+          type: string
+        maximeter_constant:
+          format: double
+          type: number
+        model:
+          type: string
+        reactive_constant:
+          format: double
+          type: number
+        serial_number:
+          type: string
+        smakia_id:
+          type: string
+        technology:
+          type: string
+        type:
+          type: string
+      required:
+      - id
+      type: object
+    MeterConfig:
+      properties:
+        ae:
+          type: integer
+        ai:
+          type: integer
+        calendar:
+          type: string
+        contractual_situation:
+          $ref: '#/components/schemas/ContractualSituation'
+        cups:
+          type: string
+        curve_type:
+          type: string
+        e:
+          type: integer
+        end_date:
+          format: date
+          type: string
+        id:
+          format: uuid
+          type: string
+        measure_point:
+          $ref: '#/components/schemas/MeasurePoint'
+        meter:
+          $ref: '#/components/schemas/Meter'
+        mx:
+          type: integer
+        priority_contract:
+          type: number
+        r1:
+          type: integer
+        r2:
+          type: integer
+        r3:
+          type: integer
+        r4:
+          type: integer
+        reading_type:
+          type: string
+        renting_prince:
+          format: double
+          type: number
+        service_point:
+          $ref: '#/components/schemas/ServicePoint'
+        start_date:
+          format: date
+          type: string
+        tlg_code:
+          type: string
+        type:
+          type: string
+      required:
+      - id
+      type: object
+    MeterType:
+      description: Type of Meter
+      enum:
+      - TLG
+      - TLM
+      - OTHER
+      type: string
+    MethodType:
+      description: Worst type of fiscal measures curve/balance
+      enum:
+      - REAL
+      - CALCULATED
+      - ESTIMATED
+      - OUTLINED
+      - ADJUSTED
+      type: string
+    MonthlyClosure:
+      properties:
+        P0:
+          $ref: '#/components/schemas/MonthlyValues'
+        P1:
+          $ref: '#/components/schemas/MonthlyValues'
+        P2:
+          $ref: '#/components/schemas/MonthlyValues'
+        P3:
+          $ref: '#/components/schemas/MonthlyValues'
+        P4:
+          $ref: '#/components/schemas/MonthlyValues'
+        P5:
+          $ref: '#/components/schemas/MonthlyValues'
+        P6:
+          $ref: '#/components/schemas/MonthlyValues'
+        end_date:
+          type: string
+        id:
+          type: string
+        init_date:
+          type: string
+        status:
+          type: string
+      required:
+      - init_date
+      - end_date
+      - status
+      - id
+      type: object
+    MonthlyValues:
+      properties:
+        AE:
+          format: double
+          type: number
+        AEi:
+          format: double
+          type: number
+        AI:
+          format: double
+          type: number
+        AIi:
+          format: double
+          type: number
+        R1:
+          format: double
+          type: number
+        R1i:
+          format: double
+          type: number
+        R2:
+          format: double
+          type: number
+        R2i:
+          format: double
+          type: number
+        R3:
+          format: double
+          type: number
+        R3i:
+          format: double
+          type: number
+        R4:
+          format: double
+          type: number
+        R4i:
+          format: double
+          type: number
+      required:
+      - AI
+      - AE
+      - R1
+      - R2
+      - R3
+      - R4
+      - AIi
+      - AEi
+      - R1i
+      - R2i
+      - R3i
+      - R4i
+      type: object
+    Others:
+      properties:
+        closing:
+          $ref: '#/components/schemas/Data'
+      required:
+      - curva
+      - closing
+      - resumen
+      type: object
+    Pagination:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    Params:
+      properties:
+        type:
+          enum:
+          - simple
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='simple'
+        validations:
+          items:
+            $ref: '#/components/schemas/Validation'
+          type: array
+          x-oapi-codegen-extra-tags:
+            binding: required,dive
+      required:
+      - type
+      - validations
+      type: object
+    PeriodFeatures:
+      properties:
+        ae:
+          format: double
+          type: number
+        ai:
+          format: double
+          type: number
+        balance_type_ae:
+          type: string
+        balance_type_ai:
+          type: string
+        balance_type_r1:
+          type: string
+        balance_type_r2:
+          type: string
+        balance_type_r3:
+          type: string
+        balance_type_r4:
+          type: string
+        r1:
+          format: double
+          type: number
+        r2:
+          format: double
+          type: number
+        r3:
+          format: double
+          type: number
+        r4:
+          format: double
+          type: number
+      required:
+      - ai
+      - balance_type_ai
+      - ae
+      - balance_type_ae
+      - r1
+      - balance_type_r1
+      - r2
+      - balance_type_r2
+      - r3
+      - balance_type_r3
+      - r4
+      - balance_type_r4
+      type: object
+    ProcessMeasureScheduler:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/ProcessMeasureSchedulerBase'
+    ProcessMeasureSchedulerBase:
+      allOf:
+      - properties:
+          name:
+            type: string
+        required:
+        - name
+        type: object
+      - $ref: '#/components/schemas/ProcessMeasureSchedulerUpdatable'
+    ProcessMeasureSchedulerUpdatable:
+      properties:
+        description:
+          type: string
+        distributor_id:
+          format: uuid
+          type: string
+        meter_type:
+          items:
+            enum:
+            - TLG
+            - TLM
+            - OTHER
+            type: string
+          type: array
+          x-oapi-codegen-extra-tags:
+            binding: dive,oneof='TLG' 'TLM' 'OTHER'
+        point_type:
+          enum:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='1' '2' '3' '4' '5'
+        reading_type:
+          enum:
+          - curve
+          - daily_closure
+          - billing_closure
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='curve' 'daily_closure' 'billing_closure'
+        scheduler:
+          type: string
+        service_type:
+          enum:
+          - G-D
+          - D-D
+          - D-C
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='G-D' 'D-D' 'D-C'
+      required:
+      - description
+      - scheduler
+      - service_type
+      - point_type
+      - meter_type
+      - reading_type
+      type: object
+    ReadingClosure:
+      properties:
+        end_date:
+          type: string
+        measure_device:
+          type: string
+        measure_type:
+          type: string
+        origin:
+          type: string
+        p0:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p1:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p2:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p3:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p4:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p5:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p6:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        start_date:
+          type: string
+      required:
+      - origin
+      - measure_type
+      - measure_device
+      - start_date
+      - end_date
+      - p0
+      - p1
+      - p2
+      - p3
+      - p4
+      - p5
+      - p6
+      type: object
+    RecoverSmarkiaMeasures:
+      description: day_types object
+      properties:
+        cups:
+          type: string
+        date:
+          format: date
+          type: string
+        distributor_id:
+          type: string
+        process_name:
+          enum:
+          - curve
+          - close
+          type: string
+      required:
+      - distributor_id
+      - cups
+      - date
+      - process_name
+      type: object
+    SelfConsumptionConfig:
+      properties:
+        antivert_type:
+          type: string
+        cnmc_type_desc:
+          type: string
+        cnmc_type_id:
+          type: integer
+        cnmc_type_name:
+          type: string
+        compensation:
+          type: boolean
+        conf_type:
+          type: string
+        conf_type_description:
+          type: string
+        conn_type:
+          type: string
+        consumer_type:
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        excedents:
+          type: boolean
+        generation_pot:
+          type: number
+        group_subgroup:
+          type: integer
+        id:
+          format: uuid
+          type: string
+        init_date:
+          format: date-time
+          type: string
+        participant_number:
+          type: integer
+        solar_zone_id:
+          type: integer
+        solar_zone_name:
+          type: string
+        solar_zone_num:
+          type: integer
+        status_id:
+          type: integer
+        status_name:
+          type: string
+        technology_description:
+          type: string
+        technology_id:
+          type: string
+      type: object
+    SelfConsumptionPoint:
+      properties:
+        CUPS:
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        exent1_flag:
+          type: integer
+        exent2_flag:
+          type: integer
+        id:
+          format: uuid
+          type: string
+        init_date:
+          format: date-time
+          type: string
+        instalation_flag:
+          type: integer
+        partition_coeff:
+          type: number
+        service_point_type:
+          type: string
+        withoutmeter_flag:
+          type: integer
+      type: object
+    SelfConsumptionUnitConfig:
+      description: Self-consumption unit config
+      properties:
+        CAU:
+          type: string
+        ccaa:
+          type: string
+        ccaa_id:
+          type: integer
+        configs:
+          items:
+            $ref: '#/components/schemas/SelfConsumptionConfig'
+          type: array
+        distributor_id:
+          format: uuid
+          type: string
+        end_date:
+          format: date-time
+          type: string
+        id:
+          format: uuid
+          type: string
+        init_date:
+          format: date-time
+          type: string
+        name:
+          type: string
+        points:
+          items:
+            $ref: '#/components/schemas/SelfConsumptionPoint'
+          type: array
+        status_id:
+          type: integer
+        status_name:
+          type: string
+      required:
+      - id
+      - CAU
+      - name
+      - status_id
+      - status_name
+      - ccaa_id
+      - ccaa
+      - init_date
+      - end_date
+      - distributor_id
+      - configs
+      - points
+      type: object
+    ServicePoint:
+      properties:
+        cups:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          format: uuid
+          type: string
+        measure_tension_level:
+          type: string
+        name:
+          type: string
+        point_tension_level:
+          type: string
+        point_type:
+          type: string
+        service_type:
+          type: string
+        tension_section:
+          type: integer
+      required:
+      - id
+      type: object
+    ServicePointCalendarStatus:
+      properties:
+        date:
+          type: string
+        status:
+          $ref: '#/components/schemas/GrossMeasureValidationStatus'
+      required:
+      - date
+      - status
+      type: object
+    ServicePointDailyValues:
+      properties:
+        P0:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P1:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P2:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P3:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P4:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P5:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P6:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        end_date:
+          type: string
+        file:
+          type: string
+        status:
+          $ref: '#/components/schemas/GrossMeasureValidationStatus'
+      required:
+      - end_date
+      - status
+      - file
+      - P0
+      - P1
+      - P2
+      - P3
+      - P4
+      - P5
+      - P6
+      type: object
+    ServicePointDashboard:
+      properties:
+        curve:
+          $ref: '#/components/schemas/Curve'
+        daily_closure:
+          $ref: '#/components/schemas/DailyClosure'
+        date:
+          type: string
+        magnitude_energy:
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE'
+        magnitudes:
+          items:
+            enum:
+            - AI
+            - AE
+            - R1
+            - R2
+            - R3
+            - R4
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+          type: array
+        monthly_closure:
+          $ref: '#/components/schemas/MonthlyClosure'
+        periods:
+          items:
+            enum:
+            - P1
+            - P2
+            - P3
+            - P4
+            - P5
+            - P6
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+          type: array
+      required:
+      - date
+      - magnitude_energy
+      - magnitudes
+      - periods
+      - curve
+      - daily_closure
+      - monthly_closure
+      type: object
+    ServicePointDashboardResponse:
+      description: Service point process measures object by type
+      properties:
+        days:
+          $ref: '#/components/schemas/ServicePointDashboardResponseDays'
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      type: object
+    ServicePointDashboardResponseDays:
+      description: Service point process measures object
+      items:
+        $ref: '#/components/schemas/ServicePointDashboard'
+      type: array
+    ServicePointMonthlyValues:
+      properties:
+        P0:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P1:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P2:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P3:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P4:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P5:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P6:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        end_date:
+          type: string
+        file:
+          type: string
+        init_date:
+          type: string
+        status:
+          $ref: '#/components/schemas/GrossMeasureValidationStatus'
+      required:
+      - init_date
+      - end_date
+      - status
+      - file
+      - P0
+      - P1
+      - P2
+      - P3
+      - P4
+      - P5
+      - P6
+      type: object
+    SummaryStructure:
+      properties:
+        adjusted:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        calculated:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        consum:
+          description: These are not percentages
+          properties:
+            p1:
+              format: double
+              type: number
+            p2:
+              format: double
+              type: number
+            p3:
+              format: double
+              type: number
+            p4:
+              format: double
+              type: number
+            p5:
+              format: double
+              type: number
+            p6:
+              format: double
+              type: number
+            total:
+              format: double
+              type: number
+          required:
+          - total
+          - p1
+          - p2
+          - p3
+          - p4
+          - p5
+          - p6
+          type: object
+        estimated:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        outlined:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        real:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+      required:
+      - real
+      - adjusted
+      - outlined
+      - calculated
+      - estimated
+      - consum
+      type: object
+    Telegestion:
+      properties:
+        closing:
+          $ref: '#/components/schemas/Data'
+        curva:
+          $ref: '#/components/schemas/Data'
+        resumen:
+          $ref: '#/components/schemas/Data'
+      required:
+      - curva
+      - closing
+      - resumen
+      type: object
+    Telemedida:
+      properties:
+        closing:
+          $ref: '#/components/schemas/Data'
+        curva:
+          $ref: '#/components/schemas/Data'
+      required:
+      - curva
+      - closing
+      type: object
+    User:
+      description: User object
+      properties:
+        distributors:
+          items:
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              role:
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                required:
+                - id
+                - name
+                type: object
+            required:
+            - id
+            - name
+            - role
+            type: object
+          type: array
+        email:
+          type: string
+        id:
+          type: string
+        is_admin:
+          type: boolean
+        name:
+          type: string
+      required:
+      - id
+      - name
+      - email
+      - is_admin
+      - distributors
+      type: object
+    Validation:
+      properties:
+        config:
+          additionalProperties:
+            type: string
+          type: object
+        id:
+          type: string
+        keys:
+          items:
+            enum:
+            - start_date
+            - end_date
+            - measure_date
+            - qualifier
+            - AI
+            - AE
+            - R1
+            - R2
+            - R3
+            - R4
+            - MX
+            - FX
+            - E
+            type: string
+          type: array
+          x-oapi-codegen-extra-tags:
+            binding: dive,oneof='start_date' 'end_date' 'measure_date' 'qualifier'
+              'AI' 'AE' 'R1' 'R2' 'R3' 'R4' 'MX' 'FX' 'E'
+        name:
+          type: string
+        required:
+          type: boolean
+        type:
+          enum:
+          - threshold
+          - qualifier
+          - daily_date
+          - hour_date
+          - quarterly_date
+          - future_date
+          - curve_limit
+          - summary_totalizer
+          - summary_calendar
+          - zero_consumption
+          - close_hose
+          - excesive_consumption
+          - close_meter
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='threshold' 'qualifier' 'daily_date' 'hour_date' 'quarterly_date'
+              'future_date' 'curve_limit' 'summary_totalizer' 'summary_calendar' 'zero_consumption'
+              'close_hose' 'excesive_consumption' 'close_meter'
+      required:
+      - id
+      - name
+      - type
+      - keys
+      - required
+      type: object
+    ValidationMeasure:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/ValidationMeasureBase'
+    ValidationMeasureBase:
+      description: Validation measure
+      properties:
+        action:
+          enum:
+          - INV
+          - SUPERV
+          - ALERT
+          - NONE
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INV' 'SUPERV' 'ALERT' 'NONE'
+        code:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        measure_type:
+          enum:
+          - INC
+          - ABS
+          - INC_CLO
+          - ABS_CLO
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INC' 'ABS' 'INC_CLO' 'ABS_CLO'
+        message:
+          type: string
+        name:
+          type: string
+        params:
+          $ref: '#/components/schemas/Params'
+        type:
+          enum:
+          - INM
+          - PROC
+          - COHE
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INM' 'PROC' 'COHE'
+      required:
+      - name
+      - params
+      - action
+      - enabled
+      - measure_type
+      - type
+      - code
+      - message
+      type: object
+    ValidationMeasureConfig:
+      allOf:
+      - properties:
+          id:
+            format: uuid
+            type: string
+        required:
+        - id
+        type: object
+      - $ref: '#/components/schemas/ValidationMeasureConfigBase'
+    ValidationMeasureConfigBase:
+      description: Validation measure config
+      properties:
+        action:
+          enum:
+          - INV
+          - SUPERV
+          - ALERT
+          - NONE
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INV' 'SUPERV' 'ALERT' 'NONE'
+        enabled:
+          type: boolean
+        extra_config:
+          items:
+            $ref: '#/components/schemas/ExtraConfig'
+          type: array
+        validation_measure:
+          $ref: '#/components/schemas/ValidationMeasure'
+      required:
+      - validation_measure
+      - action
+      - enabled
+      type: object
+    ValidationMeasureConfigCreate:
+      description: Validation measure config create
+      properties:
+        action:
+          enum:
+          - INV
+          - SUPERV
+          - ALERT
+          - NONE
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='INV' 'SUPERV' 'ALERT' 'NONE'
+        enabled:
+          type: boolean
+        extra_config:
+          items:
+            $ref: '#/components/schemas/ExtraConfig'
+          type: array
+        validation_measure_id:
+          format: uuid
+          type: string
+      required:
+      - validation_measure_id
+      - action
+      - enabled
+      type: object
+    calendar:
+      description: calendar object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        geographic_code:
+          type: string
+        id:
+          type: string
+        periods:
+          type: integer
+      required:
+      - id
+      - code
+      - description
+      - periods
+      - geographic_code
+      type: object
+    calendar_period:
+      description: calendar_period object
+      properties:
+        calendar_code:
+          type: string
+        day_type:
+          enum:
+          - Workable
+          - Festive
+          type: string
+        description:
+          type: string
+        end_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        end_hour:
+          type: integer
+        energy:
+          type: boolean
+        id:
+          type: string
+        period_number:
+          enum:
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+          type: string
+        power:
+          type: boolean
+        start_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        start_hour:
+          type: integer
+        year:
+          type: integer
+      required:
+      - id
+      - calendar_code
+      - period_number
+      - description
+      - year
+      - day_type
+      - start_hour
+      - end_hour
+      - start_date
+      - end_date
+      - power
+      - energy
+      type: object
+    calendar_with_id:
+      description: calendar object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        geographic_code:
+          type: string
+        id:
+          type: string
+        periods:
+          type: integer
+      required:
+      - id
+      - code
+      - description
+      - periods
+      - geographic_code
+      type: object
+    day_types:
+      description: day_types object
+      properties:
+        id:
+          type: string
+        isFestive:
+          type: boolean
+        month:
+          type: integer
+        name:
+          type: string
+        season_id:
+          type: string
+      required:
+      - id
+      - name
+      - season_id
+      - month
+      - isFestive
+      type: object
+    geographic_zone_with_id:
+      description: geographic zones object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+      required:
+      - id
+      - code
+      - description
+      type: object
+    geographic_zones:
+      description: geographic zones object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+      required:
+      - id
+      - code
+      - description
+      type: object
+    period:
+      description: calendar object
+      properties:
+        calendar_code:
+          type: string
+        day_type:
+          enum:
+          - Workable
+          - Festive
+          type: string
+        description:
+          type: string
+        end_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        end_hour:
+          type: integer
+        energy:
+          type: boolean
+        id:
+          type: string
+        period_number:
+          enum:
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+          type: string
+        power:
+          type: boolean
+        start_date:
+          pattern: ^\d{2}-\d{2}-\d{4}$
+          type: string
+        start_hour:
+          type: integer
+        year:
+          type: integer
+      required:
+      - id
+      - calendar_code
+      - period_number
+      - description
+      - year
+      - day_type
+      - start_hour
+      - end_hour
+      - start_date
+      - end_date
+      - power
+      - energy
+      type: object
+    seasons:
+      description: seasons object
+      properties:
+        description:
+          type: string
+        geographic_code:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - geographic_code
+      type: object
+    tariff-calendar:
+      description: Tariffs object
+      properties:
+        calendar_code:
+          type: string
+        end_date:
+          type: string
+        geographic_code:
+          type: string
+        start_date:
+          type: string
+        tariff_code:
+          type: string
+      required:
+      - calendar_code
+      - tariff_code
+      - start_date
+      - end_date
+      - geographic_code
+      type: object
+    tariffs:
+      description: Tariffs object
+      properties:
+        calendar_code:
+          type: string
+        code_odos:
+          type: string
+        code_one:
+          type: string
+        coef:
+          enum:
+          - A
+          - B
+          - C
+          - D
+          type: string
+        description:
+          type: string
+        geographic_id:
+          type: string
+        id:
+          type: string
+        periods:
+          type: integer
+        tariff_code:
+          type: string
+        tension_level:
+          enum:
+          - AT
+          - MT
+          - BT
+          type: string
+      required:
+      - id
+      - tariff_code
+      - description
+      - tension_level
+      - code_odos
+      - code_one
+      - periods
+      - geographic_id
+      - calendar_code
+      - coef
+      type: object

@@ -1,0 +1,222 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Aggregations
+tags:
+  - name: aggregations
+paths:
+  /admin/aggregations/features:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregation features available
+      summary: Get all aggregation features available
+      description: 'Get all aggregation features available'
+      operationId: Get all aggregation features available
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAggregationFeatures'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregation features available
+      summary: Create aggregation feature available
+      description: 'Create aggregation feature available'
+      operationId: Create aggregation features available
+      requestBody:
+        $ref: "#/components/requestBodies/AggregationFeature"
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateAggregationFeature'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /admin/aggregations/features/{feature_id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregation features available
+      summary: Get one aggregation feature available
+      description: 'Get one aggregation feature available'
+      operationId: Get aggregation features available
+      parameters:
+        - in: path
+          name: feature_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: feature id
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAggregationFeature'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregation features available
+      summary: Update aggregation feature available
+      description: 'Update aggregation feature available'
+      operationId: Update aggregation features available
+      parameters:
+        - in: path
+          name: feature_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: feature id
+      requestBody:
+        $ref: "#/components/requestBodies/AggregationFeature"
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateAggregationFeature'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Aggregation features available
+      summary: Delete aggregation feature available
+      description: 'Delete aggregation feature available'
+      operationId: Delete aggregation features available
+      parameters:
+        - in: path
+          name: feature_id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: feature id
+      responses:
+        '200':
+          description: "delete success"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  requestBodies:
+    AggregationFeature:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationFeaturesBase"
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    GetAggregationFeatures:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationFeatures"
+    CreateAggregationFeature:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationFeature"
+    GetAggregationFeature:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationFeature"
+    UpdateAggregationFeature:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AggregationFeature"
+
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    AggregationFeatures:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregationFeature'
+    AggregationFeature:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/AggregationFeaturesBase"
+    AggregationFeaturesBase:
+      type: object
+      description: Aggregation features
+      required:
+        - name
+        - field
+      properties:
+        name:
+          type: string
+        field:
+          type: string
+

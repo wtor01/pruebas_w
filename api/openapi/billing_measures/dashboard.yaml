@@ -1,0 +1,1056 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Billing Measures Dashboard
+tags:
+  - name: billing measures dashboard
+paths:
+  /billing-measures/dashboard/fiscal-measures:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - billing measures dashboard
+      parameters:
+        - in: query
+          required: true
+          name: cups
+          schema:
+            type: string
+          description: The distributor cups whose the data will be taken
+        - in: query
+          required: true
+          name: distributorId
+          schema:
+            type: string
+          description: The distributor whose data will be taken
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            type: string
+            format: date
+          description: Start date of the fiscal billing measures
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            type: string
+            format: date
+          description: End date of the fiscal billing measures
+      summary: Search distributor for fiscal billing measures
+      description: "Search distributor fiscal billing measures"
+      operationId: search distributor fiscal billing measures
+      responses:
+        '200':
+          $ref: '#/components/responses/FiscalBillingMeasures'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /billing_measures/mvh:
+    post:
+      description: create billing measures MVH
+      operationId: Create billing measures MVH
+      requestBody:
+        $ref: '#/components/requestBodies/CreateBillingMeasuresMVH'
+      security:
+        - BearerAuth: [ ]
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid input
+        "401":
+          description: '#/components/responses/UnauthorizedError'
+      security:
+        - BearerAuth: [ ]
+      summary: Create billing mvh
+      tags:
+        - billing measures mvh
+  /billing_measure/dashboard/summary:
+    get:
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: query
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: The distributor ID whose the data will be taken
+        - in: query
+          required: true
+          name: meter_type
+          schema:
+            $ref: '#/components/schemas/MeterType'
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            format: date
+            type: string
+            description: Date of configuration
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            format: date
+            type: string
+            description: Date of configuration
+      tags:
+        - billing measures dashboard
+      responses:
+        '200':
+          $ref: '#/components/responses/FiscalMeasureSummary'
+        '400':
+          description: 'bad request'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /billing-measures/resume/{id}:
+    get:
+      description: Get billing measures resume by id
+      operationId: Get billing measures resume by id
+      parameters:
+        - description: billing measure id
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/BillingMeasuresResume'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - BearerAuth: [ ]
+      summary: Get billing measures resume by id
+      tags:
+        - billing measures resume
+
+  /billing_measure/tax/measure:
+    get:
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: query
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: The distributor ID whose the data will be taken
+        - in: query
+          required: true
+          name: measure_type
+          schema:
+            type: string
+            enum:
+              - TLM
+              - TLG
+              - OTHER
+          description: The measure type
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            format: date
+            type: string
+            description: Date of configuration
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            format: date
+            type: string
+            description: Date of configuration
+      tags:
+        - fiscal measures dashboard
+      responses:
+        '200':
+          $ref: '#/components/responses/FiscalMeasure'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /billing_measure/tax/measurebycups:
+    get:
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: The distributor ID whose the data will be taken
+        - in: query
+          required: true
+          name: measure_type
+          schema:
+            type: string
+            enum:
+              - TLM
+              - TLG
+              - OTHER
+          description: The measure type
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            format: date
+            type: string
+            description: Date of configuration
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            format: date
+            type: string
+            description: Date of configuration
+      tags:
+        - fiscal measures dashboard
+      responses:
+        '200':
+          $ref: '#/components/responses/FiscalMeasureByCupsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  requestBodies:
+    CreateBillingMeasuresMVH:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MVH'
+  responses:
+    FiscalBillingMeasures:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FiscalBillingMeasures'
+    FiscalMeasureSummary:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FiscalMeasureSummary'
+    BillingMeasuresResume:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingMeasuresResume'
+      description: successful operation
+    UnauthorizedError:
+      description:  Access token is missing or INV
+
+    FiscalMeasure:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FiscalMeasure'
+    FiscalMeasureByCupsResponse:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FiscalMeasureByCupsResponse'
+  schemas:
+
+    FiscalMeasureByCupsResponse:
+      allOf:
+        - $ref: "#/components/schemas/Pagination"
+        - type: object
+          required:
+            - results
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/FiscalMeasureByCups'
+
+
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+    FiscalMeasure:
+      type: object
+      description: fiscalMeasure calculated
+      properties:
+        total:
+          type: integer
+        qualification_atr_real:
+          type: integer
+        qualification_atr_estimated:
+          type: integer
+        qualification_atr_calculated:
+          type: integer
+        qualification_curve_real:
+          type: integer
+        qualification_curve_adjusted:
+          type: integer
+        qualification_curve_profiled:
+          type: integer
+        qualification_curve_calculated:
+          type: integer
+        qualification_curve_estimated:
+          type: integer
+        curve_real:
+          type: integer
+        curve_estimated:
+          type: integer
+        origin_atr_monthly:
+          type: integer
+        origin_atr_daily:
+          type: integer
+        origin_atr_visual:
+          type: integer
+        origin_atr_auto_reading:
+          type: integer
+        origin_atr_estimated:
+          type: integer
+    FiscalMeasureByCups:
+      type: object
+      description: fiscalMeasure by cups
+      properties:
+        cups:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: start_date
+        end_date:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            json: end_date
+        atr_calification:
+          type: string
+          enum:
+            - "REAL"
+            - "CALCULATED"
+            - "ESTIMATED"
+            - "OUTLINED"
+            - "ADJUSTED"
+        atr_type:
+          type: string
+          description: Origin of balance
+          enum:
+            - "MONTHLY"
+            - "DAILY"
+            - "NO_CLOSURE"
+            - "OTHER"
+        curve_calification:
+          type: string
+          enum:
+            - "REAL"
+            - "CALCULATED"
+            - "ESTIMATED"
+            - "OUTLINED"
+            - "ADJUSTED"
+        curve_status:
+          type: string
+          enum:
+            - COMPLETE
+            - INCOMPLETE
+    FiscalBillingMeasures:
+      type: object
+      description: Fiscal billing measures distributor object
+      required:
+        - id
+        - cups
+        - meter_type
+        - start_date
+        - end_date
+        - last_mv_date
+        - principal_magnitude
+        - status
+        - periods
+        - magnitudes
+        - summary
+        - calendar_curve
+        - graph_history
+        - balance
+        - curve
+        - execution_summary
+      properties:
+        id:
+          type: string
+          format: uuid
+        cups:
+          type: string
+        meter_type:
+          type: string
+        start_date:
+          type: string
+        end_date:
+          type: string
+        last_mv_date:
+          type: string
+        principal_magnitude:
+          type: string
+          enum:
+            - 'AI'
+            - 'AE'
+            - 'R1'
+            - 'R2'
+            - 'R3'
+            - 'R4'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+        status:
+          type: string
+          enum:
+            - 'PENDING'
+            - 'CALCULATING'
+            - 'CALCULATED'
+            - 'READY_TO_BILL'
+            - 'BILLED'
+            - 'OVERRIDED'
+            - 'CANCELLED'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='PENDING' 'CALCULATING' 'CALCULATED' 'READY_TO_BILL' 'BILLED' 'OVERRRIDED' 'CANCELLED'
+        periods:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'P1'
+              - 'P2'
+              - 'P3'
+              - 'P4'
+              - 'P5'
+              - 'P6'
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+        magnitudes:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'AI'
+              - 'AE'
+              - 'R1'
+              - 'R2'
+              - 'R3'
+              - 'R4'
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+        summary:
+          $ref: '#/components/schemas/SummaryStructure'
+        calendar_curve:
+          $ref: '#/components/schemas/CalendarCurve'
+        graph_history:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiscalMeasureGraph'
+        balance:
+          $ref: '#/components/schemas/BalancePeriods'
+        curve:
+          $ref: '#/components/schemas/Curve'
+        execution_summary:
+          $ref: '#/components/schemas/ExecutionSummary'
+    BalancePeriods:
+      type: object
+      required:
+        - origin
+        - method
+      properties:
+        origin:
+          type: string
+          enum:
+            - REMOTE
+            - AUTO
+            - ESTIMATE
+            - TLG
+            - TLM
+            - LOCAL
+        method:
+          type: string
+          enum:
+            - REAL
+            - OUTLINED
+            - ESTIMATED
+            - CALCULATED
+            - ADJUSTED
+        p0:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p1:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p2:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p3:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p4:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p5:
+          $ref: '#/components/schemas/PeriodFeatures'
+        p6:
+          $ref: '#/components/schemas/PeriodFeatures'
+
+    PeriodFeatures:
+      type: object
+      required:
+        - ai
+        - balance_type_ai
+        - ae
+        - balance_type_ae
+        - r1
+        - balance_type_r1
+        - r2
+        - balance_type_r2
+        - r3
+        - balance_type_r3
+        - r4
+        - balance_type_r4
+      properties:
+        ai:
+          type: number
+          format: double
+        balance_type_ai:
+          type: string
+        ae:
+          type: number
+          format: double
+        balance_type_ae:
+          type: string
+        r1:
+          type: number
+          format: double
+        balance_type_r1:
+          type: string
+        r2:
+          type: number
+          format: double
+        balance_type_r2:
+          type: string
+        r3:
+          type: number
+          format: double
+        balance_type_r3:
+          type: string
+        r4:
+          type: number
+          format: double
+        balance_type_r4:
+          type: string
+
+    CalendarCurve:
+      type: array
+      items:
+        $ref: '#/components/schemas/CalendarCurveItem'
+
+    CalendarCurveItem:
+      type: object
+      required:
+        - date
+        - status
+      properties:
+        date:
+          type: string
+        status:
+          type: string
+          enum:
+            - 'REAL'
+            - 'ADJUSTED'
+            - 'OUTLINED'
+            - 'CALCULATED'
+            - 'ESTIMATED'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='REAL' 'ADJUSTED' 'OUTLINED' 'CALCULATED'  'ESTIMATED'
+
+
+    SummaryStructure:
+      type: object
+      required:
+        - real
+        - adjusted
+        - outlined
+        - calculated
+        - estimated
+        - consum
+      properties:
+        real:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        adjusted:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        outlined:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        calculated:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        estimated:
+          $ref: '#/components/schemas/ItemSummaryStructure'
+        consum:
+          type: object
+          required:
+            - total
+            - p1
+            - p2
+            - p3
+            - p4
+            - p5
+            - p6
+          description: These are not percentages
+          properties:
+            total:
+              type: number
+              format: double
+            p1:
+              type: number
+              format: double
+            p2:
+              type: number
+              format: double
+            p3:
+              type: number
+              format: double
+            p4:
+              type: number
+              format: double
+            p5:
+              type: number
+              format: double
+            p6:
+              type: number
+              format: double
+
+
+    ItemSummaryStructure:
+      type: object
+      required:
+        - total
+        - p1
+        - p2
+        - p3
+        - p4
+        - p5
+        - p6
+      properties:
+        total:
+          type: number
+          format: double
+        p1:
+          type: number
+          format: double
+        p2:
+          type: number
+          format: double
+        p3:
+          type: number
+          format: double
+        p4:
+          type: number
+          format: double
+        p5:
+          type: number
+          format: double
+        p6:
+          type: number
+          format: double
+
+    Curve:
+      type: array
+      items:
+        $ref: '#/components/schemas/ItemCurve'
+
+    ItemCurve:
+      type: object
+      required:
+        - date
+        - values
+      properties:
+        date:
+          type: string
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyCurve'
+
+    DailyCurve:
+      type: object
+      required:
+        - date
+        - status
+        - ai
+        - ae
+        - r1
+        - r2
+        - r3
+        - r4
+      properties:
+        date:
+          type: string
+        status:
+          type: string
+          enum:
+            - 'REAL'
+            - 'ADJUSTED'
+            - 'OUTLINED'
+            - 'CALCULATED'
+            - 'ESTIMATED'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='REAL' 'ADJUSTED' 'OUTLINED' 'CALCULATED'  'ESTIMATED'
+        ai:
+          type: number
+          format: double
+        ai_auto:
+          type: number
+          format: double
+        ae:
+          type: number
+          format: double
+        ae_auto:
+          type: number
+          format: double
+        r1:
+          type: number
+          format: double
+        r2:
+          type: number
+          format: double
+        r3:
+          type: number
+          format: double
+        r4:
+          type: number
+          format: double
+    MVH:
+      type: object
+      description: day_types object
+      required:
+        - distributor_id
+        - cups
+        - time
+      properties:
+        distributor_id:
+          type: string
+        cups:
+          type: string
+        time:
+          type: string
+          format: date
+
+    FiscalMeasureGraph:
+      type: object
+      description: mvh execution info
+      required:
+        - period
+        - magnitude
+        - balance_algorithm
+        - cch_algorithm
+        - started_at
+        - finished_at
+      properties:
+        period:
+          type: string
+          description: Period graph execution
+          enum:
+            - "P0"
+            - "P1"
+            - "P2"
+            - "P3"
+            - "P4"
+            - "P5"
+            - "P6"
+        magnitude:
+          type: string
+          description: Magnitude graph execution
+          enum:
+            - "AI"
+            - "AE"
+            - "R1"
+            - "R2"
+            - "R3"
+            - "R4"
+        balance_algorithm:
+          type: string
+          description: balance algorithm executed
+        cch_algorithm:
+          type: string
+          description: curve algorithm executed
+        started_at:
+          type: string
+          description: time of graph execute start
+          format: date-time
+        finished_at:
+          type: string
+          description: time of graph execute end
+          format: date-time
+
+    ExecutionSummary:
+      type: object
+      required:
+        - balance_type
+        - curve_type
+        - balance_origin
+        - curve_status
+      properties:
+        balance_type:
+          $ref: '#/components/schemas/MethodType'
+        curve_type:
+          $ref: '#/components/schemas/MethodType'
+        balance_origin:
+          type: string
+          description: Origin of balance
+          enum:
+            - "NO_CLOSURE"
+            - "MONTHLY"
+            - "DAILY"
+            - "OTHER"
+        curve_status:
+          type: string
+          description: Status of curve
+          enum:
+            - "COMPLETE"
+            - "INCOMPLETE"
+            - "ABSENT"
+
+    MethodType:
+      type: string
+      description: Worst type of fiscal measures curve/balance
+      enum:
+        - "REAL"
+        - "CALCULATED"
+        - "ESTIMATED"
+        - "OUTLINED"
+        - "ADJUSTED"
+
+    FiscalMeasureSummary:
+      type: object
+      required:
+        - meter_type
+        - total
+        - balance_type
+        - curve_type
+        - balance_origin
+        - curve_status
+      description: fiscalMeasure calculated
+      properties:
+        meter_type:
+          $ref: '#/components/schemas/MeterType'
+        total:
+          type: integer
+        balance_type:
+          $ref: '#/components/schemas/BalanceTypeSummary'
+        curve_type:
+          $ref: '#/components/schemas/CurveTypeSummary'
+        balance_origin:
+          $ref: '#/components/schemas/BalanceOriginSummary'
+        curve_status:
+          $ref: '#/components/schemas/CurveStatusSummary'
+
+    BalanceTypeSummary:
+      type: object
+      description: Balance Qualification type
+      required:
+        - real
+        - calculated
+        - estimated
+      properties:
+        real:
+          type: integer
+        calculated:
+          type: integer
+        estimated:
+          type: integer
+
+    CurveTypeSummary:
+      type: object
+      description: 'Curve Qualification type'
+      required:
+        - real
+        - adjusted
+        - outlined
+      properties:
+        real:
+          type: integer
+        adjusted:
+          type: integer
+        outlined:
+          type: integer
+        calculated:
+          type: integer
+        estimated:
+          type: integer
+
+    BalanceOriginSummary:
+      type: object
+      description: 'Origin of balance'
+      required:
+        - monthly
+        - daily
+        - other
+        - no_closure
+      properties:
+        monthly:
+          type: integer
+        daily:
+          type: integer
+        other:
+          type: integer
+        no_closure:
+          type: integer
+
+    MeterType:
+      type: string
+      description: "Type of Meter"
+      enum:
+        - "TLG"
+        - "TLM"
+        - "OTHER"
+    CurveStatusSummary:
+      type: object
+      description: 'Status'
+      required:
+        - completed
+        - not_completed
+        - absent
+      properties:
+        completed:
+          type: integer
+        not_completed:
+          type: integer
+        absent:
+          type: integer
+    BillingMeasuresResume:
+      type: object
+      required:
+        - previous_reading_closure
+        - actual_reading_closure
+      properties:
+        previous_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+        actual_reading_closure:
+          $ref: '#/components/schemas/ReadingClosure'
+    ReadingClosure:
+      type: object
+      required:
+        - origin
+        - measure_type
+        - measure_device
+        - start_date
+        - end_date
+        - p0
+        - p1
+        - p2
+        - p3
+        - p4
+        - p5
+        - p6
+      properties:
+        start_date:
+          type: string
+        end_date:
+          type: string
+        origin:
+          type: string
+        measure_type:
+          type: string
+        measure_device:
+          type: string
+        p0:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p1:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p2:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p3:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p4:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p5:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+        p6:
+          $ref: '#/components/schemas/MagnitudePeriodFeatures'
+    MagnitudePeriodFeatures:
+      type: object
+      required:
+        - ai
+        - ae
+        - r1
+        - r2
+        - r3
+        - r4
+      properties:
+        ai:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        ae:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r1:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r2:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r3:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+        r4:
+          $ref: '#/components/schemas/MagnitudeFeatures'
+    MagnitudeFeatures:
+      type: object
+      required:
+        - reading
+        - consum
+      properties:
+        reading:
+          type: number
+          format: double
+        consum:
+          type: number
+          format: double

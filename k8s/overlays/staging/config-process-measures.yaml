@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-process-measures
+data:
+  COLLECTION_LOAD_CURVE: processed_load_curve
+  COLLECTION_DAILY_LOAD_CURVE: processed_daily_load_curve
+  COLLECTION_MONTHLY_CLOSURE: processed_monthly_closure
+  COLLECTION_DAILY_CLOSURE: processed_daily_closure
+  PROCESSED_MEASURE_SUB: pre-process-measures-sub
+  PROCESSED_MEASURE_TOPIC: pre-process-measures
+  RE_PROCESSED_MEASURE_SUB: pre-re-process-measures-sub

@@ -1,0 +1,423 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Auth
+tags:
+  - name: Seasons
+paths:
+  /admin/master-tables/seasons:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Seasons
+      summary: Get all seasons
+      description: 'Get all seasons'
+      operationId: get all seasons
+
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The number of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/SeasonsResponseList'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Seasons
+      security:
+        - BearerAuth: []
+      summary: Insert seasons
+      description: 'insert season'
+      operationId: insert season
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Seasons'
+  /admin/master-tables/seasons/{season-id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Seasons
+      summary: Get season
+      description: 'Get season'
+      operationId: get season
+      parameters:
+        - description: season id
+          in: path
+          name: season-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/seasons'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - Seasons
+      summary: Modify a season
+      description: 'Modify season'
+      operationId: modify season
+      parameters:
+        - description: season id
+          in: path
+          name: season-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Seasons'
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - Seasons
+      summary: Delete season
+      description: 'delete season'
+      operationId: delete season
+      parameters:
+        - description: season-id
+          in: path
+          name: season-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/seasons'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /admin/master-tables/seasons/{season-id}/day_types:
+    post:
+      tags:
+        - Day types
+      security:
+        - BearerAuth: [ ]
+      summary: Insert day type
+      description: 'insert day type'
+      operationId: insert day type
+      parameters:
+        - description: season id
+          in: path
+          name: season-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Day_types'
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Day types
+      summary: Get all day types
+      description: 'Get all day types'
+      operationId: get all day types
+
+      parameters:
+        - description: season-id
+          in: path
+          name: season-id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search text
+        - in: query
+          name: sort
+          schema:
+            type: array
+            items:
+              type: string
+              example: "name asc"
+          description: short by
+      responses:
+        '200':
+          $ref: '#/components/responses/DayTypesResponseList'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /admin/master-tables/seasons/day_types/{day-type-id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Day types
+      summary: Get day type
+      description: 'Get day type'
+      operationId: get day type
+      parameters:
+        - description: day type id
+          in: path
+          name: day-type-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/dayTypes'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+        - Day types
+      security:
+        - BearerAuth: []
+      summary: Modify day type
+      description: 'Modify day type'
+      operationId: modify day type
+      parameters:
+        - description: day type id
+          in: path
+          name: day-type-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/Day_types'
+    delete:
+      tags:
+        - Day types
+      security:
+        - BearerAuth: []
+      summary: Delete day type
+      description: 'Delete day type'
+      operationId: delete day type
+      parameters:
+        - description: day-type-id
+          in: path
+          name: day-type-id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  requestBodies:
+    ### REQUEST BODY SEASONS
+    Seasons:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/seasons'
+      description: seasons object
+      required: true
+    Day_types:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/day_types'
+      description: day types object
+      required: true
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    SeasonsResponseList:
+      description: 'seasons response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/seasons'
+    seasons:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/seasons'
+    DayTypesResponseList:
+      description: 'day types response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - limit
+              - count
+              - size
+              - _links
+              - results
+            properties:
+              limit:
+                type: integer
+              offset:
+                type: integer
+              size:
+                type: integer
+              count:
+                type: integer
+              _links:
+                type: object
+                required:
+                  - self
+                properties:
+                  next:
+                    type: string
+                    description: "url for request next list"
+                  prev:
+                    type: string
+                    description: "url for request previous list"
+                  self:
+                    type: string
+                    description: "url for request current list"
+
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/day_types'
+    dayTypes:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: ''#/components/schemas/day_types'
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  schemas:
+    seasons:
+      type: object
+      description: seasons object
+      required:
+        - id
+        - name
+        - description
+        - geographic_code
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        geographic_code:
+          type: string
+    day_types:
+      type: object
+      description: day_types object
+      required:
+        - id
+        - name
+        - season_id
+        - month
+        - isFestive
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        season_id:
+          type: string
+        month:
+          type: integer
+        isFestive:
+          type: boolean
+

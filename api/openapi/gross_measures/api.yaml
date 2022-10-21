@@ -1,0 +1,786 @@
+openapi: 3.0.0
+servers:
+- url: http://{hostname}/api
+  variables:
+    hostname:
+      default: localhost:8080
+- url: https://{hostname}/api
+  variables:
+    hostname:
+      default: localhost
+info:
+  version: 1.0.0
+  title: api
+tags:
+- name: Statistics
+- name: dashboard
+- name: gross measure dashboard
+- name: smarkia
+paths:
+  /dashboard/gross-measure/cups:
+    get:
+      description: get process measure statistics by cups
+      operationId: get process measure statistics by cups
+      parameters:
+      - description: distributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: Number of month
+        in: query
+        name: month
+        required: true
+        schema:
+          type: integer
+      - description: Number of year
+        in: query
+        name: year
+        required: true
+        schema:
+          type: integer
+      - description: Type of measurement config
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      - description: Flag for ghost equipments
+        in: query
+        name: ghost
+        required: true
+        schema:
+          type: boolean
+      - description: The number of items to skip before starting to collect the result
+          set
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: The numbers of items to return
+        in: query
+        name: limit
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/GetGrossMeasureDashboardCUPSResponse'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: get process measure statistics by cups
+      tags:
+      - Statistics
+  /dashboard/gross-measure/global:
+    get:
+      description: get dashboard gross measure
+      operationId: get dashboard gross measure
+      parameters:
+      - description: distributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: Number of month
+        in: query
+        name: month
+        required: true
+        schema:
+          type: integer
+      - description: Number of year
+        in: query
+        name: year
+        required: true
+        schema:
+          type: integer
+      - description: Type of measurement config
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/GetGrossMeasureDashboardResponse'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: get dashboard gross measure
+      tags:
+      - Statistics
+  /dashboard/measures:
+    get:
+      description: ""
+      operationId: get measure dashboard
+      parameters:
+      - in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: ditributor id
+        in: query
+        name: distributor_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/DashboardMeasure'
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: measure dashboard
+      tags:
+      - dashboard
+  /gross-measures/dashboard/{cups}/curve-process-measures:
+    get:
+      description: Search curve of meter for gross measure
+      operationId: getCurveGrossMeasureMeter
+      parameters:
+      - description: The service point distributor_id whose the data will be taken
+        in: query
+        name: distributor
+        required: true
+        schema:
+          type: string
+      - description: The cups of equipment whose the data will be taken
+        in: path
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: Date of the gross curve measures
+        in: query
+        name: date
+        required: true
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: curve_type
+        required: true
+        schema:
+          enum:
+          - HOURLY
+          - QUARTER
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/CurveGrossMeasureMeterResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search curve of meter for gross measure
+      tags:
+      - gross measure dashboard
+  /gross-measures/dashboard/{cups}/service-point:
+    get:
+      description: Search service point gross measures
+      operationId: getGrossMeasureServicePoint
+      parameters:
+      - description: The cups whose the data will be taken
+        in: path
+        name: cups
+        required: true
+        schema:
+          type: string
+      - description: The distributor whose the data will be taken
+        in: query
+        name: distributor
+        required: true
+        schema:
+          type: string
+      - description: Start date of the process measures
+        in: query
+        name: start_date
+        required: true
+        schema:
+          format: date
+          type: string
+      - description: End date of the process measures
+        in: query
+        name: end_date
+        required: true
+        schema:
+          format: date
+          type: string
+      responses:
+        "200":
+          $ref: '#/components/responses/ServicePointGrossMeasureResponse'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - BearerAuth: []
+      summary: Search service point for gross measures
+      tags:
+      - gross measure dashboard
+  /gross_measures/smarkia/recover:
+    post:
+      description: ""
+      operationId: recover smarkia measures
+      requestBody:
+        $ref: '#/components/requestBodies/RecoverSmarkiaMeasures'
+      responses:
+        "200":
+          description: successful operation
+        "404":
+          description: Invalid input
+      security:
+      - BearerAuth: []
+      summary: recover smarkia measures
+      tags:
+      - smarkia
+components:
+  requestBodies:
+    RecoverSmarkiaMeasures:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RecoverSmarkiaMeasures'
+      description: PubSubMessage object
+      required: true
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+  responses:
+    CurveGrossMeasureMeterResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CurveGrossMeasureMeterList'
+      description: successful operation
+    DashboardMeasure:
+      content:
+        application/json:
+          schema:
+            properties:
+              daily:
+                items:
+                  properties:
+                    date:
+                      format: date
+                      type: string
+                    others:
+                      $ref: '#/components/schemas/Others'
+                    telegestion:
+                      $ref: '#/components/schemas/Telegestion'
+                    telemedida:
+                      $ref: '#/components/schemas/Telemedida'
+                  required:
+                  - date
+                  - telegestion
+                  - telemedida
+                  - others
+                  type: object
+                type: array
+              totals:
+                properties:
+                  others:
+                    $ref: '#/components/schemas/Others'
+                  telegestion:
+                    $ref: '#/components/schemas/Telegestion'
+                  telemedida:
+                    $ref: '#/components/schemas/Telemedida'
+                required:
+                - telegestion
+                - telemedida
+                - others
+                type: object
+            required:
+            - totals
+            - daily
+            type: object
+      description: dashboard measure response
+    GetGrossMeasureDashboardCUPSResponse:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Pagination'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/components/schemas/GrossMeasureDashboardCUPS'
+                  type: array
+              required:
+              - results
+              type: object
+      description: list statistics by cups
+    GetGrossMeasureDashboardResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GrossMeasureDashboardList'
+      description: successful operation
+    ServicePointGrossMeasureResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GrossMeasureServicePoint'
+      description: successful operation
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    CurveGrossMeasureMeter:
+      allOf:
+      - $ref: '#/components/schemas/ServicePointCalendarStatus'
+      - properties:
+          file:
+            type: string
+          values:
+            $ref: '#/components/schemas/GrossMeasureValues'
+        required:
+        - file
+        - values
+        type: object
+    CurveGrossMeasureMeterList:
+      description: Curve process measures distributor object
+      items:
+        $ref: '#/components/schemas/CurveGrossMeasureMeter'
+      type: array
+    Data:
+      properties:
+        invalid:
+          type: integer
+        measures_should_be:
+          type: integer
+        supervise:
+          type: integer
+        valid:
+          type: integer
+      required:
+      - valid
+      - invalid
+      - supervise
+      - measures_should_be
+      type: object
+    GrossMeasureDashboard:
+      properties:
+        distributor_id:
+          format: uuid
+          type: string
+        gross_measures_daily_stats:
+          items:
+            $ref: '#/components/schemas/GrossMeasureDashboardDaily'
+          type: array
+        month:
+          type: integer
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+        year:
+          type: integer
+      required:
+      - distributor_id
+      - month
+      - year
+      - type
+      type: object
+    GrossMeasureDashboardCUPS:
+      properties:
+        cups:
+          type: string
+        distributor_id:
+          format: uuid
+          type: string
+        gross_measures_daily_stats:
+          items:
+            $ref: '#/components/schemas/GrossMeasureDashboardDaily'
+          type: array
+        month:
+          type: integer
+        serial_number:
+          type: string
+        service_point_type:
+          type: string
+        service_type:
+          type: string
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+        year:
+          type: integer
+      required:
+      - distributor_id
+      - month
+      - year
+      - type
+      - cups
+      - service_type
+      - service_point_type
+      - serial_number
+      type: object
+    GrossMeasureDashboardDaily:
+      properties:
+        daily_closure:
+          type: integer
+        day:
+          type: integer
+        expected_daily_closure:
+          type: integer
+        expected_hourly_curve:
+          type: integer
+        expected_monthly_closure:
+          type: integer
+        expected_quarterly_curve:
+          type: integer
+        hourly_curve:
+          type: integer
+        monthly_closure:
+          type: integer
+        quarterly_curve:
+          type: integer
+      required:
+      - date
+      - hourly_curve
+      - quarterly_curve
+      - daily_closure
+      - monthly_closure
+      - expected_hourly_curve
+      - expected_quarterly_curve
+      - expected_daily_closure
+      - expected_monthly_closure
+      type: object
+    GrossMeasureDashboardList:
+      items:
+        $ref: '#/components/schemas/GrossMeasureDashboard'
+      type: array
+    GrossMeasureMonthlyValues:
+      allOf:
+      - $ref: '#/components/schemas/GrossMeasureValues'
+      - properties:
+          AEi:
+            format: double
+            type: number
+          AIi:
+            format: double
+            type: number
+          R1i:
+            format: double
+            type: number
+          R2i:
+            format: double
+            type: number
+          R3i:
+            format: double
+            type: number
+          R4i:
+            format: double
+            type: number
+        required:
+        - AIi
+        - AEi
+        - R1i
+        - R2i
+        - R3i
+        - R4i
+        type: object
+    GrossMeasureServicePoint:
+      properties:
+        calendar_curve:
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+          type: array
+        calendar_daily_closure:
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+          type: array
+        calendar_monthly_closure:
+          items:
+            $ref: '#/components/schemas/ServicePointCalendarStatus'
+          type: array
+        cups:
+          type: string
+        list_daily_closures:
+          items:
+            $ref: '#/components/schemas/ServicePointDailyValues'
+          type: array
+        list_monthly_closures:
+          items:
+            $ref: '#/components/schemas/ServicePointMonthlyValues'
+          type: array
+        magnitude_energy:
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE'
+        magnitudes:
+          items:
+            enum:
+            - AI
+            - AE
+            - R1
+            - R2
+            - R3
+            - R4
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+          type: array
+        periods:
+          items:
+            enum:
+            - P1
+            - P2
+            - P3
+            - P4
+            - P5
+            - P6
+            type: string
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+          type: array
+        serial_number:
+          type: string
+        type:
+          enum:
+          - TLG
+          - TLM
+          - OTHER
+          type: string
+      required:
+      - type
+      - cups
+      - serial_number
+      - magnitudes
+      - magnitude_energy
+      - periods
+      - calendar_daily_closure
+      - calendar_monthly_closure
+      - calendar_curve
+      - list_daily_closures
+      - list_monthly_closures
+      type: object
+    GrossMeasureValidationStatus:
+      enum:
+      - VAL
+      - INV
+      - SUPERV
+      - ALERT
+      - NONE
+      type: string
+    GrossMeasureValues:
+      properties:
+        AE:
+          format: double
+          type: number
+        AI:
+          format: double
+          type: number
+        R1:
+          format: double
+          type: number
+        R2:
+          format: double
+          type: number
+        R3:
+          format: double
+          type: number
+        R4:
+          format: double
+          type: number
+      required:
+      - AI
+      - AE
+      - R1
+      - R2
+      - R3
+      - R4
+      type: object
+    Others:
+      properties:
+        closing:
+          $ref: '#/components/schemas/Data'
+      required:
+      - curva
+      - closing
+      - resumen
+      type: object
+    Pagination:
+      properties:
+        _links:
+          properties:
+            next:
+              description: url for request next list
+              type: string
+            prev:
+              description: url for request previous list
+              type: string
+            self:
+              description: url for request current list
+              type: string
+          required:
+          - self
+          type: object
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+      required:
+      - limit
+      - count
+      - size
+      - _links
+      - results
+      type: object
+    RecoverSmarkiaMeasures:
+      description: day_types object
+      properties:
+        cups:
+          type: string
+        date:
+          format: date
+          type: string
+        distributor_id:
+          type: string
+        process_name:
+          enum:
+          - curve
+          - close
+          type: string
+      required:
+      - distributor_id
+      - cups
+      - date
+      - process_name
+      type: object
+    ServicePointCalendarStatus:
+      properties:
+        date:
+          type: string
+        status:
+          $ref: '#/components/schemas/GrossMeasureValidationStatus'
+      required:
+      - date
+      - status
+      type: object
+    ServicePointDailyValues:
+      properties:
+        P0:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P1:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P2:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P3:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P4:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P5:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        P6:
+          $ref: '#/components/schemas/GrossMeasureValues'
+        end_date:
+          type: string
+        file:
+          type: string
+        status:
+          $ref: '#/components/schemas/GrossMeasureValidationStatus'
+      required:
+      - end_date
+      - status
+      - file
+      - P0
+      - P1
+      - P2
+      - P3
+      - P4
+      - P5
+      - P6
+      type: object
+    ServicePointMonthlyValues:
+      properties:
+        P0:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P1:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P2:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P3:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P4:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P5:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        P6:
+          $ref: '#/components/schemas/GrossMeasureMonthlyValues'
+        end_date:
+          type: string
+        file:
+          type: string
+        init_date:
+          type: string
+        status:
+          $ref: '#/components/schemas/GrossMeasureValidationStatus'
+      required:
+      - init_date
+      - end_date
+      - status
+      - file
+      - P0
+      - P1
+      - P2
+      - P3
+      - P4
+      - P5
+      - P6
+      type: object
+    Telegestion:
+      properties:
+        closing:
+          $ref: '#/components/schemas/Data'
+        curva:
+          $ref: '#/components/schemas/Data'
+        resumen:
+          $ref: '#/components/schemas/Data'
+      required:
+      - curva
+      - closing
+      - resumen
+      type: object
+    Telemedida:
+      properties:
+        closing:
+          $ref: '#/components/schemas/Data'
+        curva:
+          $ref: '#/components/schemas/Data'
+      required:
+      - curva
+      - closing
+      type: object

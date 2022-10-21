@@ -1,0 +1,270 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Process measures Scheduler
+tags:
+  - name: process measures scheduler
+paths:
+  /process-measures/scheduler:
+    post:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - process measures scheduler
+      summary: Create process measures scheduler
+      description: 'create process measures scheduler'
+      operationId: Create process measures scheduler
+      requestBody:
+        $ref: "#/components/requestBodies/CreateProcessMeasureScheduler"
+      responses:
+        '201':
+          $ref: '#/components/responses/ProcessMeasureScheduler'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - process measures scheduler
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      summary: List process measures scheduler
+      description: 'List all process measures scheduler'
+      operationId: list process measures scheduler
+      responses:
+        '200':
+          $ref: '#/components/responses/ListProcessMeasuresScheduler'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /process-measures/scheduler/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - process measures scheduler
+      summary: Get process measure scheduler by id
+      description: 'Get process measure scheduler by id'
+      operationId: Get process measure scheduler by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: scheduler id
+      responses:
+        '200':
+          $ref: '#/components/responses/ProcessMeasureScheduler'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - process measures scheduler
+      summary: Delete process measures scheduler
+      description: 'delete process measures scheduler'
+      operationId: Delete process measures scheduler
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: scheduler id
+      responses:
+        '200':
+          description: "delete success"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    patch:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - process measures scheduler
+      summary: Patch process measures scheduler
+      description: 'patch process measures scheduler'
+      operationId: Patch process measures scheduler
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: scheduler id
+      requestBody:
+        $ref: "#/components/requestBodies/PatchProcessMeasureScheduler"
+      responses:
+        '201':
+          $ref: '#/components/responses/ProcessMeasureScheduler'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  requestBodies:
+    CreateProcessMeasureScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProcessMeasureSchedulerBase"
+    PatchProcessMeasureScheduler:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProcessMeasureSchedulerUpdatable"
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    ListProcessMeasuresScheduler:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProcessMeasureScheduler'
+    ProcessMeasureScheduler:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProcessMeasureScheduler"
+    UnauthorizedError:
+      description: Access token is missing or INV
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+
+    ProcessMeasureScheduler:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: "#/components/schemas/ProcessMeasureSchedulerBase"
+    ProcessMeasureSchedulerBase:
+      allOf:
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+        - $ref: "#/components/schemas/ProcessMeasureSchedulerUpdatable"
+    ProcessMeasureSchedulerUpdatable:
+      type: object
+      required:
+        - description
+        - scheduler
+        - service_type
+        - point_type
+        - meter_type
+        - reading_type
+      properties:
+        distributor_id:
+          type: string
+          format: uuid
+        description:
+          type: string
+        scheduler:
+          type: string
+        service_type:
+          type: string
+          enum:
+            - 'G-D'
+            - 'D-D'
+            - 'D-C'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='G-D' 'D-D' 'D-C'
+        point_type:
+          type: string
+          enum:
+            - '1'
+            - '2'
+            - '3'
+            - '4'
+            - '5'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='1' '2' '3' '4' '5'
+        meter_type:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'TLG'
+              - 'TLM'
+              - 'OTHER'
+          x-oapi-codegen-extra-tags:
+            binding: dive,oneof='TLG' 'TLM' 'OTHER'
+        reading_type:
+          type: string
+          enum:
+            - 'curve'
+            - 'daily_closure'
+            - 'billing_closure'
+          x-oapi-codegen-extra-tags:
+            binding: oneof='curve' 'daily_closure' 'billing_closure'

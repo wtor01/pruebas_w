@@ -1,0 +1,516 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: Api Self-consumptions
+tags:
+  - name: self-consumption
+paths:
+  /self-consumption/actives/{distributor_id}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - self-consumption
+      parameters:
+        - in: path
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: The distributor whose data will be taken
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: date
+          required: true
+          schema:
+            format: date
+            type: string
+          description: Date of configuration
+      summary: Search actives self-consumption unit config by distributor id
+      description: "Search actives self-consumption unit config by distributor id"
+      operationId: Search actives self-consumption unit config by distributor id
+      responses:
+        '200':
+          $ref: '#/components/responses/ListSelfConsumptionUnitConfigs'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /self-consumption/{distributor_id}/:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - self-consumption
+      parameters:
+        - in: path
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: The distributor whose data will be taken
+        - in: query
+          required: true
+          name: cups
+          schema:
+            type: string
+          description: The distributor cups whose the data will be taken
+        - in: query
+          name: date
+          required: true
+          schema:
+            format: date
+            type: string
+          description: Date of configuration
+      summary: Search self-consumption unit config
+      description: "Search self-consumption unit config"
+      operationId: Search self-consumption unit config
+      responses:
+        '200':
+          $ref: '#/components/responses/SelfConsumptionUnitConfigResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /self-consumption/{distributor_id}/{cau}:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - self-consumption
+      parameters:
+        - in: path
+          required: true
+          name: distributor_id
+          schema:
+            type: string
+          description: ID of distributor
+        - in: path
+          required: true
+          name: cau
+          schema:
+            type: string
+            description: CAU ID
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            type: string
+            format: date
+      summary: Get self consumption cau
+      description: Get self consumption unit
+      operationId: get self consumption by cau
+      responses:
+        '200':
+          $ref: '#/components/responses/BillingSelfConsumptionUnitResponse'
+        '400':
+          description: 'bad request'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or INV
+    ListSelfConsumptionUnitConfigs:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SelfConsumptionUnitConfig'
+    SelfConsumptionUnitConfigResponse:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/SelfConsumptionUnitConfig'
+    BillingSelfConsumptionUnitResponse:
+      description: Get billing self consumption unit by cau
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BillingSelfConsumptionUnits'
+
+
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+    SelfConsumptionUnitConfig:
+      type: object
+      description: Self-consumption unit config
+      required:
+        - id
+        - CAU
+        - name
+        - status_id
+        - status_name
+        - ccaa_id
+        - ccaa
+        - init_date
+        - end_date
+        - distributor_id
+        - configs
+        - points
+      properties:
+        id:
+          type: string
+          format: uuid
+        CAU:
+          type: string
+        name:
+          type: string
+        status_id:
+          type: integer
+        status_name:
+          type: string
+        ccaa_id:
+          type: integer
+        ccaa:
+          type: string
+        init_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        distributor_id:
+          type: string
+          format: uuid
+        configs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelfConsumptionConfig'
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelfConsumptionPoint'
+    SelfConsumptionConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status_id:
+          type: integer
+        status_name:
+          type: string
+        init_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        cnmc_type_id:
+          type: integer
+        cnmc_type_name:
+          type: string
+        cnmc_type_desc:
+          type: string
+        conf_type:
+          type: string
+        conf_type_description:
+          type: string
+        consumer_type:
+          type: string
+        participant_number:
+          type: integer
+        conn_type:
+          type: string
+        excedents:
+          type: boolean
+        compensation:
+          type: boolean
+        generation_pot:
+          type: number
+        group_subgroup:
+          type: integer
+        antivert_type:
+          type: string
+        solar_zone_id:
+          type: integer
+        solar_zone_num:
+          type: integer
+        solar_zone_name:
+          type: string
+        technology_id:
+          type: string
+        technology_description:
+          type: string
+    SelfConsumptionPoint:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        service_point_type:
+          type: string
+        CUPS:
+          type: string
+        init_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        instalation_flag:
+          type: integer
+        withoutmeter_flag:
+          type: integer
+        exent1_flag:
+          type: integer
+        exent2_flag:
+          type: integer
+        partition_coeff:
+          type: number
+
+    BillingSelfConsumptionUnits:
+      type: array
+      items:
+        $ref: '#/components/schemas/BillingSelfConsumptionUnitInfo'
+    BillingSelfConsumptionUnitInfo:
+      type: object
+      required:
+        - end_date
+        - start_date
+        - status
+        - cau_info
+        - totals
+        - net_generation
+        - unit_consumption
+        - calendar_consumption
+        - cups_list
+      properties:
+        end_date:
+          type: string
+          format: date-time
+        start_date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        cau_info:
+          $ref: '#/components/schemas/BillingCauInfo'
+        totals:
+          $ref: '#/components/schemas/BillingTotals'
+        net_generation:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingNetGeneration'
+        unit_consumption:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingUnitConsumption'
+        calendar_consumption:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingCalendarConsumption'
+        cups_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingSelfConsumptionCups'
+    BillingCauInfo:
+      type: object
+      required:
+        - id
+        - name
+        - points
+        - unit_type
+        - config_type
+      properties:
+        id:
+          type: string
+          description: "Cau Id"
+        name:
+          type: string
+          description: "Cau name"
+        points:
+          type: integer
+          description: "Cau Number Points"
+        unit_type:
+          type: string
+          description: "Cau Unit type"
+        config_type:
+          type: string
+          description: "Cau config type"
+    BillingTotals:
+      type: object
+      required:
+        - gross_generation
+        - net_generation
+        - self_consumption
+        - network_consumption
+        - aux_consumption
+      properties:
+        gross_generation:
+          type: number
+          format: double
+          description: "Gross Generation"
+        net_generation:
+          type: number
+          format: double
+          description: "Net Generation"
+        self_consumption:
+          type: number
+          format: double
+          description: "Self consumption consumed"
+        network_consumption:
+          type: number
+          format: double
+          description: "Network consumption"
+        aux_consumption:
+          type: number
+          format: double
+          description: "Auxiliar services consumption"
+    BillingNetGeneration:
+      type: object
+      required:
+        - date
+        - net
+        - excedente
+      properties:
+        date:
+          type: string
+        net:
+          type: number
+          format: double
+        excedente:
+          type: number
+          format: double
+    BillingUnitConsumption:
+      type: object
+      required:
+        - date
+        - network
+        - self
+        - aux
+      properties:
+        date:
+          type: string
+        network:
+          type: number
+          format: double
+        self:
+          type: number
+          format: double
+        aux:
+          type: number
+          format: double
+    BillingCalendarConsumption:
+      type: object
+      required:
+        - date
+        - values
+        - energy
+      properties:
+        date:
+          type: string
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingCalendarConsumptionValues'
+        energy:
+          type: number
+          format: double
+    BillingCalendarConsumptionValues:
+      type: object
+      required:
+        - hour
+        - energy
+      properties:
+        hour:
+          type: string
+        energy:
+          type: number
+          format: double
+    BillingSelfConsumptionCups:
+      description: "Billing Cups points list"
+      type: object
+      required:
+        - cups
+        - ps_type
+        - consumption
+        - generation
+        - start_date
+        - end_date
+      properties:
+        cups:
+          type: string
+        ps_type:
+          type: string
+        consumption:
+          type: number
+          format: double
+        generation:
+          type: number
+          format: double
+        start_date:
+          type: string
+        end_date:
+          type: string

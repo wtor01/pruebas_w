@@ -1,0 +1,58 @@
+# To learn more about the skaffold.yaml schema visit
+# https://skaffold.dev/docs/references/yaml/
+apiVersion: skaffold/v2beta22
+kind: Config
+metadata:
+  name: backend
+build:
+  artifacts:
+    - image: api
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs: {
+          "CMD_ROUTE": "./cmd/api/api.go"
+        }
+    - image: pubsub
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs: {
+          "CMD_ROUTE": "./cmd/pubsub/main.go"
+        }
+profiles:
+  - name: local
+    build:
+      local:
+        push: true
+      tagPolicy:
+        gitCommit: { }
+
+    deploy:
+      kustomize:
+        paths:
+          - k8s/overlays/local
+  - name: dev
+    build:
+      googleCloudBuild:
+        concurrency: 0
+        dockerImage: gcr.io/cloud-builders/docker
+        kanikoImage: gcr.io/kaniko-project/executor
+      tagPolicy:
+        gitCommit: { }
+    deploy:
+      kustomize:
+        paths:
+          - k8s/overlays/dev
+  - name: staging
+    build:
+      googleCloudBuild:
+        concurrency: 0
+        dockerImage: gcr.io/cloud-builders/docker
+        kanikoImage: gcr.io/kaniko-project/executor
+      tagPolicy:
+        gitCommit: { }
+    deploy:
+      kustomize:
+        paths:
+          - k8s/overlays/staging

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-measures-mongodb
+data:
+  MEASURE_DATABASE_HOST: mongodb+srv://%s:%s@cluster0-pri.6og8n.mongodb.net/?retryWrites=true&w=majority
+  MEASURE_DATABASE_USER: mdm_app_user
+  MEASURE_DATABASE: measure
+  MEASURE_COLLECTION: gross_measure

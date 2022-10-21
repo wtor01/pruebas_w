@@ -1,0 +1,648 @@
+openapi: 3.0.0
+servers:
+  - url: http://{hostname}/api
+    variables:
+      hostname:
+        default: localhost:8080
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+info:
+  version: 1.0.0
+  title: API Process Measures
+tags:
+  - name: process measures dashboard
+paths:
+  /process-measures/dashboard/measures:
+    get:
+      tags:
+        - process measures dashboard
+      security:
+        - BearerAuth: [ ]
+      summary: process measure dashboard
+      description: ''
+      operationId: get process measure dashboard
+
+      parameters:
+        - in: query
+          name: start_date
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+          required: true
+          description: ditributor id
+      responses:
+        '200':
+          $ref: '#/components/responses/DashboardProcessMeasure'
+        '404':
+          description: Invalid input
+
+  /process-measures/dashboard/service-point-process-measures:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - service point dashboard process measures
+      parameters:
+        - in: query
+          required: true
+          name: cups
+          schema:
+            type: string
+          description: The cups whose the data will be taken
+        - in: query
+          required: true
+          name: distributor
+          schema:
+            type: string
+          description: The distributor whose the data will be taken
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            type: string
+            format: date
+          description: Start date of the process measures
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            type: string
+            format: date
+          description: End date of the process measures
+      summary: Search service point  for process measures
+      description: "Search service point process measures"
+      operationId: getDashboardProcessServicePoint
+      responses:
+        '200':
+          $ref: '#/components/responses/ServicePointProcessDashboard'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /process-measures/dashboard/curve-process-measures:
+    get:
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - service point dashboard process measures
+      parameters:
+        - in: query
+          required: true
+          name: distributor
+          schema:
+            type: string
+          description: The service point distributor_id whose the data will be taken
+        - in: query
+          required: true
+          name: cups
+          schema:
+            type: string
+          description: The service point cups whose the data will be taken
+        - in: query
+          required: true
+          name: start_date
+          schema:
+            type: string
+            format: date
+          description: Start date of the process measures
+        - in: query
+          required: true
+          name: end_date
+          schema:
+            type: string
+            format: date
+          description: End date of the process measures
+        - in: query
+          required: true
+          name: curve_type
+          schema:
+            type: string
+            enum:
+              - "HOURLY"
+              - "QUARTER"
+      summary: Search service point  for process measures
+      description: "Search service point  process measures"
+      operationId: getCurveProcessServicePoint
+      responses:
+        '200':
+          $ref: '#/components/responses/CurveProcessServicePoint'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /process-measures/dashboard/cups:
+    get:
+      tags:
+        - process measures dashboard
+      security:
+        - BearerAuth: [ ]
+      summary: process measure dashboard
+      description: 'Get distributor cups list with processed measure info'
+      operationId: get process measure dashboard list
+
+      parameters:
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: integer
+          description: Limit of Meters to view
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: Meters to skip
+        - in: query
+          name: start_date
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2006-05-01
+          description: Start Date
+        - in: query
+          name: end_date
+          required: true
+          description: End Date
+          schema:
+            type: string
+            format: date
+            example: 2006-05-31
+        - in: query
+          name: distributor_id
+          schema:
+            type: string
+          required: true
+          example: 111111-2222-3333-4444-555555555555
+          description: Distributor Id
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - "TLG"
+              - "TLM"
+              - "OTHER"
+          required: true
+          description: Type of meter
+      responses:
+        '200':
+          $ref: '#/components/responses/DashboardCupsProcessMeasure'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          description: Invalid input
+
+
+
+
+
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    ServicePointProcessDashboard:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServicePointDashboardResponse'
+    CurveProcessServicePoint:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CurveProcessServicePoint'
+    DashboardProcessMeasure:
+      description: 'dashboard process measure response'
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - totals
+              - daily
+
+            properties:
+              totals:
+                type: object
+                required:
+                  - telegestion
+                  - telemedida
+                  - others
+                properties:
+                  telegestion:
+                    $ref: "#/components/schemas/DashboardProcessMeasureTLG"
+                  telemedida:
+                    $ref: "#/components/schemas/DashboardProcessMeasureTLM"
+                  others:
+                    $ref: "#/components/schemas/DashboardProcessMeasureOthers"
+              daily:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - date
+                    - telegestion
+                    - telemedida
+                    - others
+                  properties:
+                    date:
+                      type: string
+                      format: date
+                    telegestion:
+                      $ref: "#/components/schemas/DashboardProcessMeasureTLG"
+                    telemedida:
+                      $ref: "#/components/schemas/DashboardProcessMeasureTLM"
+                    others:
+                      $ref: "#/components/schemas/DashboardProcessMeasureOthers"
+    DashboardCupsProcessMeasure:
+      description: 'dashboard list cups process measure response'
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Pagination"
+              - type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DashboardCups'
+    UnauthorizedError:
+      description:  Access token is missing or INV
+
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - limit
+        - count
+        - size
+        - _links
+        - results
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        size:
+          type: integer
+        count:
+          type: integer
+        _links:
+          type: object
+          required:
+            - self
+          properties:
+            next:
+              type: string
+              description: "url for request next list"
+            prev:
+              type: string
+              description: "url for request previous list"
+            self:
+              type: string
+              description: "url for request current list"
+    ServicePointDashboardResponse:
+      type: object
+      description: Service point process measures object by type
+      properties:
+        type:
+          type: string
+          enum:
+            - "TLG"
+            - "TLM"
+            - "OTHER"
+        days:
+          $ref: "#/components/schemas/ServicePointDashboardResponseDays"
+    ServicePointDashboardResponseDays:
+      type: array
+      description: Service point process measures object
+      items:
+        $ref: '#/components/schemas/ServicePointDashboard'
+    Curve:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+        P1:
+          $ref: '#/components/schemas/CurveValues'
+        P2:
+          $ref: '#/components/schemas/CurveValues'
+        P3:
+          $ref: '#/components/schemas/CurveValues'
+        P4:
+          $ref: '#/components/schemas/CurveValues'
+        P5:
+          $ref: '#/components/schemas/CurveValues'
+        P6:
+          $ref: '#/components/schemas/CurveValues'
+    DailyClosure:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+        P0:
+          $ref: '#/components/schemas/CurveValues'
+        P1:
+          $ref: '#/components/schemas/CurveValues'
+        P2:
+          $ref: '#/components/schemas/CurveValues'
+        P3:
+          $ref: '#/components/schemas/CurveValues'
+        P4:
+          $ref: '#/components/schemas/CurveValues'
+        P5:
+          $ref: '#/components/schemas/CurveValues'
+        P6:
+          $ref: '#/components/schemas/CurveValues'
+    MonthlyClosure:
+      type: object
+      required:
+        - init_date
+        - end_date
+        - status
+        - id
+      properties:
+        init_date:
+          type: string
+        end_date:
+          type: string
+        status:
+          type: string
+        id:
+          type: string
+        P0:
+          $ref: '#/components/schemas/MonthlyValues'
+        P1:
+          $ref: '#/components/schemas/MonthlyValues'
+        P2:
+          $ref: '#/components/schemas/MonthlyValues'
+        P3:
+          $ref: '#/components/schemas/MonthlyValues'
+        P4:
+          $ref: '#/components/schemas/MonthlyValues'
+        P5:
+          $ref: '#/components/schemas/MonthlyValues'
+        P6:
+          $ref: '#/components/schemas/MonthlyValues'
+
+    CurveProcessServicePointResponse:
+      type: array
+      description: Curve process measures distributor object
+      items:
+        $ref: '#/components/schemas/CurveProcessServicePoint'
+
+    CurveValues:
+      type: object
+      required:
+        - AI
+        - AE
+        - R1
+        - R2
+        - R3
+        - R4
+      properties:
+        AI:
+          type: number
+          format: double
+        AE:
+          type: number
+          format: double
+        R1:
+          type: number
+          format: double
+        R2:
+          type: number
+          format: double
+        R3:
+          type: number
+          format: double
+        R4:
+          type: number
+          format: double
+
+    MonthlyValues:
+      type: object
+      required:
+        - AI
+        - AE
+        - R1
+        - R2
+        - R3
+        - R4
+        - AIi
+        - AEi
+        - R1i
+        - R2i
+        - R3i
+        - R4i
+      properties:
+        AI:
+          type: number
+          format: double
+        AE:
+          type: number
+          format: double
+        R1:
+          type: number
+          format: double
+        R2:
+          type: number
+          format: double
+        R3:
+          type: number
+          format: double
+        R4:
+          type: number
+          format: double
+        AIi:
+          type: number
+          format: double
+        AEi:
+          type: number
+          format: double
+        R1i:
+          type: number
+          format: double
+        R2i:
+          type: number
+          format: double
+        R3i:
+          type: number
+          format: double
+        R4i:
+          type: number
+          format: double
+    CurveProcessServicePoint:
+      type: object
+      required:
+        - date
+        - status
+        - values
+      properties:
+        date:
+          type: string
+        status:
+          type: string
+        values:
+          $ref: '#/components/schemas/CurveValues'
+    ServicePointDashboard:
+      type: object
+      required:
+        - date
+        - magnitude_energy
+        - magnitudes
+        - periods
+        - curve
+        - daily_closure
+        - monthly_closure
+      properties:
+        date:
+          type: string
+        magnitude_energy:
+          type: string
+          x-oapi-codegen-extra-tags:
+            binding: oneof='AI' 'AE'
+        magnitudes:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'AI'
+              - 'AE'
+              - 'R1'
+              - 'R2'
+              - 'R3'
+              - 'R4'
+            x-oapi-codegen-extra-tags:
+              binding: oneof='AI' 'AE' 'R1' 'R2' 'R3' 'R4'
+        periods:
+          type: array
+          items:
+            type: string
+            enum:
+              - 'P1'
+              - 'P2'
+              - 'P3'
+              - 'P4'
+              - 'P5'
+              - 'P6'
+            x-oapi-codegen-extra-tags:
+              binding: oneof='P1' 'P2' 'P3' 'P4' 'P5' 'P6'
+        curve:
+          $ref: '#/components/schemas/Curve'
+        daily_closure:
+          $ref: '#/components/schemas/DailyClosure'
+        monthly_closure:
+          $ref: '#/components/schemas/MonthlyClosure'
+    DashboardProcessMeasureData:
+      type: object
+      required:
+        - valid
+        - invalid
+        - supervise
+        - measures_should_be
+      properties:
+        valid:
+          type: integer
+        invalid:
+          type: integer
+        supervise:
+          type: integer
+        measures_should_be:
+          type: integer
+    DashboardProcessMeasureTLG:
+      type: object
+      required:
+        - curva
+        - closing
+        - resumen
+      properties:
+        curva:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+        closing:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+        resumen:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+    DashboardProcessMeasureTLM:
+      type: object
+      required:
+        - curva
+        - closing
+      properties:
+        curva:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+        closing:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+    DashboardProcessMeasureOthers:
+      type: object
+      required:
+        - curva
+        - closing
+        - resumen
+      properties:
+        closing:
+          $ref: "#/components/schemas/DashboardProcessMeasureData"
+    DashboardCups:
+      type: object
+      required:
+        - cups
+        - curve
+        - daily
+        - monthly
+      properties:
+        cups:
+          type: string
+        curve:
+          $ref: '#/components/schemas/DashboardCupsValues'
+        daily:
+          $ref: '#/components/schemas/DashboardCupsValues'
+        monthly:
+          $ref: '#/components/schemas/DashboardCupsValues'
+    DashboardCupsValues:
+      type: object
+      required:
+        - valid
+        - invalid
+        - supervise
+        - none
+        - total
+        - should_be
+      properties:
+        valid:
+          type: integer
+        invalid:
+          type: integer
+        supervise:
+          type: integer
+        none:
+          type: integer
+        total:
+          type: integer
+        should_be:
+          type: integer

@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: local
+resources:
+- namespace.yaml
+- config-measures.yaml
+- config-measures-mongo.yaml
+- config-measures-pubsub.yaml
+- config-postgres.yaml
+- config-sftp.yaml
+- config-redis.yaml
+- config-process-measures.yaml
+- credentials-secret.yaml
+- firebase-secret.yaml
+- postgres-secret.yaml
+- mongo-secret.yaml
+- mongo.yaml
+- redis.yaml
+- ../../base
+images:
+  - name: gcsfuse-sftp
+    newName: eu.gcr.io/med-d-base-cdad/med-d-base-sftp
+    newTag: v0.4
